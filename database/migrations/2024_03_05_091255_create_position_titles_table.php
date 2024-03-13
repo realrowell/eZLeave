@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('profile_photos', function (Blueprint $table) {
-            $table->string('id',20)->primary();
-            $table->string('profile_photo');
-            $table->string('user_id');
-            $table->string('status_id')->default('sta-1007');
+        Schema::create('position_titles', function (Blueprint $table) {
+            $table->string('id',8)->primary();
+            $table->string('position_title');
+            $table->string('status_id')->default('sta-1007'); // Status: Active
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profile_photos');
+        Schema::dropIfExists('position_titles');
     }
 };

@@ -16,10 +16,10 @@
                         {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} {{ optional(Auth::user()->suffixes)->suffix_title }}
                     </div>
                     <div class="row">
-                        {{ Auth::user()->employees->employee_positions->positions->position_title }}
+                        {{ Auth::user()->user_name }}
                     </div>
                     <div class="row">
-                        {{ Auth::user()->employees->employee_positions->subdepartments->departments->department_title }}
+                        {{ Auth::user()->email }}
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 p-2">
@@ -27,19 +27,16 @@
                         {{ Auth::user()->email }}
                     </div>
                     <div class="row">
-                        {{ Auth::user()->employees->contact_number }}
-                    </div>
-                    <div class="row">
-                        {{ optional(Auth::user()->employees->employee_positions->area_of_assignments)->location_address }}
+                        {{ Auth::user()->roles->role_title }}
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-12 p-2">
-                    <div class="row">
+                    {{-- <div class="row">
                       <a href="{{ route('employee_user_profile') }}" class="nav_link">
                         <i class="nav_icon" >@svg('css-profile')</i>
                         <span class="nav_name">Profile</span>
                       </a>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="bx bx-log-out nav_icon"></i>
@@ -52,7 +49,7 @@
                 </div>
             </div>
         </div>
-    </div>
+      </div>
     <div class="row">
         <h5>Menu</h5>
     </div>

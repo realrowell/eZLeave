@@ -46,7 +46,7 @@
         <div class="modal fade" id="update_subdepartment{{ $subdepartment->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="/organization/update_subdepartment/{{ $subdepartment->id }}" method="PUT" onsubmit="submitButtonDisabled()">
+                    <form action="{{ route('admin_update_subdepartment',['id'=>$subdepartment->id]) }}" method="PUT" onsubmit="submitButtonDisabled()">
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Update Department</h5>

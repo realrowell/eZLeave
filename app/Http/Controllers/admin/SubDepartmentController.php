@@ -1,25 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Models\SubDepartment;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SubDepartmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('authCheckAdminRole');
+    }
+
     public function admin_organization_subdepartments_grid(){
-        $subdepartments = Subdepartment::where('status_id','sta-1007')->paginate(12);
+        $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(12);
         $departments = Department::all()->where('status_id','sta-1007');
         return view('profiles.admin.organization.subdepartments_grid',compact('subdepartments'),
             ['departments' => $departments]
         );
     }
     public function admin_organization_subdepartments_list(){
-        $subdepartments = Subdepartment::all()->where('status_id','sta-1007');
+        $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(20);
         $departments = Department::all()->where('status_id','sta-1007');
-        return view('profiles.admin.organization.subdepartments_list',
-            ['subdepartments' => $subdepartments],
+        return view('profiles.admin.organization.subdepartments_list',compact('subdepartments'),
             ['departments' => $departments]
         );
     }
@@ -39,15 +44,15 @@ class SubDepartmentController extends Controller
     }
 
     public function update_subdepartment(Request $request, $id){
-        $data = $request->validate([
-            'subdepartment_title' => 'required',
-            'dept_name' => 'required'
-        ]);
-
-        $data['subdepartment_title'] = strip_tags($data['subdepartment_title']);
-        $data['dept_name'] = strip_tags($data['dept_name']);
-
         if($request->filled('subdepartment_title') || $request->filled('dept_name')){
+            $data = $request->validate([
+                'subdepartment_title' => 'required',
+                'dept_name' => 'required'
+            ]);
+
+            $data['subdepartment_title'] = strip_tags($data['subdepartment_title']);
+            $data['dept_name'] = strip_tags($data['dept_name']);
+
             $subdepartments = SubDepartment::where('id', $id)
             ->update([
                 'sub_department_title' => $data['subdepartment_title'],
@@ -61,7 +66,7 @@ class SubDepartmentController extends Controller
     public function delete_subdepartment($id){
         $subdepartments = SubDepartment::where('id', $id)
             ->update([
-                'status_id' => ('sta-1006')
+                'status_id' => ('sta-1009')
             ]);
             return redirect()->back()->with('warning','Sub-department has been deleted!');
     }

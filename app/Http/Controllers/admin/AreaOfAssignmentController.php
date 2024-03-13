@@ -1,13 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Models\AreaOfAssignment;
 use App\Models\SystemSetting;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AreaOfAssignmentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('authCheckAdminRole');
+    }
+
     public function admin_organization_areaofassignemnts_grid(){
 
         $area_of_assignments = AreaOfAssignment::all()->where('status_id','sta-1007');
@@ -57,7 +64,7 @@ class AreaOfAssignmentController extends Controller
             'location_desc' => $data['location_desc'],
             'embedded_google_map' => $data['embedmap']
         ]);
-        return redirect()->back()->with('success','Department has been created!');
+        return redirect()->back()->with('success','Area of Assignment has been created!');
     }
 
     public function update_area_of_assignments(Request $request, $id){
@@ -81,7 +88,7 @@ class AreaOfAssignmentController extends Controller
                 'location_desc' => $data['location_desc'],
                 'embedded_google_map' => $data['embedmap'],
             ]);
-            return redirect()->back()->with('success','Department has been updated!');
+            return redirect()->back()->with('success','Area of Assignment has been updated!');
         }
         return redirect()->back()->with('info','No changes has been made!');
     }

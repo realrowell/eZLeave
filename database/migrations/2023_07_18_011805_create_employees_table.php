@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->string('id',20)->primary();
             $table->string('user_id',25)->unique();
-            $table->string('contact_number',20);
+            $table->string('sap_id_number')->unique()->nullable();
+            $table->string('contact_number',20)->nullable();
             $table->string('address_id',16)->nullable();
-            $table->string('employee_position_id',16);
+            $table->string('employee_position_id',16)->nullable();
             $table->date('birthdate');
             $table->string('gender_id',8);
             $table->string('marital_status_id',8);

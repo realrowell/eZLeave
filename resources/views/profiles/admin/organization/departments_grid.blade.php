@@ -34,7 +34,9 @@
                         </div>
                         <div class="row">
                             <p class="card-desc">Employees: 6</p>
-                            <p class="card-desc">Sub-departments: 2</p>
+                            <p class="card-desc">Sub-departments:
+
+                            </p>
                         </div>
                         <div class="row mt-2">
                             <div class="col">
@@ -52,7 +54,7 @@
         <div class="modal fade" id="update_department{{ $department->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="/organization/update-department/{{ $department->id }}" method="PUT" onsubmit="submitButtonDisabled()">
+                    <form action="{{ route('admin_update_department',['id'=>$department->id]) }}" method="PUT" onsubmit="submitButtonDisabled()">
                         @csrf
                         @method('PUT')
                         <div class="modal-header">
@@ -80,6 +82,6 @@
         {{-- End Update Department Modal --}}
     @endforeach
     {{-- END CARDS --}}
-    
+
 </div>
 @endsection

@@ -13,3 +13,9 @@ function onFormSubmit(){
     document.getElementById('submit_button1').classList.add('disabled');
     document.getElementById('form_to_submit').style.opacity = "0.3";
 }
+
+function onFormSubmit_1(){
+    document.getElementById('loading_spinner_2').style.display="block";
+    document.getElementById('submit_button_2').classList.add('disabled');
+    document.getElementById('form_to_submit_2').style.opacity = "0.3";
+}

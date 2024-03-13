@@ -9,21 +9,22 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class Employee extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'user_id',
+        'sap_id_number',
         'contact_number',
         'address_id',
+        'employee_position_id',
         'birthdate',
         'gender_id',
+        'employment_status_id',
         'marital_status_id',
         'status_id',
-        'employment_status_id',
         'date_hired',
-        'employee_position_id'
     ];
 
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {

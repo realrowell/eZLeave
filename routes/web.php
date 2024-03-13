@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\AreaOfAssignmentController;
+use App\Http\Controllers\admin\AccountManagementController;
+use App\Http\Controllers\admin\AdminDashboard;
+use App\Http\Controllers\admin\AdminLeaveManagementController;
+use App\Http\Controllers\admin\AreaOfAssignmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Page_Controller;
 use App\Http\Controllers\indexPageController;
 use App\Http\Controllers\User_Profile_Controller;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\admin\DepartmentController;
 use App\Http\Controllers\LeaveManagementController;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\SubDepartmentController;
-use App\Http\Controllers\SystemSettingsController;
+use App\Http\Controllers\admin\PositionController;
+use App\Http\Controllers\admin\SubDepartmentController;
+use App\Http\Controllers\admin\SystemSettingsController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\HRStaffController;
 use App\Http\Controllers\LeaveCreditController;
@@ -131,12 +134,21 @@ Route::get('/hr/user/update/{username}', [UserManagementController::class, 'visi
 |
 */
 Route::get('/admin/login', [Page_Controller::class, 'admin_login_view']);
-Route::get('/admin/dashboard', [Page_Controller::class, 'admin_dashboard'])->name('admin_dashboard');
+Route::get('/admin/dashboard', [AdminDashboard::class, 'admin_dashboard'])->name('admin_dashboard');
 Route::get('/admin/organization/menu', [Page_Controller::class, 'admin_organization_menu'])->name('admin_org_menu');
 Route::get('/admin/policy/view', [Page_Controller::class, 'admin_policy_view']);
 Route::get('/admin/policy/create', [Page_Controller::class, 'admin_policy_create']);
 Route::get('/admin/policy/update', [Page_Controller::class, 'admin_policy_update']);
 Route::get('/admin/policy/menu', [Page_Controller::class, 'admin_policy_menu'])->name('admin_policy_menu');
+
+Route::get('/admin/accounts/grid', [AccountManagementController::class, 'admin_accounts_grid'])->name('admin_accounts_grid');
+Route::post('/admin/accounts/employee/create', [AccountManagementController::class, 'admin_create_employee'])->name('admin_create_employee');
+Route::post('/admin/accounts/create', [AccountManagementController::class, 'admin_create_account'])->name('admin_create_account');
+Route::post('/admin/accounts/update/user/profile_photo/{username}', [AccountManagementController::class, 'update_profile_photo'])->name('admin_update_profile_photo');
+Route::get('/admin/accounts/{username}', [AccountManagementController::class, 'admin_visit_employee_view'])->name('admin_visit_employee_view');
+Route::get('/admin/accounts/update/{username}', [AccountManagementController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
+Route::patch('/admin/accounts/update/{user_id}/{employee_id}/{employee_position_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
+Route::get('/admin/accounts/visit/leave/{username}', [AdminLeaveManagementController::class, 'visit_employee_leave_ms'])->name('visit_employee_leave_ms_view');
 
 Route::get('/admin/organization/departments/list', [DepartmentController::class, 'admin_organization_departments_list'])->name('admin_departments_list');
 Route::get('/admin/organization/departments/grid', [DepartmentController::class, 'admin_organization_departments_grid'])->name('admin_departments_grid');
@@ -158,7 +170,7 @@ Route::get('/organization/delete_subdepartment/{id}', [SubDepartmentController::
 Route::get('/admin/organization/positions/grid', [PositionController::class, 'admin_organization_positions_grid'])->name('admin_positions_grid');
 Route::get('/admin/organization/positions/list', [PositionController::class, 'admin_organization_positions_list'])->name('admin_positions_list');
 Route::post('/organization/create_position', [PositionController::class, 'create_position'])->name('admin_create_position');
-// Route::put('/organization/update_position/{id}', [PositionController::class, 'update_position']);
+Route::post('/organization/create_position_title', [PositionController::class, 'create_position_title'])->name('admin_create_position_title');
 Route::get('/organization/update_position/{id}', [PositionController::class, 'update_position'])->name('admin_update_position');
 // Route::put('/organization/delete_position/{id}', [PositionController::class, 'delete_position']);
 Route::get('/organization/delete_position/{id}', [PositionController::class, 'delete_position'])->name('admin_delete_position');

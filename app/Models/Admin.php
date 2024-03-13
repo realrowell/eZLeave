@@ -9,15 +9,14 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class Admin extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'user_id',
-        'employee_id',
         'privilege_id',
         'status_id'
     ];
 
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {

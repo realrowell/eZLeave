@@ -115,12 +115,12 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#B429F9", en
 .bg-pattern-1{
     --s: 50px; /* control the size */
     --c: #ffffff; /* first color */
-        
+
     --_g: #0000 8%,var(--c) 0 17%,#0000 0 58%;
-    background: 
+    background:
       linear-gradient(135deg,#0000 20.5%,var(--c) 0 29.5%,#0000 0) 0 calc(var(--s)/4),
       linear-gradient( 45deg,var(--_g)) calc(var(--s)/2) 0,
-      linear-gradient(135deg,var(--_g),var(--c) 0 67%,#0000 0),        
+      linear-gradient(135deg,var(--_g),var(--c) 0 67%,#0000 0),
       linear-gradient( 45deg,var(--_g),var(--c) 0 67%,#0000 0 83%,var(--c) 0 92%,#0000 0),
       #00c95a; /* second color */
     background-size: var(--s) var(--s);
@@ -193,7 +193,7 @@ filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#B429F9", en
     height: 50vh;
   }
 h3{
-    font-family: 'Raleway', sans-serif; 
+    font-family: 'Raleway', sans-serif;
 }
 
 .sub-menu1{
@@ -368,6 +368,7 @@ h3{
     display: block;
     margin-left: auto;
     margin-right: auto;
+    object-fit: cover;
 }
 
 .profile-photo-sm{

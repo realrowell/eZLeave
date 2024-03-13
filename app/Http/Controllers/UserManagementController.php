@@ -27,7 +27,7 @@ class UserManagementController extends Controller
     /**
      * ALL
      *
-     * 
+     *
      * SHOW EMPLOYEES IN GRID
      */
     public function hrstaff_employee_management_employees_grid(){
@@ -50,7 +50,7 @@ class UserManagementController extends Controller
     /**
      * ALL
      *
-     * 
+     *
      * SHOW EMPLOYEES IN LIST
      */
     public function hrstaff_employee_management_employees_list(){
@@ -72,7 +72,7 @@ class UserManagementController extends Controller
     /**
      * SEARCH RESULT
      *
-     * 
+     *
      * SHOW EMPLOYEES SEARCH RESULT IN GRID
      */
     public function hrstaff_employee_management_employees_grid_search(Request $request){
@@ -98,7 +98,7 @@ class UserManagementController extends Controller
     /**
      * SEARCH RESULT
      *
-     * 
+     *
      * SHOW EMPLOYEES SEARCH RESULT IN LIST
      */
     public function hrstaff_employee_management_employees_list_search(Request $request){
@@ -121,7 +121,7 @@ class UserManagementController extends Controller
     /**
      * REGULAR
      *
-     * 
+     *
      * SHOW REGULAR EMPLOYEES IN GRID
      */
     public function hrstaff_employee_management_regular_grid(){
@@ -142,15 +142,15 @@ class UserManagementController extends Controller
         return view('profiles.hr_staff.employee_management.employees_regular_grid_view',compact('users'))->with($data);
     }
 
-    
+
     /**
      * REGULAR
      *
-     * 
+     *
      * SHOW REGULAR EMPLOYEES IN LIST
      */
     public function hrstaff_employee_management_regular_list(){
-        
+
         $users = Employee::where('status_id','sta-2001')->where('employment_status_id','ems-0001')->paginate(15);
         $data=[
             // 'users' => User::where('status_id','sta-2001')->paginate(5),
@@ -169,7 +169,7 @@ class UserManagementController extends Controller
     /**
      * PROBATIONARY
      *
-     * 
+     *
      * SHOW REGULAR EMPLOYEES IN GRID
      */
     public function hrstaff_employee_management_probationary_grid(){
@@ -190,15 +190,15 @@ class UserManagementController extends Controller
         return view('profiles.hr_staff.employee_management.employees_probi_grid_view',compact('users'))->with($data);
     }
 
-    
+
     /**
      * PROBATIONARY
      *
-     * 
+     *
      * SHOW REGULAR EMPLOYEES IN LIST
      */
     public function hrstaff_employee_management_probationary_list(){
-        
+
         $users = Employee::where('status_id','sta-2001')->where('employment_status_id','ems-0002')->paginate(15);
         $data=[
             // 'users' => User::where('status_id','sta-2001')->paginate(5),
@@ -215,9 +215,9 @@ class UserManagementController extends Controller
     }
 
     /**
-     * 
      *
-     * 
+     *
+     *
      * CREATE USER
      */
     public function create_user(Request $request){
@@ -282,7 +282,7 @@ class UserManagementController extends Controller
             'role_id' => $data['role'],
             'password' => Hash::make($data['password']),
         ]);
-        
+
         $employee_positions = EmployeePosition::create([
             'position_id' => $data['position'],
             'subdepartment_id' => $data['subdepartment'],
@@ -303,9 +303,9 @@ class UserManagementController extends Controller
     }
 
     /**
-     * 
      *
-     * 
+     *
+     *
      * UPDATE USER
      */
     public function update_user(Request $request, $user_id, $employee_id, $employee_position_id){
@@ -320,9 +320,8 @@ class UserManagementController extends Controller
             'birthdate' => 'date',
             'email' => 'sometimes|email|max:100|unique:users,email,'.$user_id,
             'user_name' => 'max:50|unique:users,user_name,'.$users_username['id'],
-            'password' => 'min:8|max:255',
             'contact_number' => 'max:11',
-            'password' => 'nullable|confirmed|min:6',
+            'password' => 'nullable|confirmed|min:8|max:255',
             // 'password_confirmation' => 'nullable|confirmed',
             'position' => 'nullable',
             'subdepartment' => 'nullable',
@@ -336,7 +335,7 @@ class UserManagementController extends Controller
             'contact_number.max'
                 => ':attribute field should not exceed the max lenght of :max characters!',
         ]);
-        
+
         // dd($data);
 
         $request['firstname'] = strip_tags($request['firstname']);
@@ -358,7 +357,7 @@ class UserManagementController extends Controller
         $request['reports_to'] = strip_tags($request['reports_to']);
 
         // dd($request);
-        
+
         $users = User::where('id', $user_id)
             ->update([
                 'first_name' => $request['firstname'],
@@ -522,7 +521,7 @@ class UserManagementController extends Controller
                             'status_id' => 'sta-1007',
                         ]);
                     }
-                    
+
                 }
                 elseif(!empty($request->input('reports_to'))){
                     $employee_positions = EmployeePosition::create([

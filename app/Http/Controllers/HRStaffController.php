@@ -21,10 +21,15 @@ use App\Models\User;
 
 class HRStaffController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('authCheckHrRole');
+    }
+
     /**
-     * 
      *
-     * 
+     *
+     *
      * RETURN HR DASHBOARD
      */
     public function hrstaff_dashboard(){
@@ -41,11 +46,11 @@ class HRStaffController extends Controller
         ];
         return view('profiles.hr_staff.hr_leave_management.hrstaff_dashboard')->with($data);
     }
-    
+
     /**
-     * 
      *
-     * 
+     *
+     *
      * RETURN HR Leave Credits View
      */
     public function hrstaff_leave_credits(){
@@ -60,15 +65,15 @@ class HRStaffController extends Controller
     }
 
     /**
-     * 
      *
-     * 
+     *
+     *
      * RETURN HR Leave Credits Search View
      */
     public function hrstaff_leave_credits_search(Request $request){
         $search_input = $request['search_input'];
         $employee = User::where('first_name',$search_input)->orWhere('last_name',$search_input)->first();
-        
+
         if(is_null($employee)){
             return back() -> with('error','Employee not found!');
         }else{
@@ -78,7 +83,7 @@ class HRStaffController extends Controller
                 'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             ];
             $employee_leavecredits = EmployeeLeaveCredit::where('status_id','sta-1007')->where('employee_id',$employee->employees->id)->paginate(20);
-    
+
             return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
         }
     }
@@ -100,7 +105,7 @@ class HRStaffController extends Controller
         $input_search = explode(' ',$request->search_input);
         // dd($input_search[1]);
         $input_filter = $request->search_filter;
-        
+
         $leave_applications = LeaveApplication::orderBy('created_at', 'desc')->paginate(15);
         $users = User::where('status_id','sta-2001')->paginate(10);
         $data=[
@@ -109,7 +114,7 @@ class HRStaffController extends Controller
             'leave_application_notes'=>LeaveApplicationNote::all(),
             'leave_approvals'=>LeaveApproval::orderBy('created_at', 'asc')->get(),
         ];
-        
+
         if($input_filter == '1'){
             $leave_applications = LeaveApplication::where('reference_number',$input_search)->orderBy('created_at', 'desc')->paginate(15);
             return view('profiles.hr_staff.hr_leave_management.leave_management_all_search',compact('leave_applications'))->with($data);
@@ -127,7 +132,7 @@ class HRStaffController extends Controller
         else{
             return view('profiles.hr_staff.hr_leave_management.leave_management_all_search',compact('leave_applications'))->with($data);
         }
-            
+
     }
 
     public function hrstaff_leave_pending_approval(){

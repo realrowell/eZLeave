@@ -9,17 +9,18 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class EmployeePosition extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'employee_id',
         'position_id',
         'subdepartment_id',
         'area_of_assignment_id',
         'reports_to_id',
+        'second_superior_id',
         'status_id'
     ];
 
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {
@@ -41,5 +42,8 @@ class EmployeePosition extends Model
     }
     public function reports_tos(){
         return $this -> hasOne(Employee::class,'id','reports_to_id');
+    }
+    public function second_reports_tos(){
+        return $this -> hasOne(Employee::class,'id','second_superior_id');
     }
 }

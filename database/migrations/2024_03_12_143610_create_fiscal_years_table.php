@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('positions', function (Blueprint $table) {
-            $table->string('id',12)->primary();
-            $table->string('position_title_id');
-            $table->string('position_description',300)->nullable();
-            $table->string('subdepartment_id');
-            $table->string('position_level_id',8)->nullable();
+        Schema::create('fiscal_years', function (Blueprint $table) {
+            $table->string('id',8)->primary();
+            $table->string('fiscal_year_title',100);
+            $table->string('fiscal_year_description')->nullable();
+            $table->date('fiscal_year_start');
+            $table->date('fiscal_year_end');
             $table->string('status_id',8)->default('sta-1007');
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('positions');
+        Schema::dropIfExists('fiscal_years');
     }
 };

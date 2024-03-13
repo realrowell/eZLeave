@@ -50,10 +50,6 @@ class Page_Controller extends Controller
     {
         $this->middleware('auth');
     }
-    //admin profile
-    public function admin_dashboard(){
-        return view('profiles.admin.admin_dashboard');
-    }
 
     public function admin_organization_menu(){
         return view('profiles.admin.organization.organization_menu');

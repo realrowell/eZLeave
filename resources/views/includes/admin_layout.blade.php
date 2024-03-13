@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
     {{-- Google Fonts --}}
-    {{-- 
+    {{--
     font-family: 'Open Sans', sans-serif;
     font-family: 'Poppins', sans-serif;
     font-family: 'Raleway', sans-serif; 200, 400, 600, 800
@@ -101,7 +101,7 @@
       .bx-menu{
         color: white;
       }
-/* 
+/*
       .header_img {
         width: 35px;
         height: 35px;
@@ -122,7 +122,7 @@
         width: var(--nav-width);
         height: 100vh;
         background-color: var(--first-color);
-        padding: 0.5rem 1rem 0 0; 
+        padding: 0.5rem 1rem 0 0;
         transition: 0.5s;
         z-index: var(--z-fixed);
       }
@@ -191,7 +191,7 @@
       }
 
       .body-pd {
-        padding-left: calc(var(--nav-width) + 0rem);  
+        padding-left: calc(var(--nav-width) + 0rem);
       }
 
       .active {
@@ -257,21 +257,21 @@
         .body-pd {
           padding-left: calc(var(--nav-width) + 180px);
         }
-        
+
       }
     </style>
   </head>
   {{-- <body id="body-pd" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;"> --}}
   <body id="body-pd">
     <header class="header" id="header">
-        
+
         <div class="header_toggle">
             <i class="bx bx-menu" id="header-toggle"></i>
             <a class="text-white ms-2" id="header_title">eZLeave | </a>
             <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
         </div>
-        <div class="align-items-end justify-content-end">
-          {{-- <span class="nav_logo-name">Admin</span> --}}
+        {{-- <div class="align-items-end justify-content-end">
+          <span class="nav_logo-name">Admin</span>
 
           @guest
             @if (Route::has('login'))
@@ -300,7 +300,7 @@
               </span>
           @endguest
 
-        </div>
+        </div> --}}
     </header>
     <div class="l-navbar container-fluid" id="nav-bar">
         <nav class="nav">
@@ -314,7 +314,7 @@
                     <i class="bx bx-grid-alt nav_icon"></i>
                     <span class="nav_name">Dashboard</span>
                 </a>
-                <a href="{{ route('hrstaff_employees_grid') }}" class="nav_link @yield('sidebar_employee_management_active')">
+                <a href="{{ route('admin_accounts_grid') }}" class="nav_link @yield('sidebar_employee_management_active')">
                     <i class="bx bx-user nav_icon"></i>
                     <span class="nav_name">Account Management</span>
                 </a>
@@ -325,7 +325,7 @@
                   <p class="menu-nav_name" style="margin: 1px 0px -1px 0px">
                     <a href="#" class="@yield('sidebar_leave_management_active_custom') nav_name nav_link_custom">
                       Leave Management
-                    </a> 
+                    </a>
                     <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" style="background-color:transparent; border:none" data-bs-toggle="collapse" href="#leave_management" role="button" aria-expanded="false" aria-controls="leave_management">
                       <p class="visually-hidden">Toggle Dropdown</p>
                     </button>
@@ -385,7 +385,7 @@
           </form>
         </nav>
     </div>
-    
+
 
     <div class="">
       <div class="position-relative z-1000">
@@ -423,7 +423,7 @@
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            
+
             @if ($errors->any())
                 <div class="alert alert-danger fade show">
                   <div class="row">
@@ -448,9 +448,50 @@
     </div>
 
     <div class="mb-5">
+        <div class="container-fluid" id="profile_body">
+            <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+                <div class="col ">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-12 p-2">
+                            <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="">
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 p-2">
+                            <div class="row">
+                                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} {{ optional(Auth::user()->suffixes)->suffix_title }}
+                            </div>
+                            <div class="row">
+                                {{ Auth::user()->user_name }}
+                            </div>
+                            <div class="row">
+                                {{ Auth::user()->email }}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 p-2">
+                            <div class="row">
+                                {{ Auth::user()->email }}
+                            </div>
+                            <div class="row">
+                                {{ Auth::user()->roles->role_title }}
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 p-2">
+                            <div class="row">
+                                <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bx bx-log-out nav_icon"></i>
+                                    <span class="nav_name">SignOut</span>
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         @yield('content')
     </div>
-    
+
     <footer class="position-static mt-5 pt-5" >
       <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
         <div class="footer-custom">
@@ -459,14 +500,14 @@
               <a >
                 <p>© {{ now()->year }}
                   <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
-                    Bioseed Research Philippines, Inc. 
+                    Bioseed Research Philippines, Inc.
                   </a> | Powered by Bioseed Information Systems.
                 </p>
               </a>
             </div>
           </div>
         </div>
-        
+
       </div>
         <script
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -474,6 +515,6 @@
           crossorigin="anonymous">
         </script>
     </footer>
-    
+
   </body>
 </html>

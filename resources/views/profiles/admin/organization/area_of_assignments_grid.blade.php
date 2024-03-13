@@ -33,8 +33,8 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col">
-                                <a href="/admin/organization/area_of_assignments/profile/{{ $area_of_assignment->id }}" class="btn-sm btn-primary text-center">View</a>
-                                <a href="#Update_department" class="btn-sm btn-outline-primary border border-primary" data-bs-toggle="modal" data-bs-target="#update_area_of_assignment{{ $area_of_assignment->id }}">
+                                <a href="{{ route('admin_areaofassignemnts_profile',['id'=>$area_of_assignment->id]) }}" class="btn btn-sm btn-primary text-center">View</a>
+                                <a href="#Update_department" class="btn btn-sm btn-outline-primary border border-primary" data-bs-toggle="modal" data-bs-target="#update_area_of_assignment{{ $area_of_assignment->id }}">
                                     Update
                                 </a>
                             </div>
@@ -44,16 +44,19 @@
             </div>
         </div>
         <!-- Update Department Modal -->
-        <div class="modal fade" id="update_area_of_assignment{{ $area_of_assignment->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="update_area_of_assignment{{ $area_of_assignment->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
+                <div class="spinner-border text-primary" id="loading_spinner_2" role="status" style="display: none;">
+                    <span class="visually-hidden" >Loading...</span>
+                </div>
                 <div class="modal-content">
-                    <form action="/organization/update_area_of_assignments/{{ $area_of_assignment->id }}" method="PUT">
+                    <form action="{{ route('admin_update_areaofassignemnt',['id'=>$area_of_assignment->id]) }}" onsubmit="onFormSubmit_1()" method="PUT">
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Update Area of Assignment</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" id="form_to_submit_2">
                             <div class="container-fluid text-start">
                                 <div class="row mt-2 mb-3" >
                                     <div class="col">
@@ -76,7 +79,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                            <button type="submit" class="btn btn-success">Update</button>
+                            <button type="submit" id="submit_button_2" class="btn btn-success">Update</button>
                         </div>
                     </form>
                 </div>

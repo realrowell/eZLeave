@@ -1,21 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Models\SubDepartment;
 
 class DepartmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('authCheckAdminRole');
+    }
+
     public function admin_organization_departments_grid(){
-        $departments = Department::all()->where('status_id','sta-1007');
+        $subdepartments = SubDepartment::all()->where('status_id','sta-1007'); //only active sub departments
+        $departments = Department::where('status_id','sta-1007')->orderBy('department_title','asc')->get();
+        // dd($subdepartment_counts);
         return view('profiles.admin.organization.departments_grid',
-            ['departments' => $departments]
+            [
+                'departments' => $departments,
+                'subdepartments' => $subdepartments,
+            ]
         );
     }
+
     public function admin_organization_departments_list(){
-        $departments = Department::all()->where('status_id','sta-1007');
+        $departments = Department::where('status_id','sta-1007')->orderBy('department_title','asc')->get();
         return view('profiles.admin.organization.departments_list',
             ['departments' => $departments]
         );
@@ -27,7 +40,7 @@ class DepartmentController extends Controller
         ],[
             'department_title.max' => ':attribute field should not exceed the max lenght of :max characters!',
         ]);
-        
+
         $data['department_title'] = strip_tags($request['department_title']);
         $departments = Department::create([
             'department_title' => $data['department_title']
@@ -36,19 +49,20 @@ class DepartmentController extends Controller
     }
 
     public function update_department(Request $request, $id){
-        $data = $request->validate([
-            'department_title' => 'required|max:50'
-        ],[
-            'department_title.max' => ':attribute field should not exceed the max lenght of :max characters!',
-        ]);
 
-        $data['department_title'] = strip_tags($data['department_title']);
         if($request->filled('department_title')){
-            $department = Department::where('id', $id)
-            ->update([
-                'department_title' => $data['department_title']
+            $data = $request->validate([
+                'department_title' => 'required|max:50'
+            ],[
+                'department_title.max' => ':attribute field should not exceed the max lenght of :max characters!',
             ]);
-            return redirect()->back()->with('success','Department has been updated!');
+
+            $data['department_title'] = strip_tags($data['department_title']);
+                $department = Department::where('id', $id)
+                ->update([
+                    'department_title' => $data['department_title']
+                ]);
+                return redirect()->back()->with('success','Department has been updated!');
         }
         return redirect()->back()->with('info','No changes has been made!');
     }
@@ -56,11 +70,11 @@ class DepartmentController extends Controller
     public function delete_department($id){
         $department = Department::where('id', $id)
             ->update([
-                'status_id' => ('sta-1006')
+                'status_id' => ('sta-1009')
             ]);
             return redirect()->back()->with('warning','Department has been deleted!');
     }
 
-    
-    
+
+
 }
