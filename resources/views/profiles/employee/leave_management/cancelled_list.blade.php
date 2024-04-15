@@ -1,4 +1,4 @@
-@extends('profiles.employee.leave_management.cancelled')
+@extends('profiles.employee.leave_management.pending_availment')
 @section('list_view_active','bg-selected-warning')
 @section('sub-content')
 
@@ -27,16 +27,16 @@
                                 <tr>
                                     <td>{{ $leave_application->reference_number }}</td>
                                     <td>
-                                        {{ optional($leave_application->employees->users)->first_name }} 
-                                        {{ optional($leave_application->employees->users)->middle_name }} 
-                                        {{ optional($leave_application->employees->users)->last_name }} 
+                                        {{ optional($leave_application->employees->users)->first_name }}
+                                        {{ optional($leave_application->employees->users)->middle_name }}
+                                        {{ optional($leave_application->employees->users)->last_name }}
                                         {{ optional($leave_application->employees->users->suffixes)->suffix_title }}
                                     </td>
                                     <td id="table_reports_to">
                                         @if (!empty($leave_application->employees->employee_positions->reports_tos->users))
-                                            {{ optional($leave_application->employees->employee_positions->reports_tos)->first_name }} 
-                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->middle_name }} 
-                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }} 
+                                            {{ optional($leave_application->employees->employee_positions->reports_tos)->first_name }}
+                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->middle_name }}
+                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }}
                                         @else
                                             Not Available
                                         @endif
@@ -98,8 +98,8 @@
                                                                             <h6 class="">Approver</h6>
                                                                         </label>
                                                                         <h4>
-                                                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }} 
-                                                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }} 
+                                                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }}
+                                                                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }}
                                                                             {{ optional($leave_application->employees->employee_positions->reports_tos->users->suffixes)->suffix_title }}
                                                                         </h4>
                                                                     </div>
@@ -236,7 +236,7 @@
                                                     @elseif ($leave_application->status_id == 'sta-1005')
                                                         <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
                                                     @endif
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>

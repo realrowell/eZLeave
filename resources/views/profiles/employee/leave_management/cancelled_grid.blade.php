@@ -1,4 +1,4 @@
-@extends('profiles.employee.leave_management.cancelled')
+@extends('profiles.employee.leave_management.pending_availment')
 @section('grid_view_active','bg-selected-warning')
 @section('sub-content')
 
@@ -12,9 +12,9 @@
                         <p class="card-text" id="approval_p">Reference #:</p>
                         <h5> {{ $leave_application->reference_number }}</h5>
                         <p class="card-text" id="approval_p">Approver:</p>
-                        <h5> 
-                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }} 
-                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }} 
+                        <h5>
+                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }}
+                            {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }}
                             {{ optional($leave_application->employees->employee_positions->reports_tos->users->suffixes)->suffix_title }}
                         </h5>
                         <div class="row">
@@ -72,8 +72,8 @@
                                                     <h6 class="">Approver</h6>
                                                 </label>
                                                 <h4>
-                                                    {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }} 
-                                                    {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }} 
+                                                    {{ optional($leave_application->employees->employee_positions->reports_tos->users)->first_name }}
+                                                    {{ optional($leave_application->employees->employee_positions->reports_tos->users)->last_name }}
                                                     {{ optional($leave_application->employees->employee_positions->reports_tos->users->suffixes)->suffix_title }}
                                                 </h4>
                                             </div>
@@ -207,7 +207,7 @@
                             @elseif ($leave_application->status_id == 'sta-1005')
                                 <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
                             @endif
-                            
+
                         </div>
                     </div>
                 </div>

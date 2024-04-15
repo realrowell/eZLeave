@@ -19,3 +19,7 @@ function onFormSubmit_1(){
     document.getElementById('submit_button_2').classList.add('disabled');
     document.getElementById('form_to_submit_2').style.opacity = "0.3";
 }
+var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+var toastList = toastElList.map(function (toastEl) {
+  return new bootstrap.Toast(toastEl, option)
+})

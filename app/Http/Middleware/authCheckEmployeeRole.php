@@ -17,13 +17,19 @@ class authCheckEmployeeRole
     {
         if(auth()->check()){
             if(auth()->user()->role_id == 'rol-0001'){
-                return redirect(route('admin_dashboard'));
+                return redirect(route('admin_dashboard'))->with('warning', 'The page you are accessing is for employee only');
             }
             elseif (auth()->user()->role_id == 'rol-0002') {
-                return redirect(route('hrstaff_dashboard'));
+                return redirect(route('hrstaff_dashboard'))->with('warning', 'The page you are accessing is for employee only');
             }
             elseif (auth()->user()->role_id == 'rol-0003') {
-                return $next($request);
+                if(auth()->user()->status_id == 'sta-2001'){
+                    return $next($request);
+                }
+                else{
+                    auth()->logout();
+                    return redirect(route('index'))->with('warning','Your account has been deactivated by the administrator!');
+                }
             }
             else {
                 auth()->logout();

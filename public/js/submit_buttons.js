@@ -1,3 +1,5 @@
+new DataTable('#loginlogs_table');
+
 function submitButtonDisabled(){
     document.getElementById('form_submit').disabled = true;
     document.getElementById('loading_spinner').style.display="block";
@@ -43,14 +45,27 @@ function changeClass(){
 }
 
 function showLeaveDuration(){
-    let startdate = new Date(document.getElementById("datetime_startdate").value); 
+    let startdate = new Date(document.getElementById("datetime_startdate").value);
     let enddate = new Date(document.getElementById("datetime_enddate").value);
     // window.alert( Math.floor((startdate - enddate)/(1000*60*60*24)));
+    const currentDate = new Date();
     if(startdate.getTime() == enddate.getTime()){
-        document.getElementById('datelabel').style.display="block";
-        document.getElementById('duration_input').value = 1;
-        if(document.getElementById('partOfDay_check').checked){
+        // document.getElementById('datelabel').style.display="block";
+        document.getElementById('datelabel_start_am').style.display="block";
+        document.getElementById('datelabel_start_pm').style.display="none";
+        document.getElementById('datelabel_end_am').style.display="none";
+        document.getElementById('datelabel_end_pm').style.display="block";
+        if(document.getElementById('start_am_check').checked && document.getElementById('end_pm_check').checked){
+            document.getElementById('duration_input').value = 1;
+        }
+        else if(document.getElementById('start_am_check').checked){
             document.getElementById('duration_input').value = 0.5;
+        }
+        else if(document.getElementById('end_pm_check').checked){
+            document.getElementById('duration_input').value = 0.5;
+        }
+        else{
+            document.getElementById('duration_input').value = 1;
         }
     }
     else if(startdate.getTime() > enddate.getTime()) {
@@ -58,34 +73,162 @@ function showLeaveDuration(){
         document.getElementById('datetime_enddate').value="";
         document.getElementById('duration_input').value = 0;
     }
+    else if(startdate.getTime() < enddate.getTime()){
+        document.getElementById('datelabel_start_am').style.display="none";
+        document.getElementById('datelabel_start_pm').style.display="block";
+        document.getElementById('datelabel_end_am').style.display="block";
+        document.getElementById('datelabel_end_pm').style.display="none";
+        const duration = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+        document.getElementById('duration_input').value = duration;
+
+        if(document.getElementById('start_pm_check').checked && document.getElementById('end_am_check').checked){
+                document.getElementById('duration_input').value = duration-1;
+            }
+        else if(document.getElementById('start_pm_check').checked){
+            document.getElementById('duration_input').value = duration-0.5;
+        }
+        else if(document.getElementById('end_am_check').checked){
+            document.getElementById('duration_input').value = duration-0.5;
+        }
+        else{
+            document.getElementById('duration_input').value = duration;
+        }
+    }
     else{
+        document.getElementById('datelabel_start_am').style.display="none";
+        document.getElementById('datelabel_start_pm').style.display="none";
+        document.getElementById('datelabel_end_am').style.display="none";
+        document.getElementById('datelabel_end_pm').style.display="none";
         document.getElementById('partOfDay_check').checked = false;
         document.getElementById('datelabel').style.display="none";
         document.getElementById('duration_input').value = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
     }
+
 }
 
 function showLeaveDuration_onUpdate(){
-    let startdate = new Date(document.getElementById("datetime_startdate_update").value); 
+    let startdate = new Date(document.getElementById("datetime_startdate_update").value);
     let enddate = new Date(document.getElementById("datetime_enddate_update").value);
     // window.alert( Math.floor((startdate - enddate)/(1000*60*60*24)));
+
+    const currentDate = new Date();
     if(startdate.getTime() == enddate.getTime()){
-        document.getElementById('datelabel_update').style.display="block";
-        document.getElementById('duration_input_update').value = 1;
-        if(document.getElementById('partOfDay_check_update').checked){
-            document.getElementById('duration_input_update').value = 0.5;
+        // document.getElementById('datelabel').style.display="block";
+        document.getElementById('datelabel_start_am_up').style.display="block";
+        document.getElementById('datelabel_start_pm_up').style.display="none";
+        document.getElementById('datelabel_end_am_up').style.display="none";
+        document.getElementById('datelabel_end_pm_up').style.display="block";
+        if(document.getElementById('start_am_check_up').checked && document.getElementById('end_pm_check_up').checked){
+            document.getElementById('duration_input_up').value = 1;
+        }
+        else if(document.getElementById('start_am_check_up').checked){
+            document.getElementById('duration_input_up').value = 0.5;
+        }
+        else if(document.getElementById('end_pm_check_up').checked){
+            document.getElementById('duration_input_up').value = 0.5;
+        }
+        else{
+            document.getElementById('duration_input_up').value = 1;
         }
     }
     else if(startdate.getTime() > enddate.getTime()) {
         alert("Start date is later than the End date");
         document.getElementById('datetime_enddate_update').value="";
-        document.getElementById('duration_input_update').value = 0;
+        document.getElementById('duration_input_up').value = 0;
+    }
+    else if(startdate.getTime() < enddate.getTime()){
+        document.getElementById('datelabel_start_am_up').style.display="none";
+        document.getElementById('datelabel_start_pm_up').style.display="block";
+        document.getElementById('datelabel_end_am_up').style.display="block";
+        document.getElementById('datelabel_end_pm_up').style.display="none";
+        const duration = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+        document.getElementById('duration_input_up').value = duration;
+
+        if(document.getElementById('start_pm_check_up').checked && document.getElementById('end_am_check_up').checked){
+                document.getElementById('duration_input_up').value = duration-1;
+            }
+        else if(document.getElementById('start_pm_check_up').checked){
+            document.getElementById('duration_input_up').value = duration-0.5;
+        }
+        else if(document.getElementById('end_am_check_up').checked){
+            document.getElementById('duration_input_up').value = duration-0.5;
+        }
+        else{
+            document.getElementById('duration_input_up').value = duration;
+        }
     }
     else{
-        document.getElementById('partOfDay_check_update').checked = false;
-        document.getElementById('datelabel_update').style.display="none";
-        document.getElementById('duration_input_update').value = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+        document.getElementById('datelabel_start_am_up').style.display="none";
+        document.getElementById('datelabel_start_pm_up').style.display="none";
+        document.getElementById('datelabel_end_am_up').style.display="none";
+        document.getElementById('datelabel_end_pm_up').style.display="none";
+        document.getElementById('partOfDay_check_up').checked = false;
+        document.getElementById('datelabel_up').style.display="none";
+        document.getElementById('duration_input_up').value = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
     }
+}
+
+
+function showLeaveDurationHR(){
+    let startdate = new Date(document.getElementById("datetime_startdate").value);
+    let enddate = new Date(document.getElementById("datetime_enddate").value);
+    // window.alert( Math.floor((startdate - enddate)/(1000*60*60*24)));
+    const currentDate = new Date();
+    if(startdate.getTime() == enddate.getTime()){
+        // document.getElementById('datelabel').style.display="block";
+        document.getElementById('datelabel_start_am').style.display="block";
+        document.getElementById('datelabel_start_pm').style.display="none";
+        document.getElementById('datelabel_end_am').style.display="none";
+        document.getElementById('datelabel_end_pm').style.display="block";
+        if(document.getElementById('start_am_check').checked && document.getElementById('end_pm_check').checked){
+            document.getElementById('duration_input').value = 1;
+        }
+        else if(document.getElementById('start_am_check').checked){
+            document.getElementById('duration_input').value = 0.5;
+        }
+        else if(document.getElementById('end_pm_check').checked){
+            document.getElementById('duration_input').value = 0.5;
+        }
+        else{
+            document.getElementById('duration_input').value = 1;
+        }
+    }
+    else if(startdate.getTime() > enddate.getTime()) {
+        alert("Start date is later than the End date");
+        document.getElementById('datetime_enddate').value="";
+        document.getElementById('duration_input').value = 0;
+    }
+    else if(startdate.getTime() < enddate.getTime()){
+        document.getElementById('datelabel_start_am').style.display="none";
+        document.getElementById('datelabel_start_pm').style.display="block";
+        document.getElementById('datelabel_end_am').style.display="block";
+        document.getElementById('datelabel_end_pm').style.display="none";
+        const duration = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+        document.getElementById('duration_input').value = duration;
+
+        if(document.getElementById('start_pm_check').checked && document.getElementById('end_am_check').checked){
+                document.getElementById('duration_input').value = duration-1;
+            }
+        else if(document.getElementById('start_pm_check').checked){
+            document.getElementById('duration_input').value = duration-0.5;
+        }
+        else if(document.getElementById('end_am_check').checked){
+            document.getElementById('duration_input').value = duration-0.5;
+        }
+        else{
+            document.getElementById('duration_input').value = duration;
+        }
+    }
+    else{
+        document.getElementById('datelabel_start_am').style.display="none";
+        document.getElementById('datelabel_start_pm').style.display="none";
+        document.getElementById('datelabel_end_am').style.display="none";
+        document.getElementById('datelabel_end_pm').style.display="none";
+        document.getElementById('partOfDay_check').checked = false;
+        document.getElementById('datelabel').style.display="none";
+        document.getElementById('duration_input').value = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+    }
+
 }
 
 
@@ -114,8 +257,11 @@ function searchBtnEnable(){
     document.getElementById('search_btn').classList.remove('disabled');
 }
 
+
 function onKeyUpAddress(){
-    document.getElementById('address_city').classList.add('required');
-    document.getElementById('address_province').classList.add('required');
-    document.getElementById('address_region').classList.add('required');
+    document.getElementById('address_line_1').required=true;
+    document.getElementById('address_city').required=true;
+    document.getElementById('address_province').required=true;
+    document.getElementById('address_region').required=true;
 }
+

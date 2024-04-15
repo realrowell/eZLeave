@@ -33,9 +33,15 @@
                             <h5><strong>{{ $department->department_title }}</strong></h5>
                         </div>
                         <div class="row">
-                            <p class="card-desc">Employees: 6</p>
+                            <p class="card-desc">
+                                @php
+                                    echo App\Models\Employee::all()->where('id',optional($department->subdepartments->positions->employee_positions)->employee_id)->count();
+                                @endphp
+                            </p>
                             <p class="card-desc">Sub-departments:
-
+                                @php
+                                    echo App\Models\SubDepartment::where('department_id',$department->id)->count();
+                                @endphp
                             </p>
                         </div>
                         <div class="row mt-2">

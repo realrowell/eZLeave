@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('subdepartment_id');
             $table->string('position_level_id',8)->nullable();
             $table->string('status_id',8)->default('sta-1007');
+            $table->boolean('is_hr_manager')->nullable();
+            $table->boolean('is_hod')->nullable();
             $table->timestamps();
         });
     }

@@ -25,11 +25,11 @@ class User extends Authenticatable
             $model->id = IdGenerator::generate(['table' => 'users', 'length' => 25, 'prefix' =>$prefix.date('ym').time()]);
         });
     }
-    
+
     public function employees(){
         return $this -> hasOne(Employee::class,'user_id','id');
     }
-    
+
     public function suffixes(){
         return $this -> hasOne(Suffix::class,'id','suffix_id');
     }
@@ -40,6 +40,10 @@ class User extends Authenticatable
 
     public function statuses(){
         return $this -> hasOne(Status::class,'id','status_id');
+    }
+
+    public function profile_photos(){
+        return $this -> hasOne(ProfilePhoto::class,'user_id','id');
     }
 
 

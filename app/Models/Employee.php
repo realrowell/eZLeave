@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Faker\Provider\ar_EG\Address;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;

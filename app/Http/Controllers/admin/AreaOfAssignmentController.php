@@ -47,13 +47,14 @@ class AreaOfAssignmentController extends Controller
 
     public function create_area_of_assignments(Request $request){
         $data = $request->validate([
-            'location_address' => 'required|max:100',
+            'location_address' => 'required|max:100|unique:area_of_assignments,location_address',
             'location_desc' => 'required|max:300',
             'embedmap' => 'max:1000'
         ],[
             'location_address.max' => ':attribute field should not exceed the max lenght of :max characters!',
             'location_desc.max' => ':attribute field should not exceed the max lenght of :max characters!',
             'embedmap.max' => ':attribute field should not exceed the max lenght of :max characters!',
+            'location_address.unique' => 'The :attribute: :input is already available!',
         ]);
 
         $data['location_address'] = strip_tags($data['location_address']);

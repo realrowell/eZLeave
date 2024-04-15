@@ -1,4 +1,4 @@
-@extends('profiles.hr_staff.employee_management.employees')
+@extends('profiles.admin.account_management.accounts')
 @section('list_active','bg-selected-warning')
 @section('sub-content')
 
@@ -26,16 +26,14 @@
     <div>
         <div class="table-responsive">
             <div class="table-wrapper">
-                <table class="table table-striped table-hover bg-light">
-                    <thead>
+                <table class="table table-bordered table-hover bg-light ">
+                    <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
-                            <th>Position</th>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Gender</th>
-                            <th>Sub-department</th>
-                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -43,15 +41,29 @@
                         @foreach ($users as $user)
                         <tr>
                             <td>{{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }} {{ optional($user->suffixes)->suffix_title }}</td>
-                            <td>{{ optional($user->employees->employee_positions->positions)->position_title }}</td>
                             <td>{{ $user->user_name }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->employees->genders->gender_title }}</td>
-                            <td>{{ optional($user->employees->employee_positions->subdepartments)->sub_department_title }}</td>
-                            <td>{{ optional(optional($user->employees->employee_positions->subdepartments)->departments)->department_title }}</td>
+                            <td>{{ $user->roles->role_title }}</td>
+                            <td>
+                                @if ($user->status_id == 'sta-2001')
+                                    <p class="card-desc badge bg-success">{{ optional($user->statuses)->status_title }}</p>
+                                @elseif ($user->status_id == 'sta-2002')
+                                    <p class="card-desc badge bg-warning text-dark">{{ optional($user->statuses)->status_title }}</p>
+                                @elseif ($user->status_id == 'sta-2003')
+                                    <p class="card-desc badge bg-warning text-dark">{{ optional($user->statuses)->status_title }}</p>
+                                @elseif ($user->status_id == 'sta-2004')
+                                    <p class="card-desc badge bg-danger">{{ optional($user->statuses)->status_title }}</p>
+                                @elseif ($user->status_id == 'sta-2002')
+                                    <p class="card-desc badge bg-warning text-dark">{{ optional($user->statuses)->status_title }}</p>
+                                @endif
+                            </td>
                             <td class="d-flex gap-2">
-                                <a href="/hr/user/profile/{{ $user->user_name }}" class="btn-sm btn-primary">Profile</a>
-                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
+                                @if ($user->role_id != 'rol-0003')
+                                    <a href="{{ route('admin_visit_account_view',['username'=>$user->user_name]) }}" class="btn-sm btn-primary text-center">Profile</a>
+                                @else
+                                    <a href="{{ route('admin_visit_employee_view',['username'=>$user->user_name]) }}" class="btn-sm btn-primary text-center">Profile</a>
+                                    <a href="{{ route('visit_employee_leave_ms_view',['username'=>$user->user_name]) }}" class="btn-sm btn-primary text-center">Leave-MS</a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col mt-2">
           <h3>Leave Management HR Staff Menu</h3>
-        </div> 
+        </div>
     </div>
     <div class="row">
         <div class="row justify-content-center align-items-start g-4">
@@ -37,10 +37,10 @@
                     </div>
                 </a>
             </div>
-            
+
         </div>
-        
+
     </div>
-    
+
 </div>
 @endsection

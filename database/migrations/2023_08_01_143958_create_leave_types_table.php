@@ -18,6 +18,10 @@ return new class extends Migration
             $table->decimal('leave_days_per_year',65,2);
             $table->decimal('max_leave_days',5,2);
             $table->dateTime('reset_date')->nullable();
+            $table->dateTime('cut_off_date')->nullable();
+            $table->boolean('show_on_employee')->default(false);
+            $table->boolean('accumulable')->default(false);
+            $table->boolean('predate')->default(false);
             $table->string('status_id',8)->default('sta-1007');
             $table->timestamps();
         });

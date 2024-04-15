@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AccountManagementController;
 use App\Http\Controllers\admin\AdminDashboard;
 use App\Http\Controllers\admin\AdminLeaveManagementController;
+use App\Http\Controllers\admin\AdminPageController;
 use App\Http\Controllers\admin\AreaOfAssignmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Page_Controller;
@@ -10,19 +11,20 @@ use App\Http\Controllers\indexPageController;
 use App\Http\Controllers\User_Profile_Controller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\admin\DepartmentController;
-use App\Http\Controllers\LeaveManagementController;
 use App\Http\Controllers\admin\PositionController;
 use App\Http\Controllers\admin\SubDepartmentController;
 use App\Http\Controllers\admin\SystemSettingsController;
-use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\HRStaffController;
-use App\Http\Controllers\LeaveCreditController;
-use App\Http\Controllers\LeaveTypesController;
-use App\Http\Controllers\LeaveApplicationController;
-use App\Http\Controllers\EmployeeDashboard;
-use App\Http\Controllers\EmployeeLeaveApplicationController;
-use App\Http\Controllers\EmployeePageController;
-use App\Http\Controllers\EmployeeProfileController;
+use App\Http\Controllers\hr_staff\LeaveCreditController;
+use App\Http\Controllers\hr_staff\LeaveTypesController;
+use App\Http\Controllers\hr_staff\LeaveApplicationController;
+use App\Http\Controllers\employee\EmployeeDashboard;
+use App\Http\Controllers\employee\EmployeeLeaveApplicationController;
+use App\Http\Controllers\employee\EmployeePageController;
+use App\Http\Controllers\employee\EmployeeProfileController;
+use App\Http\Controllers\hr_staff\HrStaffLeavePageController;
+use App\Http\Controllers\hr_staff\HrStaffPageController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +44,6 @@ use App\Http\Controllers\EmployeeProfileController;
 
 
 Route::get('/', [indexPageController::class, 'index'])->name('index');
-Route::get('/welcome', [Page_Controller::class, 'welcome']);
 
 Route::get('/profile/user_profile', [User_Profile_Controller::class, 'profile_user_profile'])->name('employee_user_profile');
 Route::get('/profile/user_profile/edit', [User_Profile_Controller::class, 'profile_user_profile_edit']);
@@ -62,14 +63,16 @@ Route::get('/profile/update/view', [EmployeeProfileController::class, 'employee_
 Route::patch('/profile/update', [EmployeeProfileController::class, 'employee_update_profile'])->name('employee_update_profile');
 Route::get('/leave_management/menu', [EmployeePageController::class, 'profile_leave_management_menu'])->name('profile_leave_management_menu');
 Route::get('/leave_management/for_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_for_approval_grid'])->name('profile_leave_management_for_approval_grid');
+Route::get('/leave_management/leave_details/{leave_application_rn}', [EmployeePageController::class, 'leaveDetailsPage'])->name('leave_details_page');
 Route::get('/leave_management/for_approval/list_view', [EmployeePageController::class, 'profile_leave_management_for_approval_list'])->name('profile_leave_management_for_approval_list');
 Route::get('/leave_management/pending_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_pending_approval_grid'])->name('profile_leave_management_pending_approval_grid');
 Route::get('/leave_management/pending_approval/list_view', [EmployeePageController::class, 'profile_leave_management_pending_approval_list'])->name('profile_leave_management_pending_approval_list');
 Route::get('/leave_management/cancelled/grid_view', [EmployeePageController::class, 'profile_leave_management_cancelled_grid'])->name('profile_leave_management_cancelled_grid');
 Route::get('/leave_management/cancelled/list_view', [EmployeePageController::class, 'profile_leave_management_cancelled_list'])->name('profile_leave_management_cancelled_list');
+Route::get('/leave_management/pending_availment/grid_view', [EmployeePageController::class, 'profile_leave_management_pending_availment_grid'])->name('profile_leave_management_pending_availment_grid');
+Route::get('/leave_management/pending_availment/list_view', [EmployeePageController::class, 'profile_leave_management_pending_availment_list'])->name('profile_leave_management_pending_availment_list');
 Route::get('/leave_management/history/grid_view', [EmployeePageController::class, 'profile_leave_management_history_grid'])->name('profile_leave_management_history_grid');
 Route::get('/leave_management/history/list_view', [EmployeePageController::class, 'profile_leave_management_history_list'])->name('profile_leave_management_history_list');
-Route::get('/select_user_menu', [Page_Controller::class, 'profile_select_user_menu'])->name('profile_select_user_menu');
 Route::post('/employee/create_leaveapplication', [EmployeeLeaveApplicationController::class, 'create_employee_leaveapplication'])->name('create_employee_leaveapplication');
 Route::patch('/employee/update_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'update_employee_leaveapplication'])->name('update_employee_leaveapplication');
 Route::post('/employee/create_note_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'create_note_employee_leaveapplication'])->name('create_note_employee_leaveapplication');
@@ -86,28 +89,36 @@ Route::get('/employee/cancel_leaveapplication/{leave_application_rn}', [Employee
 |
 |
 */
-Route::get('/hr/dashboard', [HRStaffController::class, 'hrstaff_dashboard'])->name('hrstaff_dashboard');
-Route::get('/hr/employee_management/employees/grid', [UserManagementController::class, 'hrstaff_employee_management_employees_grid'])->name('hrstaff_employees_grid');
-Route::get('/hr/employee_management/employees/list', [UserManagementController::class, 'hrstaff_employee_management_employees_list'])->name('hrstaff_employees_list');
-Route::get('/hr/employee_management/employees/grid/search', [UserManagementController::class, 'hrstaff_employee_management_employees_grid_search'])->name('hrstaff_employees_grid_search');
-Route::get('/hr/employee_management/employees/list/search', [UserManagementController::class, 'hrstaff_employee_management_employees_list_search'])->name('hrstaff_employees_list_search');
-Route::get('/hr/employee_management/employees/regular/grid', [UserManagementController::class, 'hrstaff_employee_management_regular_grid'])->name('hrstaff_employees_regular_grid');
-Route::get('/hr/employee_management/employees/regular/list', [UserManagementController::class, 'hrstaff_employee_management_regular_list'])->name('hrstaff_employees_regular_list');
-Route::get('/hr/employee_management/employees/probationary/grid', [UserManagementController::class, 'hrstaff_employee_management_probationary_grid'])->name('hrstaff_employees_probi_grid');
-Route::get('/hr/employee_management/employees/probationary/list', [UserManagementController::class, 'hrstaff_employee_management_probationary_list'])->name('hrstaff_employees_probi_list');
-Route::post('/hr/create-user', [UserManagementController::class, 'create_user']);
+Route::get('/hr/dashboard', [HrStaffPageController::class, 'hrstaff_dashboard'])->name('hrstaff_dashboard');
+Route::get('/hr/dashboard/{fiscal_year}', [HrStaffPageController::class, 'hrstaff_fy_dashboard'])->name('hrstaff_fy_dashboard');
+Route::get('/hr/employee_management/employees/grid', [HrStaffPageController::class, 'hrstaff_employee_management_employees_grid'])->name('hrstaff_employees_grid');
+Route::get('/hr/employee_management/employees/list', [HrStaffPageController::class, 'hrstaff_employee_management_employees_list'])->name('hrstaff_employees_list');
+Route::get('/hr/employee_management/employees/grid/search', [HrStaffPageController::class, 'hrstaff_employee_management_employees_grid_search'])->name('hrstaff_employees_grid_search');
+Route::get('/hr/employee_management/employees/list/search', [HrStaffPageController::class, 'hrstaff_employee_management_employees_list_search'])->name('hrstaff_employees_list_search');
+Route::get('/hr/employee_management/employees/regular/grid', [HrStaffPageController::class, 'hrstaff_employee_management_regular_grid'])->name('hrstaff_employees_regular_grid');
+Route::get('/hr/employee_management/employees/regular/list', [HrStaffPageController::class, 'hrstaff_employee_management_regular_list'])->name('hrstaff_employees_regular_list');
+Route::get('/hr/employee_management/employees/probationary/grid', [HrStaffPageController::class, 'hrstaff_employee_management_probationary_grid'])->name('hrstaff_employees_probi_grid');
+Route::get('/hr/employee_management/employees/probationary/list', [HrStaffPageController::class, 'hrstaff_employee_management_probationary_list'])->name('hrstaff_employees_probi_list');
+// Route::post('/hr/create-user', [UserManagementController::class, 'create_user']);
 // Route::put('/hr/update-user/{user_id}/{employee_id}/{employee_position_id}', [UserManagementController::class, 'update_user']);
-Route::patch('/hr/update-user/{user_id}/{employee_id}/{employee_position_id}', [UserManagementController::class, 'update_user'])->name('update_user');
-Route::get('/hr/leave_management/menu', [Page_Controller::class, 'hrstaff_leave_menu'])->name('hrstaff_leave_menu');
-Route::get('/hr/leave_management', [HRStaffController::class, 'hrstaff_leave_management'])->name('hrstaff_leave_management');
-Route::get('/hr/leave_management/search/', [HRStaffController::class, 'hrstaff_leave_management_search'])->name('hrstaff_leave_management_search');
-Route::get('/hr/leave_management/leave_credits', [HRStaffController::class, 'hrstaff_leave_credits'])->name('hrstaff_leave_credits');
-Route::get('/hr/leave_management/leave_credits/search', [HRStaffController::class, 'hrstaff_leave_credits_search'])->name('hrstaff_leave_credits_search');
-Route::get('/hr/leave_management/pending_approval', [HRStaffController::class, 'hrstaff_leave_pending_approval'])->name('hrstaff_leave_pending_approval');
-Route::get('/hr/leave_management/approved', [HRStaffController::class, 'hrstaff_leave_approved'])->name('hrstaff_leave_approved');
-Route::get('/hr/leave_management/cancelled', [HRStaffController::class, 'hrstaff_leave_cancelled'])->name('hrstaff_leave_cancelled');
-Route::get('/hr/leave_management/rejected', [HRStaffController::class, 'hrstaff_leave_rejected'])->name('hrstaff_leave_rejected');
-Route::get('/hr/leave_management/leavetypes', [LeaveTypesController::class, 'hrstaff_leave_types'])->name('hrstaff_leave_types');
+// Route::patch('/hr/update-user/{user_id}/{employee_id}/{employee_position_id}', [UserManagementController::class, 'update_user'])->name('update_user');
+Route::get('/hr/profile', [HrStaffPageController::class, 'hrstaff_visit_profile'])->name('hrstaff_profile');
+Route::get('/hr/profile/update', [HrStaffPageController::class, 'hrstaff_visit_profile_update'])->name('hrstaff_profile_update');
+
+Route::get('/hr/leave_management/menu', [HrStaffLeavePageController::class, 'hrstaff_leave_menu'])->name('hrstaff_leave_menu');
+Route::get('/hr/leave_management', [HrStaffLeavePageController::class, 'hrstaff_leave_management'])->name('hrstaff_leave_management');
+Route::get('/hr/leave_management/all/{fiscal_year}', [HrStaffLeavePageController::class, 'hrstaff_fy_leave_management'])->name('hrstaff_fy_leave_management');
+Route::get('/hr/leave_management/search/', [HrStaffLeavePageController::class, 'hrstaff_leave_management_search'])->name('hrstaff_leave_management_search');
+Route::get('/hr/leave_management/leave_credits', [HrStaffLeavePageController::class, 'hrstaff_leave_credits'])->name('hrstaff_leave_credits');
+Route::get('/hr/leave_management/leave_credits/{fiscal_year}', [HrStaffLeavePageController::class, 'hrstaff_fy_leave_credits'])->name('hrstaff_fy_leave_credits');
+Route::get('/hr/leave_management/leave_credits/search', [HrStaffLeavePageController::class, 'hrstaff_leave_credits_search'])->name('hrstaff_leave_credits_search');
+Route::get('/hr/leave_management/leave_details/{leave_application_rn}', [HrStaffLeavePageController::class, 'hr_leaveDetailsPage'])->name('hr_leave_details_page');
+Route::get('/hr/leave_management/pending_approval', [HrStaffLeavePageController::class, 'hrstaff_leave_pending_approval'])->name('hrstaff_leave_pending_approval');
+Route::get('/hr/leave_management/pending_availment', [HrStaffLeavePageController::class, 'hrstaff_leave_pending_availment'])->name('hrstaff_leave_pending_availment');
+Route::get('/hr/leave_management/approved', [HrStaffLeavePageController::class, 'hrstaff_leave_approved'])->name('hrstaff_leave_approved');
+Route::get('/hr/leave_management/cancelled', [HrStaffLeavePageController::class, 'hrstaff_leave_cancelled'])->name('hrstaff_leave_cancelled');
+Route::get('/hr/leave_management/rejected', [HrStaffLeavePageController::class, 'hrstaff_leave_rejected'])->name('hrstaff_leave_rejected');
+Route::get('/hr/leave_management/leavetypes', [HrStaffLeavePageController::class, 'hrstaff_leave_types'])->name('hrstaff_leave_types');
 Route::post('/hr/create_leavetypes', [LeaveTypesController::class, 'create_leavetypes'])->name('create_leavetypes');
 Route::get('/hr/update_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'update_leavetypes'])->name('update_leavetypes');
 Route::get('/hr/delete_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'delete_leavetypes'])->name('delete_leavetypes');
@@ -121,8 +132,9 @@ Route::get('/hr/leave_management/approval/{leave_application_rn}', [LeaveApplica
 Route::get('/hr/leave_management/rejection/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_rejection'])->name('leave_application_rejection');
 Route::get('/hr/leave_management/cancellation/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_cancellation'])->name('leave_application_cancellation');
 
-Route::get('/hr/user/profile/{username}', [UserManagementController::class, 'visit_profile_view'])->name('user_profile');
-Route::get('/hr/user/update/{username}', [UserManagementController::class, 'visit_profile_update']);
+Route::get('/hr/user/profile/{username}', [HrStaffPageController::class, 'visit_profile_view'])->name('user_profile');
+Route::get('/hr/user/update/{username}', [HrStaffPageController::class, 'visit_profile_update'])->name('visit_user_update');
+Route::get('/hr/user/profile/leave/{username}', [HrStaffPageController::class, 'visit_profile_leave_view'])->name('user_profile_leave');
 
 
 /*
@@ -140,15 +152,28 @@ Route::get('/admin/policy/view', [Page_Controller::class, 'admin_policy_view']);
 Route::get('/admin/policy/create', [Page_Controller::class, 'admin_policy_create']);
 Route::get('/admin/policy/update', [Page_Controller::class, 'admin_policy_update']);
 Route::get('/admin/policy/menu', [Page_Controller::class, 'admin_policy_menu'])->name('admin_policy_menu');
+Route::get('/admin/login-logs', [AdminPageController::class, 'admin_login_logs_view'])->name('admin_login_logs');
 
-Route::get('/admin/accounts/grid', [AccountManagementController::class, 'admin_accounts_grid'])->name('admin_accounts_grid');
+Route::get('/admin/accounts/grid', [AdminPageController::class, 'admin_accounts_grid'])->name('admin_accounts_grid');
+Route::get('/admin/accounts/list', [AdminPageController::class, 'admin_accounts_list'])->name('admin_accounts_list');
+Route::get('/admin/accounts/grid/search', [AdminPageController::class, 'admin_accounts_search_grid'])->name('admin_accounts_search_grid');
 Route::post('/admin/accounts/employee/create', [AccountManagementController::class, 'admin_create_employee'])->name('admin_create_employee');
 Route::post('/admin/accounts/create', [AccountManagementController::class, 'admin_create_account'])->name('admin_create_account');
 Route::post('/admin/accounts/update/user/profile_photo/{username}', [AccountManagementController::class, 'update_profile_photo'])->name('admin_update_profile_photo');
-Route::get('/admin/accounts/{username}', [AccountManagementController::class, 'admin_visit_employee_view'])->name('admin_visit_employee_view');
-Route::get('/admin/accounts/update/{username}', [AccountManagementController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
-Route::patch('/admin/accounts/update/{user_id}/{employee_id}/{employee_position_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
+Route::get('/admin/accounts/{username}', [AdminPageController::class, 'admin_visit_employee_view'])->name('admin_visit_employee_view');
+Route::get('/admin/accounts/admin/{username}', [AdminPageController::class, 'admin_visit_account_view'])->name('admin_visit_account_view');
+Route::get('/admin/accounts/update_view/{username}', [AdminPageController::class, 'admin_visit_account_update_view'])->name('admin_visit_account_update_view');
+Route::get('/admin/accounts/update/{username}', [AdminPageController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
+Route::patch('/admin/accounts/update/{user_id}/{employee_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
+Route::patch('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
+Route::get('/admin/accounts/visit/reset_password/{username}', [AccountManagementController::class, 'account_reset_password'])->name('account_reset_password');
+Route::get('/admin/accounts/admin/reset_password/{username}', [AccountManagementController::class, 'admin_account_reset_password'])->name('admin_account_reset_password');
+Route::get('/admin/accounts/account_deactivate/{username}', [AccountManagementController::class, 'account_deactivate'])->name('account_deactivate');
+Route::get('/admin/accounts/account_activate/{username}', [AccountManagementController::class, 'account_activate'])->name('account_activate');
 Route::get('/admin/accounts/visit/leave/{username}', [AdminLeaveManagementController::class, 'visit_employee_leave_ms'])->name('visit_employee_leave_ms_view');
+Route::get('/admin/profile', [AdminPageController::class, 'admin_visit_profile'])->name('admin_profile');
+Route::get('/admin/profile/update/view', [AdminPageController::class, 'admin_visit_profile_update'])->name('admin_profile_update_view');
+Route::patch('/admin/profile/update', [AccountManagementController::class, 'update_admin_profile'])->name('admin_profile_update');
 
 Route::get('/admin/organization/departments/list', [DepartmentController::class, 'admin_organization_departments_list'])->name('admin_departments_list');
 Route::get('/admin/organization/departments/grid', [DepartmentController::class, 'admin_organization_departments_grid'])->name('admin_departments_grid');

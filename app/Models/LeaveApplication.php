@@ -18,13 +18,17 @@ class LeaveApplication extends Model
         'attachment',
         'employee_id',
         'approver_id',
+        'second_approver_id',
         'employee_leave_credit_id',
+        'fiscal_year_id',
         'status_id',
+        'start_part_of_day',
+        'end_part_of_day',
     ];
 
     protected $primaryKey = 'id';
     public $incrementing = false;
-    
+
 
     public static function boot()
     {
@@ -43,13 +47,25 @@ class LeaveApplication extends Model
     public function approvers(){
         return $this -> hasOne(Employee::class,'id','approver_id');
     }
+    public function second_approvers(){
+        return $this -> hasOne(Employee::class,'id','second_approver_id');
+    }
     public function leavetypes(){
         return $this -> hasOne(LeaveType::class,'id','leave_type_id');
     }
     public function statuses(){
         return $this -> hasOne(Status::class,'id','status_id');
     }
-    // public function leave_approvals(){
-    // return $this->hasMany('LeaveApprovals'); 
-    // }
+    public function start_of_date_parts(){
+        return $this -> hasOne(DayPart::class,'id','start_part_of_day');
+    }
+    public function end_of_date_parts(){
+        return $this -> hasOne(DayPart::class,'id','end_part_of_day');
+    }
+    public function fiscal_years(){
+        return $this -> hasOne(FiscalYear::class,'id','fiscal_year_id');
+    }
+    public function employee_leave_credits(){
+        return $this -> hasOne(EmployeeLeaveCredit::class,'id','employee_leave_credit_id');
+    }
 }

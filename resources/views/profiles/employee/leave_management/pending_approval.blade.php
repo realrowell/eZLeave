@@ -6,14 +6,44 @@
 @section('custom_active_pending_approval','var(--accent-color)')
 @section('content')
 
-{{-- <div class="banner-gradient p-5 text-center text-light ">
-    <h2 class="banner-title">
-        Bioseed Leave Management System
-    </h2>
-</div> --}}
-<div class="container-fluid mb-4 pb-5" id="profile_body">
+<div class="container-fluid d-print-none" id="profile_body">
     <div class="row">
         <h5>Menu</h5>
+    </div>
+    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " style="min-height: 1rem" >
+            <a href="{{ route('employee_dashboard') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Dashboard</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+            <a href="{{ route('employee_profile') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Profile</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
+            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Leave Management</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid d-print-none" id="profile_body">
+    <div class="row">
+        <h5>Leave Menu</h5>
     </div>
     <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
@@ -35,10 +65,10 @@
             </a>
         </div>
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_cancelled_grid') }}" class="text-dark">
+            <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
-                        <h6>Cancelled</h6>
+                        <h6>Pending Availment</h6>
                     </div>
                 </div>
             </a>
@@ -53,9 +83,34 @@
             </a>
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-6 mt-2">
-            <h3>Leave Management / Pending Approval</h3>
+            <div class="row">
+                <div class="col">
+                    <h3>Leave Management</h3>
+                </div>
+                {{-- <div class="col">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Fiscal Year:
+                            @if (Request()->fiscal_year == null)
+                                {{ $current_fiscal_year->fiscal_year_title }}
+                            @else
+                                @foreach ($fiscal_years as $fiscal_year)
+                                    @if ( $fiscal_year->id == Request()->fiscal_year)
+                                        {{ $fiscal_year->fiscal_year_title }}
+                                    @endif
+                                @endforeach
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu">
+                          @foreach ($fiscal_years as $fiscal_year)
+                              <li><a class="dropdown-item" href="{{ route('hrstaff_fy_leave_credits',['fiscal_year'=>$fiscal_year->id]) }}">{{ $fiscal_year->fiscal_year_title }}</a></li>
+                          @endforeach
+                        </ul>
+                    </div>
+                </div> --}}
+            </div>
         </div>
         <div class="col-sm-12 col-md-8 col-lg-6 justify-content-end align-items-end text-end mt-2">
             <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col p-2 custom-primary-button custom-rounded-top @yield('grid_view_active')">
@@ -78,14 +133,7 @@
             </a>
         </div>
     </div>
-    <div class="sub-content" id="form_submit" style="opacity: 1">
-        @yield('sub-content')
-    </div>
-        
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    
+
     <!-- Apply leave Modal -->
     <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -118,8 +166,8 @@
                                             </label>
                                             <select class="form-select" id="leavetype" name="leavetype" required>
                                                 <option selected disabled value=""></option>
-                                                @foreach ($leavetypes as $leavetype)
-                                                    <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
+                                                @foreach ($leave_credits as $leave_credit)
+                                                    <option value="{{ $leave_credit->leavetypes->id }}">{{ $leave_credit->leavetypes->leave_type_title }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -139,10 +187,28 @@
                                         </div>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col " id="datelabel" style="display: none;">
+                                        <div class="col" id="datelabel_start_am" style="display: none;">
                                             <div class="form-check">
-                                                <label for="partOfDay_check" class="form-check-label" >Half Day?</label>
-                                                <input type="checkbox" class="form-check-input" id="partOfDay_check" name="partOfDay_check" value="1" onchange="showLeaveDuration()">
+                                                <label for="start_am_check" class="form-check-label" >Morning</label>
+                                                <input type="checkbox" class="form-check-input" id="start_am_check" name="start_am_check" value="1" onchange="showLeaveDuration()">
+                                            </div>
+                                        </div>
+                                        <div class="col " id="datelabel_start_pm" style="display: none;">
+                                            <div class="form-check">
+                                                <label for="start_pm_check" class="form-check-label" >Afternoon</label>
+                                                <input type="checkbox" class="form-check-input" id="start_pm_check" name="start_pm_check" value="1" onchange="showLeaveDuration()">
+                                            </div>
+                                        </div>
+                                        <div class="col " id="datelabel_end_am" style="display: none;">
+                                            <div class="form-check">
+                                                <label for="end_am_check" class="form-check-label" >Morning</label>
+                                                <input type="checkbox" class="form-check-input" id="end_am_check" name="end_am_check" value="1" onchange="showLeaveDuration()">
+                                            </div>
+                                        </div>
+                                        <div class="col " id="datelabel_end_pm" style="display: none;">
+                                            <div class="form-check">
+                                                <label for="end_pm_check" class="form-check-label" >Afternoon</label>
+                                                <input type="checkbox" class="form-check-input" id="end_pm_check" name="end_pm_check" value="1" onchange="showLeaveDuration()">
                                             </div>
                                         </div>
                                     </div>
@@ -184,12 +250,15 @@
         </div>
     </div>
     {{-- End Apply leave Modal --}}
-    <div class="row">
-        <div class="col">
-            <div class="mt-5">
-                <ul class="pagination justify-content-center align-items-center">
-                    {!! $leave_applications->links('pagination::bootstrap-5') !!}
-                </ul>
+</div>
+<div class="container-fluid mb-4 pb-5" id="profile_body">
+    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
+        <span class="visually-hidden" >Loading...</span>
+    </div>
+    <div class="sub-content" id="form_submit_1" style="opacity: 1">
+        <div class="container-fluid">
+            <div class="row">
+                @yield('sub-content')
             </div>
         </div>
     </div>

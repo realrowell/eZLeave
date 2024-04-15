@@ -6,7 +6,9 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\SubDepartment;
+use App\Models\EmployeePosition;
 
 class DepartmentController extends Controller
 {
@@ -18,11 +20,13 @@ class DepartmentController extends Controller
     public function admin_organization_departments_grid(){
         $subdepartments = SubDepartment::all()->where('status_id','sta-1007'); //only active sub departments
         $departments = Department::where('status_id','sta-1007')->orderBy('department_title','asc')->get();
+        $employees = Employee::all()->where('status_id','sta-2001');
         // dd($subdepartment_counts);
         return view('profiles.admin.organization.departments_grid',
             [
                 'departments' => $departments,
                 'subdepartments' => $subdepartments,
+                'employees' => $employees,
             ]
         );
     }
@@ -36,9 +40,10 @@ class DepartmentController extends Controller
 
     public function create_department(Request $request){
         $data = $request->validate([
-            'department_title' => 'required|max:50'
+            'department_title' => 'required|max:50|unique:departments,department_title'
         ],[
             'department_title.max' => ':attribute field should not exceed the max lenght of :max characters!',
+            'department_title.unique' => 'The :attribute: :input is already available!',
         ]);
 
         $data['department_title'] = strip_tags($request['department_title']);

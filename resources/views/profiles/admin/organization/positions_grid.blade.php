@@ -50,7 +50,7 @@
                         </div>
                         <!-- Update Department Modal -->
                             <div class="modal fade" id="update_position{{ $position->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form action="{{ route('admin_update_position',['id'=>$position->id]) }}" method="PUT" onsubmit="submitButtonDisabled()">
                                             @csrf
@@ -86,6 +86,24 @@
                                                                     <option value="{{ $position_level->id }}">{{ $position_level->level_title }}</option>
                                                                 @endforeach
                                                             </select>
+                                                            <div class="form-check form-switch mt-3">
+                                                                <input class="form-check-input" type="checkbox" id="is_hod1" name="is_hod"
+                                                                    @php
+                                                                        if($position->is_hod == true){
+                                                                        echo 'checked';
+                                                                        }
+                                                                    @endphp>
+                                                                <label class="form-check-label" for="is_hod1">Head of Department</label>
+                                                            </div>
+                                                            <div class="form-check form-switch mt-3">
+                                                                <input class="form-check-input" type="checkbox" id="is_hr_manager1" name="is_hr_manager"
+                                                                    @php
+                                                                        if($position->is_hr_manager == true){
+                                                                        echo 'checked';
+                                                                        }
+                                                                    @endphp>
+                                                                <label class="form-check-label" for="is_hr_manager1">HR Manager</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

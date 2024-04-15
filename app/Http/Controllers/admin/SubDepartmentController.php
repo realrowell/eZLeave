@@ -31,8 +31,10 @@ class SubDepartmentController extends Controller
 
     public function create_subdepartment(Request $request){
         $data = $request->validate([
-            'subdepartment_title' => 'required',
+            'subdepartment_title' => 'required|unique:sub_departments,sub_department_title',
             'dept_name' => 'required'
+        ],[
+            'subdepartment_title.unique' => 'The :attribute: :input is already available!',
         ]);
         $data['subdepartment_title'] = strip_tags($data['subdepartment_title']);
         $data['dept_name'] = strip_tags($data['dept_name']);

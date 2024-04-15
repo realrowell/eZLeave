@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
     {{-- Google Fonts --}}
-    {{-- 
+    {{--
     font-family: 'Open Sans', sans-serif;
     font-family: 'Poppins', sans-serif;
     font-family: 'Raleway', sans-serif; 200, 400, 600, 800
@@ -32,7 +32,7 @@
       href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
       rel="stylesheet"
     />
-    
+
     {{-- TinyMCE Editor --}}
     <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
@@ -42,7 +42,7 @@
     <script type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
-    
+
 
     <script type="text/javascript">
       $("#alert").delay(4000).slideUp(200, function() {
@@ -108,7 +108,7 @@
       .bx-menu{
         color: white;
       }
-/* 
+/*
       .header_img {
         width: 35px;
         height: 35px;
@@ -129,7 +129,7 @@
         width: var(--nav-width);
         height: 100vh;
         background-color: var(--first-color);
-        padding: 0.5rem 1rem 0 0; 
+        padding: 0.5rem 1rem 0 0;
         transition: 0.5s;
         z-index: var(--z-fixed);
       }
@@ -198,7 +198,7 @@
       }
 
       .body-pd {
-        padding-left: calc(var(--nav-width) + 0rem);  
+        padding-left: calc(var(--nav-width) + 0rem);
       }
 
       .active {
@@ -264,90 +264,79 @@
         .body-pd {
           padding-left: calc(var(--nav-width) + 180px);
         }
-        
+
       }
     </style>
   </head>
   <body id="body-pd">
     <header class="header" id="header">
-        
-        <div class="header_toggle">
-            <i class="bx bx-menu" id="header-toggle"></i>
-            <a class="text-white ms-2" id="header_title">Bioseed Leave Management System |</a>
-            <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
-        </div>
-        
-        <div class="align-items-end justify-content-end">
-          <span class="nav_logo-name">Employee UI</span>
+        <div class="container-fluid">
+            <div class="row  justify-content-start align-items-start">
+                <div class="col-1 align-self-center">
+                    <div class="header_toggle">
+                        <i class="bx bx-menu pt-2" id="header-toggle"></i>
+                    </div>
+                </div>
+                <div class="col-8 align-self-center">
+                    <div class="text-start">
+                        <a class="text-white" id="header_title">eZLeave | </a>
+                        <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
+                    </div>
+                </div>
+                <div class="col-3 align-self-center text-end align-items-center">
+                    <a class="nav_logo-name dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ auth()->user()->first_name }}
+                    </a>
+                    <ul class="dropdown-menu shadow" >
+                        <li><span class="dropdown-item-text">{{ auth()->user()->first_name." ".auth()->user()->last_name." ".optional(auth()->user()->suffixes)->suffix_title }}</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ route('employee_profile') }}">Profile</a></li>
+                        <li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Sign out</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </header>
     <div class="l-navbar container-fluid" id="nav-bar">
         <nav class="nav">
             <div>
-              <a href="/profile/select_user_menu" class="nav_logo">
-                <i class="bx nav_logo-icon" id="bioseed_logo"><img style="width: 30px" src="/img/bioseed_logo_low1.png" alt=""></i>
-                <i class="bx nav_logo-icon" id="bioseed_logo"><img style="width: 100px" src="/img/bioseed_logo_low2.png" alt=""></i>
-            </a>
-            <div class="nav_list">
-                <a href="{{ route('employee_dashboard') }}" class="nav_link @yield('sidebar_dashboard_active')">
-                    <i class="bx bx-grid-alt nav_icon"></i>
-                    <span class="nav_name">Dashboard</span>
-                </a>
-                <a href="{{ route('employee_user_profile') }}" class="nav_link @yield('sidebar_user_active')">
-                    <i class="bx bx-user nav_icon"></i>
-                    <span class="nav_name">User</span>
-                </a>
+                <span class="nav_logo">
+                    <i class="bx nav_logo-icon" id="bioseed_logo"><img style="width: 30px" src="/img/bioseed_logo_low1.png" alt=""></i>
+                    <i class="bx nav_logo-icon" id="bioseed_logo"><img style="width: 100px" src="/img/bioseed_logo_low2.png" alt=""></i>
+                </span>
 
-
-                <div class="nav_link @yield('sidebar_leave_management_active') btn-group">
-                  <a class="custom_icon" style="color: @yield('custom_active_leave_icon');" href="{{ route('profile_leave_management_menu') }}">
-                    <i class="bx nav_icon bx-message-square-detail">
-                    </i>
-                  </a>
-                  <p class="menu-nav_name" style="margin: 1px 0px -1px 0px">
-                    <a href="{{ route('profile_leave_management_menu') }}" class="@yield('sidebar_leave_management_active_custom') nav_name nav_link_custom">
-                      Leave Management
-                    </a> 
-                    <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" style="background-color:transparent; border:none" data-bs-toggle="collapse" href="#leave_management" role="button" aria-expanded="false" aria-controls="leave_management">
-                      <p class="visually-hidden">Toggle Dropdown</p>
-                    </button>
-                  </p>
+                <div class="nav_list">
+                    <a href="{{ route('employee_dashboard') }}" class="nav_link @yield('sidebar_dashboard_active')">
+                        <i class="bx bx-grid-alt nav_icon"></i>
+                        <span class="nav_name">Dashboard</span>
+                    </a>
+                    <a href="{{ route('employee_profile') }}" class="nav_link @yield('sidebar_user_active')">
+                        <i class="bx bx-user nav_icon"></i>
+                        <span class="nav_name">Profile</span>
+                    </a>
+                    <a href="{{ route('profile_leave_management_menu') }}" class="nav_link @yield('sidebar_leave_management_active')">
+                        <i class="bx nav_icon bx-calendar"></i>
+                        <span class="nav_name">Leave Management</span>
+                    </a>
                 </div>
-
-
-                <div class="collapse" id="leave_management">
-                  <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_pending_approval')">Pending Approval</span>
-                  </a>
-                  <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_approval')">For Approval</span>
-                  </a>
-                  <a href="{{ route('profile_leave_management_cancelled_grid') }}" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_cancelled')">Cancelled</span>
-                  </a>
-                  <a href="{{ route('profile_leave_management_history_grid') }}" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_history')">History</span>
-                  </a>
-                </div>
-                {{--  --}}
-
-            </div>
             </div>
             <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}"
             onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">
-              <i class="bx bx-log-out nav_icon"></i>
-              <span class="nav_name">SignOut</span>
+                <i class="bx bx-log-out nav_icon"></i>
+                <span class="nav_name">SignOut</span>
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-              @csrf
+                @csrf
             </form>
         </nav>
     </div>
-    {{-- <div class="banner-gradient p-5 text-center text-light ">
-        <img style="max-width: 100%; height: auto;" src="/img/dashboard_banner_01.jpg" alt="">
-        {{ now()->format('l') }}
-    </div> --}}
+
     <div class="">
       <div class="position-relative z-1000">
         <div class="position-fixed bottom-0 end-0 me-5">
@@ -384,7 +373,7 @@
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            
+
             @if ($errors->any())
                 <div class="alert alert-danger fade show">
                   <div class="row">
@@ -410,7 +399,7 @@
     <div class="">
         @yield('content')
     </div>
-    
+
     <footer class="position-static pt-5">
       <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
         <div class="footer-custom">
@@ -419,14 +408,14 @@
               <a >
                 <p>© {{ now()->year }}
                   <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
-                    Bioseed Research Philippines, Inc. 
+                    Bioseed Research Philippines, Inc.
                   </a> | All Rights Reserved.
                 </p>
               </a>
             </div>
           </div>
         </div>
-        
+
       </div>
 
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> --}}
@@ -437,6 +426,6 @@
       ></script>
       <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
     </footer>
-    
+
   </body>
 </html>

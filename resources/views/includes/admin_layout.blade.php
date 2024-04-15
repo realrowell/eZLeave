@@ -7,10 +7,13 @@
     <link rel="icon" type="image/x-icon" href="/img/logo_icon.png">
 
     {{-- Bootstrap 5 --}}
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> --}}
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> --}}
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.jqueryui.css">
+
     {{-- Google Fonts --}}
     {{--
     font-family: 'Open Sans', sans-serif;
@@ -33,15 +36,18 @@
       rel="stylesheet"
     />
 
-    {{-- TinyMCE Editor --}}
-    <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 
-    <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- TinyMCE Editor --}}
+    <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
 
     {{-- Javescript Navbar --}}
-    <script type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -71,6 +77,8 @@
         font-size: var(--normal-font-size);
         transition: 0.5s;
         background-color: #f4f4f4;
+        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        background-size: 20px 20px;
       }
 
       a {
@@ -260,15 +268,41 @@
 
       }
     </style>
-  </head>
-  {{-- <body id="body-pd" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;"> --}}
-  <body id="body-pd">
-    <header class="header" id="header">
 
-        <div class="header_toggle">
-            <i class="bx bx-menu" id="header-toggle"></i>
-            <a class="text-white ms-2" id="header_title">eZLeave | </a>
-            <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
+</head>
+  {{-- <body id="body-pd" oncontextmenu="return false" onkeydown="return false;" onmousedown="return false;"> --}}
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="container-fluid">
+            <div class="row  justify-content-start align-items-start">
+                <div class="col-1 align-self-center">
+                    <div class="header_toggle">
+                        <i class="bx bx-menu pt-2" id="header-toggle"></i>
+                    </div>
+                </div>
+                <div class="col-8 align-self-center">
+                    <div class="text-start">
+                        <a class="text-white" id="header_title">eZLeave | </a>
+                        <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
+                    </div>
+                </div>
+                <div class="col-3 align-self-center text-end align-items-center">
+                    <a class="nav_logo-name dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ auth()->user()->first_name }}
+                    </a>
+                    <ul class="dropdown-menu shadow" >
+                        <li><span class="dropdown-item-text">{{ auth()->user()->first_name." ".auth()->user()->last_name." ".optional(auth()->user()->suffixes)->suffix_title }}</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Sign out</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         {{-- <div class="align-items-end justify-content-end">
           <span class="nav_logo-name">Admin</span>
@@ -318,40 +352,10 @@
                     <i class="bx bx-user nav_icon"></i>
                     <span class="nav_name">Account Management</span>
                 </a>
-
-
-                <div class="nav_link @yield('sidebar_leave_management_active') btn-group">
-                  <a class="custom_icon" style="color: @yield('custom_active_leave_icon');" href="#"><i class="bx nav_icon bx-message-square-detail"></i></a>
-                  <p class="menu-nav_name" style="margin: 1px 0px -1px 0px">
-                    <a href="#" class="@yield('sidebar_leave_management_active_custom') nav_name nav_link_custom">
-                      Leave Management
-                    </a>
-                    <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" style="background-color:transparent; border:none" data-bs-toggle="collapse" href="#leave_management" role="button" aria-expanded="false" aria-controls="leave_management">
-                      <p class="visually-hidden">Toggle Dropdown</p>
-                    </button>
-                  </p>
-                </div>
-
-
-                <div class="collapse" id="leave_management">
-                  <a href="#" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_inprogress')">In Progress</span>
-                  </a>
-                  <a href="#" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_approved')">Approved</span>
-                  </a>
-                  <a href="#" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_rejected')">Rejected</span>
-                  </a>
-                  <a href="#" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_history')">History</span>
-                  </a>
-                  <a href="/profile/leave_management/for_approval" class="nav_link ms-4">
-                    <span class="sub-menu1 menu-nav_name" style="color: @yield('custom_active_for_settings')">Settings</span>
-                  </a>
-                </div>
-                {{--  --}}
-
+                <a href="#" class="nav_link @yield('sidebar_leave_management_active')">
+                    <i class="bx nav_icon bx-message-square-detail"></i>
+                    <span class="nav_name">Leave Management</span>
+                </a>
                 <a href="{{ route('admin_org_menu') }}" class="nav_link @yield('sidebar_organization_active')">
                     <i class="bx x-polaris-major-organization nav_icon">{{ svg('css-organisation') }}</i>
                     <span class="nav_name">Organization</span>
@@ -448,12 +452,17 @@
     </div>
 
     <div class="mb-5">
-        <div class="container-fluid" id="profile_body">
+        <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
             <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
                 <div class="col ">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-12 p-2">
-                            <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="">
+                            {{-- <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt=""> --}}
+                            @if (auth()->user()->profile_photos == null)
+                                <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="profile photo">
+                            @else
+                                <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
+                            @endif
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12 p-2">
                             <div class="row">
@@ -476,6 +485,12 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-12 p-2">
                             <div class="row">
+                                <div class="row">
+                                    <a href="{{ route('admin_profile') }}" class="nav_link">
+                                      <i class="nav_icon" >@svg('css-profile')</i>
+                                      <span class="nav_name">Profile</span>
+                                    </a>
+                                </div>
                                 <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bx bx-log-out nav_icon"></i>
                                     <span class="nav_name">SignOut</span>

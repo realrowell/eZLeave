@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('leave_approvals', function (Blueprint $table) {
             $table->string('id',20)->primary();
             $table->string('leave_application_reference');
-            $table->string('reason_note');
+            $table->string('reason_note')->nullable();
             $table->string('approver_id');
             $table->string('status_id')->nullable();
             $table->timestamps();

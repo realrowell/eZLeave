@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col mt-2">
           <h3>Leave Management Menu</h3>
-        </div> 
+        </div>
     </div>
     <div class="row">
         <div class="row justify-content-center align-items-start g-4">
@@ -29,7 +29,7 @@
                 </a>
             </div>
             <div class="col-custom col-lg-5 col-md-5 col-sm-12">
-                <a class="text-dark" href="/leave_management/for_approval/grid_view">
+                <a class="text-dark" href="{{ route('profile_leave_management_for_approval_grid') }}">
                     <div class="card shadow card-menu border-0">
                         <div class="card-body text-center">
                             <i class="row mb-3 mt-2 justify-content-center align-items-center">
@@ -44,7 +44,7 @@
                 </a>
             </div>
             <div class="col-lg-5 col-md-5 col-sm-12">
-                <a class="text-dark" href="#">
+                <a class="text-dark" href="{{ route('profile_leave_management_pending_availment_grid') }}">
                     <div class="card shadow card-menu border-0">
                         <div class="card-body text-center">
                             <i class="row mb-3 mt-2 justify-content-center align-items-center">
@@ -59,7 +59,7 @@
                 </a>
             </div>
             <div class="col-lg-5 col-md-5 col-sm-12">
-                <a class="text-dark" href="#">
+                <a class="text-dark" href="{{ route('profile_leave_management_history_grid') }}">
                     <div class="card shadow card-menu border-0" >
                         <div class="card-body text-center">
                             <i class="row mb-3 mt-2 justify-content-center align-items-center">
@@ -74,8 +74,8 @@
                 </a>
             </div>
         </div>
-        
+
     </div>
-    
+
 </div>
 @endsection

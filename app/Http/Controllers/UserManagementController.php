@@ -10,6 +10,7 @@ use App\Models\EmploymentStatus;
 use App\Models\Gender;
 use App\Models\MaritalStatus;
 use App\Models\Position;
+use App\Models\ProfilePhoto;
 use App\Models\Role;
 use App\Models\SubDepartment;
 use App\Models\Suffix;
@@ -578,6 +579,7 @@ class UserManagementController extends Controller
     public function visit_profile_view($username){
         $user=User::where('user_name',$username)->get()->first();
         $employees=Employee::all();
+        $profile_photo = ProfilePhoto::where('user_id',$user->id)->where('status_id','sta-1007')->first();
 
         // compute the total length of service
         $current_date = Carbon::now();
@@ -588,12 +590,36 @@ class UserManagementController extends Controller
         $length_of_service = $length_of_service/365;
         $length_of_service = number_format((float)$length_of_service, 2, '.', '');
 
-        $reports_to = optional(optional($user->employees->employee_positions->reports_tos)->users)->first_name." ".
+        if($user->employees->employee_positions->reports_tos == null){
+            $reports_to = "NONE";
+        }
+        else{
+            $reports_to = optional(optional($user->employees->employee_positions->reports_tos)->users)->first_name." ".
                         optional(optional($user->employees->employee_positions->reports_tos)->users)->middle_name." ".
                         optional(optional($user->employees->employee_positions->reports_tos)->users)->last_name." ".
-                        optional(optional(optional($user->employees->employee_positions->reports_tos)->users)->suffixes)->suffix_title;
-        if (empty($reports_to)){
-            $reports_to = "NONE";
+                        optional(optional(optional($user->employees->employee_positions->reports_tos)->users)->suffixes)->suffix_title." - ".
+                        $user->employees->employee_positions->reports_tos->employee_positions->positions->position_description;
+        }
+
+        if($user->employees->employee_positions->second_reports_tos == null){
+            $second_reports_to = "NONE";
+        }
+        else{
+            $second_reports_to = optional(optional($user->employees->employee_positions->second_reports_tos)->users)->first_name." ".
+            optional(optional($user->employees->employee_positions->second_reports_tos)->users)->middle_name." ".
+            optional(optional($user->employees->employee_positions->second_reports_tos)->users)->last_name." ".
+            optional(optional(optional($user->employees->employee_positions->second_reports_tos)->users)->suffixes)->suffix_title." - ".
+            $user->employees->employee_positions->second_reports_tos->employee_positions->positions->position_description;
+        }
+
+        if($user->employees->address_id == null){
+            $employee_address = "N/A";
+        }
+        else{
+            $employee_address = $user->employees->employee_addresses->address_line_1.", ".
+                                $user->employees->employee_addresses->city.", ".
+                                $user->employees->employee_addresses->province.", ".
+                                $user->employees->employee_addresses->region;
         }
 
         return view('profiles.hr_staff.employee_management.visit_user_view',[
@@ -601,12 +627,39 @@ class UserManagementController extends Controller
             'employees'=>$employees,
             'length_of_service' => $length_of_service,
             'reports_to' => $reports_to,
+            'second_reports_to' => $second_reports_to,
+            'profile_photo' => $profile_photo,
+            'employee_address' => $employee_address,
         ]);
     }
 
     public function visit_profile_update($username){
         $user=User::where('user_name',$username)->get()->first();
+        $employees=Employee::all();
         $user_reports_tos=Employee::with('employee_positions')->get();
+        $profile_photo = ProfilePhoto::where('user_id',$user->id)->where('status_id','sta-1007')->first();
+
+        // dd($user_reports_to_name);
+
+        if($user->employees->employee_positions->reports_tos == null){
+            $reports_to = "NONE";
+        }
+        else{
+            $reports_to = optional(optional($user->employees->employee_positions->reports_tos)->users)->first_name." ".
+                        optional(optional($user->employees->employee_positions->reports_tos)->users)->middle_name." ".
+                        optional(optional($user->employees->employee_positions->reports_tos)->users)->last_name." ".
+                        optional(optional(optional($user->employees->employee_positions->reports_tos)->users)->suffixes)->suffix_title;
+        }
+
+        if($user->employees->employee_positions->second_reports_tos == null){
+            $second_reports_to = "NONE";
+        }
+        else{
+            $second_reports_to = optional(optional($user->employees->employee_positions->second_reports_tos)->users)->first_name." ".
+            optional(optional($user->employees->employee_positions->second_reports_tos)->users)->middle_name." ".
+            optional(optional($user->employees->employee_positions->second_reports_tos)->users)->last_name." ".
+            optional(optional(optional($user->employees->employee_positions->second_reports_tos)->users)->suffixes)->suffix_title;
+        }
 
         $data=[
             // 'users' => User::where('status_id','sta-2001')->paginate(5),
@@ -617,13 +670,17 @@ class UserManagementController extends Controller
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
             'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007'),
+            'user_reports_to_name' => optional($user->employees->employee_positions->reports_tos)->last_name.', '.
+                                        optional($user->employees->employee_positions->reports_tos)->first_name,
         ];
-        // dd($user);
-        $employees=Employee::all();
+
         return view('profiles.hr_staff.employee_management.visit_user_update',[
             'user'=>$user,
             'employees'=>$employees,
-            'user_reports_tos' => $user_reports_tos
+            'user_reports_tos' => $user_reports_tos,
+            'reports_to' => $reports_to,
+            'second_reports_to' => $second_reports_to,
+            'profile_photo' => $profile_photo,
         ])->with($data);
     }
 }

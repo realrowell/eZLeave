@@ -66,182 +66,144 @@
                 Add Account
             </a>
             <!-- Add Account Modal -->
-            <div class="modal fade" id="AddAccountModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal fade" id="AddAccountModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none;">
+                            <span class="visually-hidden" >Loading...</span>
+                        </div>
                         <div class="modal-content">
-                            <form action="/hr/create-user" method="POST" onsubmit="submitButtonDisabled()">
+                            <form action="{{ route('admin_create_employee') }}" method="POST" onsubmit="onFormSubmit()">
                                 @csrf
-        
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="staticBackdropLabel">Add Account</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body" id="form_submit">
+                                <div class="modal-body" id="form_to_submit">
                                     <div class="container-fluid text-start">
-                                        <div class="row ps-5 p-3 pe-5">
-                                            <div class="col-lg-6 col-md-6 col-sm-12 border-start border-warning border-5">
-                                                <div class="row mt-4 mb-1">
-                                                    <div class="col">
-                                                        <h5 class="profile-title-header">Personal Information</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1" >
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="firstname"><h6 class="profile-title">First name</h6></label>
-                                                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{ old('firstname') }}">
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="lastname"><h6 class="profile-title">Last name</h6></label>
-                                                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ old('lastname') }}">
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1" >
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="middlename"><h6 class="profile-title">Middle name</h6></label>
-                                                        <input type="text" class="form-control" id="middlename" name="middlename" value="{{ old('middlename') }}">
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="suffix"><h6 class="profile-title">Suffix</h6></label>
-                                                        <select class="form-control" id="suffix" name="suffix">
-                                                            <option selected value="">-- N/A --</option>
-                                                            @foreach ($suffixes as $suffix)
-                                                                <option value="{{ $suffix->id }}">{{ $suffix->suffix_title }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="gender"><h6 class="profile-title">Sex</h6></label>
-                                                        <select class="form-control" id="gender" name="gender">
-                                                            <option selected disabled></option>
-                                                            @foreach ($genders as $gender)
-                                                                <option value="{{ $gender->id }}">{{ $gender->gender_title }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="marital_status"><h6 class="profile-title">Marital status</h6></label>
-                                                        <select class="form-control" id="marital_status" name="marital_status">
-                                                            <option selected disabled></option>
-                                                            @foreach ($marital_statuses as $marital_status)
-                                                                <option value="{{ $marital_status->id }}">{{ $marital_status->marital_status_title }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col">
-                                                        <label for="birthdate"><h6 class="profile-title">Birth date</h6></label>
-                                                        <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ old('birthdate') }}">
-                                                    </div>
-                                                </div>
-                                                @if (Auth::user()->role_id=='rol-0001')
-                                                    <div class="row mt-2 mb-1">
+                                        <div class="row">
+                                            <div class="row ps-5 p-3 pe-5 text-dark">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 border-start border-warning border-5">
+                                                    <div class="row mt-4 mb-1">
                                                         <div class="col">
-                                                            <label for="role"><h6 class="profile-title">Role</h6></label>
-                                                            <select class="form-control" id="role" name="role">
-                                                                <option selected disabled></option>
-                                                                @foreach ($roles as $role)
-                                                                    <option value="{{ $role->id }}">{{ $role->role_title }}</option>
+                                                            <h5 class="profile-title-header">Personal Information</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2 mb-1" >
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="firstname"><h6 class="profile-title">First name</h6></label>
+                                                            <input type="text" class="form-control" id="firstname" name="firstname" value="{{ old('firstname') }}" required>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="lastname"><h6 class="profile-title">Last name</h6></label>
+                                                            <input type="text" class="form-control" id="lastname" name="lastname" value="{{ old('lastname') }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2 mb-1" >
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="middlename"><h6 class="profile-title">Middle name</h6></label>
+                                                            <input type="text" class="form-control" id="middlename" name="middlename" value="{{ old('middlename') }}">
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="suffix"><h6 class="profile-title">Suffix</h6></label>
+                                                            <select class="form-control" id="suffix" name="suffix">
+                                                                <option selected value="{{ old('suffix') }}">-- N/A --</option>
+                                                                @foreach ($suffixes as $suffix)
+                                                                    <option value="{{ $suffix->id }}">{{ $suffix->suffix_title }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
-                                                @endif
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-12 border-start border-warning border-5">
-                                                <div class="row mt-4 mb-1">
-                                                    <div class="col">
-                                                        <h5 class="profile-title-header">Account Details</h5>
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col">
-                                                        <label for="email"><h6 class="profile-title">Email</h6></label>
-                                                        <input type="email" class="form-control" id="email" placeholder="" name="email" value="{{ old('email') }}">
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col">
-                                                        <label for="user_name"><h6 class="profile-title">Username</h6></label>
-                                                        <input type="user_name" class="form-control" id="user_name" placeholder="" name="user_name" value="{{ old('user_name') }}">
-                                                    </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col-lg-6 col-md-12 col-sm-12 ">
-                                                        <label for="password"><h6 class="profile-title">Password</h6></label>
-                                                        {{-- onfocusin="(this.type='text') --}}
-                                                        <div class="input-group">
-                                                            <input type="password" class="form-control" id="password" placeholder="" name="password" value="{{ old('password') }}" required>
-                                                            <button type="button" class="btn rounded-end btn-outline-primary" id="show_password" onclick="showPass()">
-                                                                show
-                                                            </button>
-                                                            <button type="button" class="btn rounded-end btn-outline-primary" id="hide_password" onclick="hidePass()" hidden>
-                                                                hide
-                                                            </button>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="gender"><h6 class="profile-title">Sex</h6></label>
+                                                            <select class="form-control" id="gender" name="gender" required>
+                                                                <option selected value="{{ old('gender') }}"></option>
+                                                                @foreach ($genders as $gender)
+                                                                    <option value="{{ $gender->id }}">{{ $gender->gender_title }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
-                                                        
-                                                            
-                                                        {{-- <input type="checkbox" id="show_password">Show Password --}}
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="marital_status"><h6 class="profile-title">Marital status</h6></label>
+                                                            <select class="form-control" id="marital_status" name="marital_status" required>
+                                                                <option selected value="{{ old('marital_status') }}"></option>
+                                                                @foreach ($marital_statuses as $marital_status)
+                                                                    <option value="{{ $marital_status->id }}">{{ $marital_status->marital_status_title }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="repassword"><h6 class="profile-title">Re-type password</h6></label>
-                                                        <div class="input-group">
-                                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="{{ old('password_confirmation') }}" required>
-                                                            <button type="button" class="btn rounded-end btn-outline-primary" id="show_repassword" onclick="showRePass()">
-                                                                show
-                                                            </button>
-                                                            <button type="button" class="btn rounded-end btn-outline-primary" id="hide_repassword" onclick="hideRePass()" hidden>
-                                                                hide
-                                                            </button>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col">
+                                                            <label for="birthdate"><h6 class="profile-title">Birth date</h6></label>
+                                                            <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ old('birthdate') }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col">
+                                                            <label for="date_hired"><h6 class="profile-title">Date Hired</h6></label>
+                                                            <input type="date" class="form-control" id="date_hired" name="date_hired" value="{{ old('date_hired') }}">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col">
-                                                        <label for="contact_number"><h6 class="profile-title">Contact number</h6></label>
-                                                        <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ old('area_of_assignment') }}">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 border-start border-warning border-5">
+                                                    <div class="row mt-4 mb-1">
+                                                        <div class="col">
+                                                            <h5 class="profile-title-header">Account Details</h5>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="position"><h6 class="profile-title">Position</h6></label>
-                                                        <select class="form-control" id="position" name="position">
-                                                            <option selected disabled></option>
-                                                            @foreach ($positions as $position)
-                                                                <option value="{{ $position->id }}">{{ $position->position_title }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col">
+                                                            <label for="email"><h6 class="profile-title">Email</h6></label>
+                                                            <input type="email" class="form-control" id="email" placeholder="" name="email" value="{{ old('email') }}" required>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="employee_status"><h6 class="profile-title">Sub-department</h6></label>
-                                                        <select class="form-control" id="subdepartment" name="subdepartment">
-                                                            <option selected disabled></option>
-                                                            @foreach ($subdepartments as $subdepartment)
-                                                                <option value="{{ $subdepartment->id }}">{{ $subdepartment->sub_department_title }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col">
+                                                            <label for="user_name"><h6 class="profile-title">Username</h6></label>
+                                                            <input type="user_name" class="form-control" id="user_name" placeholder="" name="user_name" value="{{ old('user_name') }}" required>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mt-2 mb-1">
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="area_of_assignment"><h6 class="profile-title">Area of assignment</h6></label>
-                                                        <select class="form-control" id="area_of_assignment" name="area_of_assignment">
-                                                            <option selected disabled></option>
-                                                            @foreach ($area_of_assignments as $area_of_assignment)
-                                                                <option value="{{ $area_of_assignment->id }}">{{ $area_of_assignment->location_address }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col">
+                                                            <label for="contact_number"><h6 class="profile-title">Contact number</h6></label>
+                                                            <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ old('contact_number') }}">
+                                                        </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                                        <label for="employee_status"><h6 class="profile-title">Employment Status</h6></label>
-                                                        <select class="form-control" id="employee_status" name="employee_status">
-                                                            <option selected disabled></option>
-                                                            @foreach ($employment_statuses as $employment_status)
-                                                                <option value="{{ $employment_status->id }}">{{ $employment_status->employment_status_title }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="position"><h6 class="profile-title">Position</h6></label>
+                                                            <select class="form-control" id="position" name="position" required>
+                                                                <option selected value="{{ old('position') }}"></option>
+                                                                @foreach ($positions as $position)
+                                                                    <option value="{{ $position->id }}">{{ $position->position_description }} ({{ $position->subdepartments->departments->department_title }}) </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="sap_id_number"><h6 class="profile-title">ID Number</h6></label>
+                                                            <input type="text" class="form-control" id="sap_id_number" name="sap_id_number" value="{{ old('sap_id_number') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="area_of_assignment"><h6 class="profile-title">Area of assignment</h6></label>
+                                                            <select class="form-control" id="area_of_assignment" name="area_of_assignment" required>
+                                                                <option selected value="{{ old('area_of_assignment') }}"></option>
+                                                                @foreach ($area_of_assignments as $area_of_assignment)
+                                                                    <option value="{{ $area_of_assignment->id }}">{{ $area_of_assignment->location_address }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="employee_status"><h6 class="profile-title">Employment Status</h6></label>
+                                                            <select class="form-control" id="employee_status" name="employee_status" required>
+                                                                <option selected value="{{ old('employee_status') }}"></option>
+                                                                @foreach ($employment_statuses as $employment_status)
+                                                                    <option value="{{ $employment_status->id }}">{{ $employment_status->employment_status_title }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,26 +212,20 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                                    <button id="submit_button1" type="submit" class="btn btn-success">Add Account</button>
+                                    <button type="submit" id="submit_button1" class="btn btn-success">Add Account</button>
                                 </div>
                             </form>
                         </div>
-                    
+                    </div>
                 </div>
-            </div>
             {{-- End Add Account Modal --}}
         </div>
-    </div>
-
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none; z-index: 1060">
-        <span class="visually-hidden" >Loading...</span>
     </div>
 
     <div class="sub-content mb-5 bg-light p-3" id="form_submit" >
         @yield('sub-content')
     </div>
-    
-  </div>
+
 </div>
 
 @endsection

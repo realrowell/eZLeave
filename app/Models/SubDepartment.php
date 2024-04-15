@@ -9,13 +9,13 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class SubDepartment extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'sub_department_title',
         'department_id',
         'status_id',
     ];
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {
@@ -28,5 +28,9 @@ class SubDepartment extends Model
 
     public function departments(){
         return $this -> hasOne(Department::class,'id','department_id');
+    }
+
+    public function positions(){
+        return $this -> belongsTo(Position::class,'id','subdepartment_id');
     }
 }

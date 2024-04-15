@@ -15,16 +15,18 @@ class EmployeeLeaveCredit extends Model
         'employee_id',
         'leave_days_credit',
         'status_id',
-        'fiscal_year'
+        'fiscal_year_id',
+        'expiration',
+        'show_on_employee',
     ];
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
             $prefix = 'elc-';
-            $model->id = IdGenerator::generate(['table' => 'employee_leave_credits', 'length' => 20, 'prefix' =>$prefix.date('ym')]);
+            $model->id = IdGenerator::generate(['table' => 'employee_leave_credits', 'length' => 20, 'prefix' =>$prefix.date('ymdHis')]);
         });
     }
 
@@ -36,5 +38,8 @@ class EmployeeLeaveCredit extends Model
     }
     public function statuses(){
         return $this -> hasOne(Status::class,'id','status_id');
+    }
+    public function fiscal_years(){
+        return $this -> hasOne(FiscalYear::class,'id','fiscal_year_id');
     }
 }

@@ -13,14 +13,11 @@ return new class extends Migration
     {
         Schema::create('leave_credit_logs', function (Blueprint $table) {
             $table->string('id',20)->primary();
-            $table->string('leave_type_id',12);
             $table->string('employee_leave_credits_id',20);
+            $table->string('leave_application_rn')->nullable();
+            $table->string('leave_approval_id')->nullable();
             $table->decimal('leave_days_credit',5,2);
-            $table->string('employee_id',20);
-            $table->string('author_id',20);
-            $table->string('approver_id',20)->nullable();
             $table->string('status_id',8)->default('sta-1007');
-            $table->string('fiscal_year_id');
             $table->string('reason_note',500)->nullable();
             $table->timestamps();
         });

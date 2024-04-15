@@ -6,9 +6,44 @@
 @section('custom_active_history','var(--accent-color)')
 @section('content')
 
-<div class="container-fluid mb-4 pb-5" id="profile_body">
+<div class="container-fluid" id="profile_body">
     <div class="row">
         <h5>Menu</h5>
+    </div>
+    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " style="min-height: 1rem" >
+            <a href="{{ route('employee_dashboard') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Dashboard</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+            <a href="{{ route('employee_profile') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Profile</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
+            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Leave Management</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mb-4 pb-5" id="profile_body">
+    <div class="row">
+        <h5>Leave Menu</h5>
     </div>
     <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
@@ -30,10 +65,10 @@
             </a>
         </div>
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_cancelled_grid') }}" class="text-dark">
+            <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
-                        <h6>Cancelled</h6>
+                        <h6>Pending Availment</h6>
                     </div>
                 </div>
             </a>
@@ -76,11 +111,11 @@
     <div class="sub-content mb-5" id="form_submit" style="opacity: 1">
         @yield('sub-content')
     </div>
-        
+
     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
         <span class="visually-hidden" >Loading...</span>
     </div>
-    
+
     <!-- Apply leave Modal -->
     <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

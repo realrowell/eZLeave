@@ -28,16 +28,20 @@
             <div class="card w-100 p-2 shadow">
                 <div class="card-body row">
                     <div class="col-lg-4 col-md-4 col-4 ">
-                        <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="">
+                        @if ($user->profile_photos == null)
+                            <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="profile photo">
+                        @else
+                            <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.$user->profile_photos->profile_photo) }}" alt="profile photo">
+                        @endif
                     </div>
                     <div class="col-lg-8 col-md-8 col-8">
                         <div class="row">
                             <h5><strong>{{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }} {{ optional($user->suffixes)->suffix_title }}</strong></h5>
                         </div>
                         <div class="row">
-                            <p class="card-desc">{{ optional($user->employees->employee_positions->positions)->position_title }}</p>
-                            <p class="card-desc">{{ optional($user->employees->employee_positions->subdepartments)->sub_department_title }}</p>
-                            <p class="card-desc">{{ optional($user->employees->employee_positions->subdepartments->departments)->department_title }}</p>
+                            <p class="card-desc">{{ optional(optional($user->employees->employee_positions)->positions)->position_description }}</p>
+                            <p class="card-desc">{{ optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</p>
+                            <p class="card-desc">{{ optional(optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</p>
                         </div>
                         <div class="row mt-2">
                             <div class="col">
@@ -50,9 +54,9 @@
             </div>
         </div>
     @endforeach
-    
+
     {{-- END CARDS --}}
-    
+
 </div>
 <div class="row">
     <div class="col">

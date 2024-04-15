@@ -47,13 +47,13 @@
             <h3>Employee Management</h3>
         </div>
         <div class="col-sm-12 col-md-8 col-lg-6 justify-content-end align-items-end text-end mt-2">
-            <a href="{{ route('hrstaff_employees_grid') }}" class="col p-2 me-2 custom-primary-button custom-rounded-top @yield('grid_active')">
+            <a href="{{ route('admin_accounts_grid') }}" class="col p-2 me-2 custom-primary-button custom-rounded-top @yield('grid_active')">
                 <i data-toggle="tooltip" title="grid view" class="grid-view-icon">
                     <svg stroke="white" class="mb-2" width="25px" height="25px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.5 3.5H10.5V10.5H3.5V3.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3.5 13.5H10.5V20.5H3.5V13.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.5 3.5H20.5V10.5H13.5V3.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.5 13.5H20.5V20.5H13.5V13.5Z"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                 </i>
                 Grid View
             </a>
-            <a href="{{ route('hrstaff_employees_list') }}" class="col p-2 custom-primary-button custom-rounded-top @yield('list_active')">
+            <a href="{{ route('admin_accounts_list') }}" class="col p-2 custom-primary-button custom-rounded-top @yield('list_active')">
                 <i data-toggle="tooltip" title="list view" class="list-view-icon">
                     <svg fill="white" class="" width="25px" height="25px" viewBox="-2.1 -2.1 25.20 25.20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>list [#1497]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1"  fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-179.000000, -322.000000)" > <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M124.575,174 C123.7056,174 123,174.672 123,175.5 C123,176.328 123.7056,177 124.575,177 C125.4444,177 126.15,176.328 126.15,175.5 C126.15,174.672 125.4444,174 124.575,174 L124.575,174 Z M128.25,177 L144,177 L144,175 L128.25,175 L128.25,177 Z M124.575,168 C123.7056,168 123,168.672 123,169.5 C123,170.328 123.7056,171 124.575,171 C125.4444,171 126.15,170.328 126.15,169.5 C126.15,168.672 125.4444,168 124.575,168 L124.575,168 Z M128.25,171 L144,171 L144,169 L128.25,169 L128.25,171 Z M124.575,162 C123.7056,162 123,162.672 123,163.5 C123,164.328 123.7056,165 124.575,165 C125.4444,165 126.15,164.328 126.15,163.5 C126.15,162.672 125.4444,162 124.575,162 L124.575,162 Z M128.25,165 L144,165 L144,163 L128.25,163 L128.25,165 Z" id="list-[#1497]"> </path> </g> </g> </g> </g></svg>
                 </i>
@@ -291,7 +291,7 @@
                                                 <div class="row mt-2 mb-1">
                                                     <div class="col">
                                                         <label for="contact_number"><h6 class="profile-title">Contact number</h6></label>
-                                                        <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ old('area_of_assignment') }}">
+                                                        <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ old('contact_number') }}">
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2 mb-1">
@@ -300,7 +300,7 @@
                                                         <select class="form-control" id="position" name="position" required>
                                                             <option selected value="{{ old('position') }}"></option>
                                                             @foreach ($positions as $position)
-                                                                <option value="{{ $position->id }}">{{ $position->position_description }} ({{ $position->subdepartments->departments->department_title }}) </option>
+                                                                <option value="{{ $position->id }}">{{ $position->position_description }} ({{ $position->subdepartments->sub_department_title }}) </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -348,7 +348,7 @@
 
 
 
-    <div class="sub-content mb-5 bg-light p-3" id="form_submit" >
+    <div class="sub-content mb-5 p-3" id="form_submit" >
         @yield('sub-content')
     </div>
 

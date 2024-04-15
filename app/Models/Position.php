@@ -15,7 +15,9 @@ class Position extends Model
         'position_description',
         'subdepartment_id',
         'position_level_id',
-        'status_id'
+        'status_id',
+        'is_hr_manager',
+        'is_hod',
     ];
 
     public $incrementing = false;
@@ -30,7 +32,7 @@ class Position extends Model
     }
 
     public function employee_positions(){
-        return $this -> belongsTo(EmployeePosition::class,'position_id','id');
+        return $this -> belongsTo(EmployeePosition::class,'id','position_id');
     }
     // public function departments(){
     //     return $this -> hasOne(department::class,'department_id','id');

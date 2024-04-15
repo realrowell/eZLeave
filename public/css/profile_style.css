@@ -1,5 +1,5 @@
 :root{
-    --primary-color: #2C63F5;
+    --primary-color: #0077b6;
     --secondary-color: #6D6D6D;
     --success-color: #03bb16;
     --danger-color: #DE1212;
@@ -14,6 +14,12 @@
     --warning-color-hover: #f08800;
     --light-color-hover: #4e4e4e;
     --dark-color-hover: #ececec;
+
+    --msg-background-color: #0a8cc9;
+}
+
+.bg-msg-custom{
+    background-color: var(--msg-background-color);
 }
 
 .btn-warning-color{
@@ -22,6 +28,7 @@
 
 .custom-bg-primary{
     background-color: var(--primary-color);
+    color: white;
 }
 .custom-bg-secondary{
     background-color: var(--secondary-color);
@@ -45,6 +52,7 @@
 
 .custom-bg-primary-hover:hover{
     background-color: var(--primary-color-hover);
+    color: white;
 }
 .custom-bg-secondary-hover:hover{
     background-color: var(--secondary-color-hover);
@@ -103,11 +111,11 @@
 .bg-gradient-primary{
     background: hsla(280, 95%, 57%, 1);
 
-background: linear-gradient(90deg, hsla(280, 95%, 57%, 1) 0%, hsla(193, 90%, 55%, 1) 100%);
+background: linear-gradient(90deg, rgb(24, 80, 233) 0%, hsla(193, 90%, 55%, 1) 100%);
 
-background: -moz-linear-gradient(90deg, hsla(280, 95%, 57%, 1) 0%, hsla(193, 90%, 55%, 1) 100%);
+background: -moz-linear-gradient(90deg, rgb(24, 80, 233) 0%, hsla(193, 90%, 55%, 1) 100%);
 
-background: -webkit-linear-gradient(90deg, hsla(280, 95%, 57%, 1) 0%, hsla(193, 90%, 55%, 1) 100%);
+background: -webkit-linear-gradient(90deg, rgb(24, 80, 233) 0%, hsla(193, 90%, 55%, 1) 100%);
 
 filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#B429F9", endColorstr="#26C5F3", GradientType=1 );
 }
@@ -380,6 +388,7 @@ h3{
     display: block;
     margin-left: auto;
     margin-right: auto;
+    object-fit: cover;
 }
 
 .banner-gradient{

@@ -6,14 +6,44 @@
 @section('custom_active_for_approval','var(--accent-color)')
 @section('content')
 
-{{-- <div class="banner-gradient p-5 text-center text-light ">
-    <h2 class="banner-title">
-        Bioseed Leave Management System
-    </h2>
-</div> --}}
-<div class="container-fluid mb-4 pb-5" id="profile_body">
+<div class="container-fluid" id="profile_body">
     <div class="row">
         <h5>Menu</h5>
+    </div>
+    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " style="min-height: 1rem" >
+            <a href="{{ route('employee_dashboard') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Dashboard</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+            <a href="{{ route('employee_profile') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Profile</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
+            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Leave Management</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mb-4 pb-5" id="profile_body">
+    <div class="row">
+        <h5>Leave Menu</h5>
     </div>
     <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
@@ -35,10 +65,10 @@
             </a>
         </div>
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_cancelled_grid') }}" class="text-dark">
+            <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
-                        <h6>Cancelled</h6>
+                        <h6>Pending Availment</h6>
                     </div>
                 </div>
             </a>
@@ -55,7 +85,7 @@
     </div>
     <div class="row mb-3">
         <div class="col-sm-4 col-md-7 col-lg-6 mt-2">
-            <h3>Leave Management / For Approval</h3>
+            <h3>Leave Management </h3>
         </div>
         <div class="col-sm-8 col-md-5 col-lg-6 justify-content-end align-items-end text-end mt-2">
             <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="col p-2 custom-primary-button custom-rounded-top @yield('grid_view_active')">
@@ -76,15 +106,15 @@
         @yield('sub-content')
     </div>
 
-    {{-- <div class="row">
+    <div class="row">
         <div class="col">
             <div class="mt-5">
                 <ul class="pagination justify-content-center align-items-center">
-                    {!! $leave_approvals->links('pagination::bootstrap-5') !!}
+                    {!! $leave_applications->links('pagination::bootstrap-5') !!}
                 </ul>
             </div>
         </div>
-    </div> --}}
+    </div>
     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
         <span class="visually-hidden" >Loading...</span>
     </div>

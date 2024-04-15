@@ -13,9 +13,9 @@ class LeaveApplicationNote extends Model
     protected $fillable = [
         'leave_application_reference',
         'reason_note',
-        'employee_id'
+        'author_id'
     ];
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {
@@ -30,7 +30,7 @@ class LeaveApplicationNote extends Model
         return $this -> hasOne(LeaveApplication::class,'reference_number','leave_application_reference');
     }
 
-    public function employees(){
-        return $this -> hasOne(Employee::class,'id','employee_id');
+    public function users(){
+        return $this -> hasOne(User::class,'id','author_id');
     }
 }

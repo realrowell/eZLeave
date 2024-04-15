@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('leave_days_credit',5,2);
             $table->string('status_id',8)->default('sta-1007');
             $table->string('fiscal_year_id');
+            $table->date('expiration')->nullable();
+            $table->boolean('show_on_employee')->default(false);
             $table->timestamps();
         });
     }

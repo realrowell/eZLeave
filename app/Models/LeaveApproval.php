@@ -13,18 +13,19 @@ class LeaveApproval extends Model
     protected $fillable = [
         'leave_application_reference',
         'approver_id',
-        'status_id'
+        'status_id',
+        'reason_note'
     ];
-    
+
     protected $primary = 'id';
-    public $incrementing = false; 
+    public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
             $prefix = 'apv-';
-            $model->id = IdGenerator::generate(['table' => 'leave_application_notes', 'length' => 16, 'prefix' =>$prefix.date('ymdHism')]);
+            $model->id = IdGenerator::generate(['table' => 'leave_approvals', 'length' => 20, 'prefix' =>$prefix.date('ymdHis')]);
         });
     }
 
@@ -36,5 +37,8 @@ class LeaveApproval extends Model
     }
     public function statuses(){
         return $this -> hasOne(Status::class,'id','status_id');
+    }
+    public function approvers(){
+        return $this -> hasOne(User::class,'id','approver_id');
     }
 }

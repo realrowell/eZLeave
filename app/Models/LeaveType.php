@@ -10,7 +10,7 @@ class LeaveType extends Model
 {
     use HasFactory;
 
-    public $incrementing = false; 
+    public $incrementing = false;
 
     protected $fillable = [
         'leave_type_title',
@@ -18,6 +18,10 @@ class LeaveType extends Model
         'leave_days_per_year',
         'max_leave_days',
         'reset_date',
+        'cut_off_date',
+        'show_on_employee',
+        'accumulable',
+        'predate',
     ];
 
     public static function boot()
@@ -27,5 +31,9 @@ class LeaveType extends Model
             $prefix = 'ltp-1';
             $model->id = IdGenerator::generate(['table' => 'leave_types', 'length' => 12, 'prefix' =>$prefix]);
         });
+    }
+
+    public function statuses(){
+        return $this -> hasOne(Status::class,'id','status_id');
     }
 }

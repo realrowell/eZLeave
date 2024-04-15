@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('id',16)->primary();
             $table->string('leave_application_reference');
             $table->string('reason_note');
-            $table->string('employee_id')->nullable();
+            $table->string('author_id')->nullable();
             $table->timestamps();
         });
     }

@@ -13,25 +13,31 @@
     <div class="row justify-content-center align-items-start g-2">
       <div class="col-md bg-light border pt-2 ps-2 pb-5 me-2 shadow border-bottom-0 border-end-0 border-top-0 border-warning border-5">
         <div class="row ">
-          <div class="col"><h5>Leave Management</h5></div>
+          <div class="col"><h5>Account Management</h5></div>
           <div class="col d-flex justify-content-end pe-4">
             <a href="/" class="btn-sm btn-primary">see all</a>
           </div>
         </div>
         <div class="container-fluid">
           <div class="row justify-content-center align-items-center text-center g-2 mt-3">
-            <a href="/profile/leave_management/for_approval" class="col-md text-dark">
-              <span id="approval_numbers" class="col">4</span>
+            <a href="#" class="col-md text-dark">
+              <span id="approval_numbers" class="col">{{ $users_count }}</span>
                 <div class="row">
-                  <span class="col">For Approval</span>
+                  <span class="col">Number of Accounts</span>
                 </div>
             </a>
             <a href="#" class="col-md text-dark">
-              <span id="approval_numbers" class="col">4</span>
-                <div class="row">
-                  <span class="col">Pending Approval</span>
-                </div>
-            </a>
+                <span id="approval_numbers" class="col">{{ $users_count_active }}</span>
+                  <div class="row">
+                    <span class="col">Active Accounts</span>
+                  </div>
+              </a>
+              <a href="#" class="col-md text-dark">
+                <span id="approval_numbers" class="col">{{ $user_count_admin }}</span>
+                  <div class="row">
+                    <span class="col">Admin Accounts</span>
+                  </div>
+              </a>
           </div>
         </div>
       </div>
@@ -39,7 +45,7 @@
         <div class="row ">
           <div class="col"><h5>Login Logs</h5></div>
           <div class="col d-flex justify-content-end pe-4">
-            <a href="#" class="btn-sm btn-primary">see all</a>
+            <a href="{{ route('admin_login_logs') }}" class="btn-sm btn-primary">see all</a>
           </div>
         </div>
         @foreach ($login_logs as $login_log)

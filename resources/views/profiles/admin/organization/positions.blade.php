@@ -124,6 +124,14 @@
                                                 <option value="{{ $position_level->id }}">{{ $position_level->level_title }}</option>
                                             @endforeach
                                         </select>
+                                        <div class="form-check form-switch mt-3">
+                                            <input class="form-check-input" type="checkbox" id="is_hod" name="is_hod">
+                                            <label class="form-check-label" for="is_hod">Head of Department</label>
+                                        </div>
+                                        <div class="form-check form-switch mt-3">
+                                            <input class="form-check-input" type="checkbox" id="is_hr_manager" name="is_hr_manager">
+                                            <label class="form-check-label" for="is_hr_manager">HR Manager</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

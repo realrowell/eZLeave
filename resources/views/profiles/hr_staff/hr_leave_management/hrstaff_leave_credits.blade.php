@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col mt-2">
       <h3>Leave Management HR Staff / Leave Credits</h3>
-    </div> 
+    </div>
 </div>
 <div class="row gap-3" id="table_container">
     <div class="row">
@@ -26,75 +26,129 @@
     </div>
 
     <!-- Add Leave Credits Modal -->
-    <div class="modal fade" id="AddLeaveCreditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApprove()">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid text-start">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                    <h2></h2>
-                                </div>
-                                <div class="col-lg-8 col-md-12 col-sm-12">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="employee">
-                                                <h6 class="">Employee</h6>
-                                            </label>
-                                            <select class="form-select" id="employee" name="employee" required>
-                                                <option selected disabled value=""></option>
-                                                @foreach ($employees as $employee)
-                                                    <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+        <div class="modal fade" id="AddLeaveCreditModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApprove()">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid text-start">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
+                                        <h2></h2>
                                     </div>
-                                    <div class="row mt-3">
-                                        <div class="col">
-                                            <label class="" for="leavetype">
-                                                <h6 class="">Leave Type</h6>
-                                            </label>
-                                            <select class="form-select" id="leavetype" name="leavetype" required>
-                                                <option selected disabled value=""></option>
-                                                @foreach ($leavetypes as $leavetype)
-                                                    <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="col-lg-8 col-md-12 col-sm-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="employee">
+                                                    <h6 class="">Employee</h6>
+                                                </label>
+                                                <select class="form-select" id="employee" name="employee" required>
+                                                    <option selected disabled value=""></option>
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <label for="credits">
-                                                <h6>Credits (Days)</h6>
-                                            </label>
-                                            <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <label class="" for="leavetype">
+                                                    <h6 class="">Leave Type</h6>
+                                                </label>
+                                                <select class="form-select" id="leavetype" name="leavetype" required>
+                                                    <option selected disabled value=""></option>
+                                                    @foreach ($leavetypes as $leavetype)
+                                                        <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label for="credits">
+                                                    <h6>Credits (Days)</h6>
+                                                </label>
+                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <label class="" for="leavetype">
+                                                    <h6 class="">Fiscal Year</h6>
+                                                </label>
+                                                <select class="form-select" id="fiscal_year" name="fiscal_year" required>
+                                                    <option selected value="{{ $current_fiscal_year->id }}">{{ $current_fiscal_year->fiscal_year_title }}</option>
+                                                    @foreach ($fiscal_years as $fiscal_year)
+                                                        @if ($fiscal_year->id != $current_fiscal_year->id)
+                                                            <option value="{{ $fiscal_year->id }}">{{ $fiscal_year->fiscal_year_title }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label for="expiration">
+                                                    <h6>Expiration (for Offset)</h6>
+                                                </label>
+                                                <input type="date" class="form-control" name="expiration" id="expiration">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <div class="form-check form-switch mt-3">
+                                                    <input class="form-check-input" type="checkbox" id="show_on_employee2{{ $leavetype->leave_type_title }}" name="show_on_employee" value="1">
+                                                    <label class="form-check-label" for="show_on_employee2{{ $leavetype->leave_type_title }}">Show this to Employee</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                        <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                            <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     {{-- End Add Leave Credits Modal --}}
-    
+
     {{-- Employee Management Table --}}
     <div class="row bg-light p-3 m-1">
         <div class="row">
-            <div class="col">
-                <h5>Employee Leave Credits</h5>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="row mb-3">
+                    <div class="col-lg-4 col-md-5 col-sm-12">
+                        <h5>Employee Leave Credits</h5>
+                    </div>
+                    <div class="col-lg-8 col-md-7 col-sm-12">
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Fiscal Year:
+                                @if (Request()->fiscal_year == null)
+                                    {{ $current_fiscal_year->fiscal_year_title }}
+                                @else
+                                    @foreach ($fiscal_years as $fiscal_year)
+                                        @if ( $fiscal_year->id == Request()->fiscal_year)
+                                            {{ $fiscal_year->fiscal_year_title }}
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </button>
+                            <ul class="dropdown-menu">
+                              @foreach ($fiscal_years as $fiscal_year)
+                                  <li><a class="dropdown-item" href="{{ route('hrstaff_fy_leave_credits',['fiscal_year'=>$fiscal_year->id]) }}">{{ $fiscal_year->fiscal_year_title }}</a></li>
+                              @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col text-end">
+            <div class="col text-end col-lg-6 col-md-6 col-sm-12">
                 <form action="{{ route('hrstaff_leave_credits_search') }}" class="input-group">
                     {{-- @csrf --}}
                     <input class="form-control " type="text" name="search_input" id="myInput" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here">
@@ -102,10 +156,10 @@
                 </form>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-3">
             <div class="table-wrapper">
-                <table class="table table-striped table-hover bg-light">
-                    <thead>
+                <table class="table table-bordered table-hover bg-light">
+                    <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
                             <th>Position</th>
@@ -120,14 +174,14 @@
                         @foreach ($employee_leavecredits as $employee_leavecredit)
                         <tr>
                             <td>
-                                {{ optional($employee_leavecredit->employees->users)->first_name }} 
-                                {{ optional($employee_leavecredit->employees->users)->middle_name }} 
-                                {{ optional($employee_leavecredit->employees->users)->last_name }} 
+                                {{ optional($employee_leavecredit->employees->users)->last_name }},
+                                {{ optional($employee_leavecredit->employees->users)->first_name }}
+                                {{ optional($employee_leavecredit->employees->users)->middle_name }}
                                 {{ optional($employee_leavecredit->employees->users->suffixes)->suffix_title }}
                             </td>
-                            <td>{{ optional($employee_leavecredit->employees->employee_positions->positions)->position_title }}</td>
-                            <td>{{ optional($employee_leavecredit->employees->employee_positions->subdepartments)->sub_department_title }}</td>
-                            <td>{{ optional($employee_leavecredit->employees->employee_positions->subdepartments->departments)->department_title }}</td>
+                            <td>{{ optional(optional($employee_leavecredit->employees->employee_positions)->positions)->position_description }}</td>
+                            <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td>
+                            <td>{{ optional(optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</td>
                             <td>{{ optional($employee_leavecredit->leavetypes)->leave_type_title }}</td>
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
                             <td class="d-flex gap-2">
@@ -173,6 +227,27 @@
                                                                         <h6>Credits (Days)</h6>
                                                                     </label>
                                                                     <input type="number" step="0.5" class="form-control" id="credits" name="credits" value="{{ $employee_leavecredit->leave_days_credit }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                <div class="col">
+                                                                    <label class="" for="leavetype">
+                                                                        <h6 class="">Fiscal Year</h6>
+                                                                    </label>
+                                                                    <input type="text" step="0.5" class="form-control" id="credits" name="credits" value="{{ $employee_leavecredit->fiscal_years->fiscal_year_title }}" disabled>
+                                                                </div>
+                                                                <div class="col">
+                                                                    @if ($employee_leavecredit->show_on_employee == false)
+                                                                        <div class="form-check form-switch mt-3">
+                                                                            <input class="form-check-input" type="checkbox" id="show_on_employee2{{ $employee_leavecredit->id }}" name="show_on_employee" value="1">
+                                                                            <label class="form-check-label" for="show_on_employee2{{ $employee_leavecredit->id }}">Show this to Employee</label>
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="form-check form-switch mt-3">
+                                                                            <input class="form-check-input" type="checkbox" id="show_on_employee1{{ $employee_leavecredit->id }}" name="show_on_employee" value="1" checked>
+                                                                            <label class="form-check-label" for="show_on_employee1{{ $leavetype->id }}">Show this to Employee</label>
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
