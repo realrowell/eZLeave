@@ -22,6 +22,7 @@ use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use PharIo\Manifest\Email;
 
@@ -210,11 +211,13 @@ class AccountManagementController extends Controller
             'second_reports_to'=> 'sometimes',
             'position' => 'required',
             'sap_id_number' => 'nullable',
-            'area_of_assignment' => 'sometimes',
+            'area_of_assignment' => 'required',
             'email' => 'required|email|max:100|unique:users,email,'.$user_name->id,
             'user_name' => 'required|max:50|unique:users,user_name,'.$user_name->id,
             'password' => 'nullable|min:8|confirmed',
         ]);
+
+
 
         $redirect_message = '';
         $redirect_message_type = '';
@@ -313,7 +316,7 @@ class AccountManagementController extends Controller
                     $redirect_message = $redirect_message.' - CITY, PROVINCE, and REGION fields must not be null';
                     $redirect_message_type = 'error';
                 }
-                if($request['address_city'] != null && $request['address_province'] != null && $request['address_region'] != null){
+                if($request['address_city'] != null && $request['address_province'] != null){
                     $employee_address_save = EmployeeAddress::create([
                         'address_line_1' => $data['address_line_1'],
                         'city' => $data['address_city'],
@@ -332,7 +335,7 @@ class AccountManagementController extends Controller
                     $redirect_message = $redirect_message.'<li>- CITY, PROVINCE, and REGION fields must not be null</li> ';
                     $redirect_message_type = 'error';
                 }
-                if($request['address_city'] != null && $request['address_province'] != null && $request['address_region'] != null){
+                if($request['address_city'] != null && $request['address_province'] != null){
                     $employee_address_save = EmployeeAddress::where('id', $user_name->employees->address_id)
                         ->update([
                             'status_id'     => 'sta-1006',
@@ -405,7 +408,8 @@ class AccountManagementController extends Controller
                     ]);
             }
         }
-        else{
+
+        if($request['position'] != null || $request['area_of_assignment'] != null){
             $employee_positions = EmployeePosition::where('id',$employee_position_id)
                     ->update([
                         'position_id' => $data['position'],
@@ -413,6 +417,12 @@ class AccountManagementController extends Controller
                     ]);
         }
 
+        if($request['second_reports_to'] == null){
+            $employee_positions = EmployeePosition::where('id',$employee_position_id)
+                ->update([
+                    'second_superior_id' => $data['second_reports_to'],
+                ]);
+        }
 
         if($request->has('email') || $request->has('user_name')){
             if($request['user_name'] != null){
@@ -433,8 +443,12 @@ class AccountManagementController extends Controller
                 'password' => Hash::make($data['password'])
                 ]);
         }
+
+
         $redirect_message_type = 'success';
         $redirect_message = 'Account has updated succesfully';
+
+        Log::notice('User with ID '. auth()->user()->id.' | User name: '.auth()->user()->first_name.auth()->user()->middle_name.auth()->user()->last_name. ' has successfully update User: '.$user_name->id.' | '.$user_name->first_name.$user_name->middle_name.$user_name->last_name);
 
         if(auth()->user()->role_id == 'rol-0001'){
             return redirect()->to(route('admin_visit_employee_view',['username'=>$data['user_name']]))->with($redirect_message_type,$redirect_message);
@@ -736,5 +750,20 @@ class AccountManagementController extends Controller
             return redirect(route('index'))->with('warning','Something went wrong. Please contact your Administrator');
         }
 
+    }
+
+    public function GetSubdepartmentFromDepartment($id){
+        $subdepartments = SubDepartment::where('department_id',$id)->where('status_id','sta-1007')->get();
+        echo json_encode($subdepartments);
+    }
+
+    public function GetPositionFromSubdepartment($id){
+        $positions = Position::where('subdepartment_id',$id)->where('status_id','sta-1007')->get();
+        echo json_encode($positions);
+    }
+
+    public function GetReportsToFromPosition($id){
+        $positions = Position::where('subdepartment_id',$id)->where('status_id','sta-1007')->get();
+        echo json_encode($positions);
     }
 }

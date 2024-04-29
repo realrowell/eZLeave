@@ -1,77 +1,69 @@
 <?php
 
-namespace App\Http\Controllers\hr_staff;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class LeaveTypesController extends Controller
+class AdminLeaveMaintenanceController extends Controller
 {
-
-    public function hrstaff_leave_types(){
-        $leavetypes = LeaveType::all()->where('status_id','sta-1007');
-        return view('profiles.hr_staff.hr_leave_management.leave_types',
-        [
-            'leavetypes'=>$leavetypes
+    /**
+     * Store leave types here.
+     *
+     *
+     * CREATE LEAVE TYPE
+     */
+    public function create_leavetypes(Request $request){
+        $data = $request->validate([
+            'leavetype_title' => 'required|max:50',
+            'leavetype_description' => 'required|max:300',
+            'days_per_year' => 'nullable',
+            'max_days' => 'nullable',
+            'cut_off_date' => 'nullable',
+            'show_on_employee' => 'nullable',
+            'is_accumulable' => 'nullable',
+            'apply_predate' => 'nullable',
         ]);
+
+        if($request->has('show_on_employee') == true){
+            $data['show_on_employee'] = true;
+        }
+        else{
+            $data['show_on_employee'] = false;
+        }
+
+
+        if($request->has('is_accumulable')){
+            $data['is_accumulable'] = true;
+        }
+        else{
+            $data['is_accumulable'] = false;
+        }
+
+        if($request->has('apply_predate')){
+            $data['apply_predate'] = true;
+        }
+        else{
+            $data['apply_predate'] = false;
+        }
+
+
+
+        $leave_types = LeaveType::create([
+            'leave_type_title' => $data['leavetype_title'],
+            'leave_type_description' => $data['leavetype_description'],
+            'leave_days_per_year' => $data['days_per_year'],
+            'max_leave_days' => $data['max_days'],
+            'cut_off_date' => $data['cut_off_date'],
+            'show_on_employee' => $data['show_on_employee'],
+            'accumulable' => $data['is_accumulable'],
+            'predate' => $data['apply_predate'],
+        ]);
+        Log::notice( "New leave type CREATED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leave_types->id );
+        return redirect()->back()->with('success','Leave type has been created!');
     }
-
-    // /**
-    //  * Store leave types here.
-    //  *
-    //  *
-    //  * CREATE LEAVE TYPE
-    //  */
-    // public function create_leavetypes(Request $request){
-    //     $data = $request->validate([
-    //         'leavetype_title' => 'required|max:50',
-    //         'leavetype_description' => 'required|max:300',
-    //         'days_per_year' => 'nullable',
-    //         'max_days' => 'nullable',
-    //         'reset_date' => 'nullable',
-    //         'cut_off_date' => 'nullable',
-    //         'show_on_employee' => 'nullable',
-    //         'is_accumulable' => 'nullable',
-    //         'apply_predate' => 'nullable',
-    //     ]);
-
-    //     if($request->has('show_on_employee') == true){
-    //         $data['show_on_employee'] = true;
-    //     }
-    //     else{
-    //         $data['show_on_employee'] = false;
-    //     }
-
-
-    //     if($request->has('is_accumulable')){
-    //         $data['is_accumulable'] = true;
-    //     }
-    //     else{
-    //         $data['is_accumulable'] = false;
-    //     }
-
-    //     if($request->has('apply_predate')){
-    //         $data['apply_predate'] = true;
-    //     }
-    //     else{
-    //         $data['apply_predate'] = false;
-    //     }
-
-
-
-    //     $leave_types = LeaveType::create([
-    //         'leave_type_title' => $data['leavetype_title'],
-    //         'leave_type_description' => $data['leavetype_description'],
-    //         'leave_days_per_year' => $data['days_per_year'],
-    //         'max_leave_days' => $data['max_days'],
-    //         'cut_off_date' => $data['cut_off_date'],
-    //         'show_on_employee' => $data['show_on_employee'],
-    //         'accumulable' => $data['is_accumulable'],
-    //         'predate' => $data['apply_predate'],
-    //     ]);
-    //     return redirect()->back()->with('success','Leave type has been created!');
-    // }
 
     /**
      * Update leave types here.
@@ -85,7 +77,6 @@ class LeaveTypesController extends Controller
             'leavetype_description' => 'sometimes|max:300',
             'days_per_year' => 'nullable',
             'max_days' => 'nullable',
-            'reset_date' => 'nullable',
             'cut_off_date' => 'nullable',
             'show_on_employee' => 'nullable',
             'is_active' => 'nullable',
@@ -127,13 +118,13 @@ class LeaveTypesController extends Controller
             'leave_type_description' => $data['leavetype_description'],
             'leave_days_per_year' => $data['days_per_year'],
             'max_leave_days' => $data['max_days'],
-            'reset_date' => $data['reset_date'],
             'cut_off_date' => $data['cut_off_date'],
             'show_on_employee' => $data['show_on_employee'],
             'accumulable' => $data['is_accumulable'],
             'predate' => $data['apply_predate'],
             'status_id' => $data['is_active'],
         ]);
+        Log::notice( "Leave type UPDATED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leavetype_id );
         return redirect()->back()->with('success','Leave type has been updated!');
     }
 
@@ -148,6 +139,7 @@ class LeaveTypesController extends Controller
         ->update([
             'status_id' => 'sta-1009',
         ]);
+        Log::warning( "Leave type DELETED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leavetype_id );
         return redirect()->back()->with('warning','Leave type has been deleted!');
     }
 }

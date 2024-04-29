@@ -17,6 +17,8 @@ class LeaveCreditLog extends Model
         'leave_days_credit',
         'reason_note',
         'status_id',
+        'employee_id',
+        'fiscal_year_id',
     ];
     public $incrementing = false;
 
@@ -36,5 +38,8 @@ class LeaveCreditLog extends Model
     }
     public function employee_leave_credits(){
         return $this -> hasOne(EmployeeLeaveCredit::class,'id','employee_leave_credits_id');
+    }
+    public function leave_applications(){
+        return $this -> hasOne(LeaveApplication::class,'reference_number','leave_application_rn');
     }
 }

@@ -19,21 +19,6 @@ class RedirectIfAuthenticated
     {
         $guards = empty($guards) ? [null] : $guards;
 
-        // foreach ($guards as $guard) {
-        //     if (Auth::guard($guard)->check()) {
-        //         if(Auth::user()->role_id=='rol-0001'){
-        //             // dd('success');
-        //             return redirect(route('admin_dashboard'));
-        //         }
-        //         elseif(Auth::user()->role_id=='rol-0002'){
-        //             return redirect(route('hrstaff_dashboard'));
-        //         }
-        //         elseif(Auth::user()->role_id=='rol-0003'){
-        //             return redirect(route('employee_dashboard'));
-        //         }
-        //     }
-        // }
-
         return $next($request);
     }
 }

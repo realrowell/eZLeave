@@ -7,12 +7,12 @@
 <div class="container-fluid mb-4 pb-5" id="profile_body">
     <div class="row mb-3">
         <div class="col-sm-12 col-md-4 col-lg-6 mt-2">
-            <h3><a href="/admin/organization/menu" class="text-dark">Organization</a> / 
+            <h3><a href="/admin/organization/menu" class="text-dark">Organization</a> /
                 <a href="/admin/organization/area_of_assignments/grid" class="text-dark">Area of Assignments</a>
                  / Profile</h3>
         </div>
         <div class="col-sm-12 col-md-8 col-lg-6 justify-content-end align-items-end text-end mt-2">
-            
+
         </div>
     </div>
     <div class="row justify-content-center align-items-start d-flex gap-2">
@@ -79,85 +79,48 @@
                     </div>
                 </div>
                 {{-- LIST PROFILE --}}
-                <div class="row">
+                <div class="row mt-3">
                     <div>
                         <div class="table-responsive">
                             <div class="table-wrapper">
-                                <table class="table table-striped table-hover bg-light">
-                                    <thead>
+                                <table id="data_table" class="table table-bordered table-hover bg-light shadow">
+                                    <thead class="bg-success text-light border-light">
                                         <tr>
-                                            <th>ID</th>
                                             <th>Full Name</th>
                                             <th>Position</th>
                                             <th>Sub-department</th>
-                                            <th>Actions</th>
+                                            <th class="text-end pe-5">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>EM-00192</td>
-                                            <td>Thomas Hardy</td>
-                                            <td>Territory Lead</td>
-                                            <td>Luzon</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="/profile/user_profile" class="btn-sm btn-primary">Profile</a>
-                                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>EM-00197</td>
-                                            <td>Kenneth Ian</td>
-                                            <td>Territory Lead</td>
-                                            <td>Mindanao</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="#" class="btn-sm btn-primary">Profile</a>
-                                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>EM-00201</td>
-                                            <td>Arnold Gerillo</td>
-                                            <td>Area Sales Lead</td>
-                                            <td>Luzon</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="#" class="btn-sm btn-primary">Profile</a>
-                                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>EM-00233</td>
-                                            <td>Bobong Dela Cruz</td>
-                                            <td>Zonal Sales Manager</td>
-                                            <td>Luzon</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="#" class="btn-sm btn-primary">Profile</a>
-                                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                                            </td>
-                                        </tr>					
-                                        <tr>
-                                            <td>EM-00241</td>
-                                            <td>Jacob Arbarado</td>
-                                            <td>Territory Lead</td>
-                                            <td>Luzon</td>
-                                            <td class="d-flex gap-2">
-                                                <a href="#" class="btn-sm btn-primary">Profile</a>
-                                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                                            </td>
-                                        </tr> 
+                                        @foreach ($employees as $employee)
+                                            @foreach ($employee_positions as $employee_position)
+                                                @if ($employee->employee_position_id == $employee_position->id)
+                                                    <tr>
+                                                        <td>{{ $employee->users?->first_name }}</td>
+                                                        <td>{{ $employee?->employee_positions?->positions?->position_description }}</td>
+                                                        <td>{{ $employee?->employee_positions?->positions?->subdepartments->sub_department_title }}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                            {{-- <tr>
+                                                <td>{{ $subdepartment->sub_department_title }}</td>
+                                                <td>{{ $subdepartment->departments->department_title }} </td>
+                                                <td class="text-end pe-5">
+                                                    <a type="button" href="#" class="btn btn-sm btn-primary">
+                                                        View
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal">
+                                                        Update
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal">
+                                                        Delete
+                                                    </button>
+                                                </td>
+                                            </tr> --}}
+                                        @endforeach
                                     </tbody>
                                 </table>
-                                <div class="clearfix">
-                                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,7 +131,7 @@
         </div>
 
         <!-- Update Department Modal -->
-        <div class="modal fade" id="update_area_of_assignment{{ $area_of_assignments->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="update_area_of_assignment{{ $area_of_assignments->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form action="/organization/update_area_of_assignments/{{ $area_of_assignments->id }}" method="PUT">
@@ -211,7 +174,7 @@
     <div class="row mt-4 z-1 p-1 m-1">
         {!! $area_of_assignments->embedded_google_map !!}
     </div>
-    
+
 </div>
 
 @endsection

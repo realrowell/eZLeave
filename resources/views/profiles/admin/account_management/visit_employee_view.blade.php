@@ -1,4 +1,4 @@
-@extends('includes.hrstaff_layout')
+@extends('includes.admin_layout')
 @section('title','Employee Management')
 @section('sidebar_employee_management_active','active')
 @section('content')

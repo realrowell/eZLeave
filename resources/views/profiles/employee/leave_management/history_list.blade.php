@@ -5,7 +5,7 @@
 <div class="row">
     <div class="table-responsive" id="table_container">
         <div class="table-wrapper">
-            <table class="table table-bordered table-hover bg-light">
+            <table id="data_table" class="table table-sm compact table-bordered table-hover bg-light">
                 <h5>Pending Approval</h5>
                 <thead class="bg-success text-light border-light">
                     <tr>
@@ -270,7 +270,7 @@
                             {{-- leave details Modal --}}
                         @endforeach
                     @else
-                        <tr>
+                        {{-- <tr>
                             <td>
                                 <div class="row align-items-center justify-content-center mt-3">
                                     <div class="col text-center">
@@ -278,7 +278,7 @@
                                     </div>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                     @endif
                 </tbody>
             </table>

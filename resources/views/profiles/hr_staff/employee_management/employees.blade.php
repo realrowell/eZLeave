@@ -3,12 +3,6 @@
 @section('sidebar_employee_management_active','active')
 @section('content')
 
-
-{{-- <div class="banner-gradient p-5 text-center text-light ">
-    <h2 class="banner-title">
-        Bioseed Leave Management System
-    </h2>
-</div> --}}
 <div class="container-fluid mb-4 pb-5" id="profile_body">
     <div class="row">
         <h5>Menu</h5>
@@ -23,7 +17,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+        {{-- <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
             <a href="{{ route('hrstaff_employees_regular_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
@@ -40,7 +34,7 @@
                     </div>
                 </div>
             </a>
-        </div>
+        </div> --}}
     </div>
     <div class="row mb-2">
         <div class="col-sm-12 col-md-4 col-lg-6 mt-2">
@@ -163,8 +157,6 @@
                                                             <label for="user_name"><h6 class="profile-title">Username</h6></label>
                                                             <input type="user_name" class="form-control" id="user_name" placeholder="" name="user_name" value="{{ old('user_name') }}" required>
                                                         </div>
-                                                    </div>
-                                                    <div class="row mt-2 mb-1">
                                                         <div class="col">
                                                             <label for="contact_number"><h6 class="profile-title">Contact number</h6></label>
                                                             <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ old('contact_number') }}">
@@ -172,8 +164,32 @@
                                                     </div>
                                                     <div class="row mt-2 mb-1">
                                                         <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <label for="department"><h6 class="profile-title">Department</h6></label>
+                                                            <select class="form-control" id="department" name="department" required>
+                                                                <option disabled selected value="">Select department</option>
+                                                                @foreach ($departments as $department)
+                                                                    <option value="{{ $department->id }}">{{ $department->department_title }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-12 col-sm-12 placeholder-glow">
+                                                            <label for="subdepartment"><h6 class="profile-title">Sub-department</h6></label>
+                                                            <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_subdepartment" role="status" >
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                            <select class="form-control" id="subdepartment" name="subdepartment" required>
+                                                                <option value="" disabled selected>Select Sub-department</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-2 mb-1">
+                                                        <div class="col-lg-6 col-md-12 col-sm-12 placeholder-glow">
                                                             <label for="position"><h6 class="profile-title">Position</h6></label>
-                                                            <select class="form-control" id="position" name="position" required>
+                                                            <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_position" role="status" >
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                            <select class="form-control " id="position" name="position" required>
+                                                                <option value="" disabled selected>Select position</option>
                                                                 <option selected value="{{ old('position') }}"></option>
                                                                 @foreach ($positions as $position)
                                                                     <option value="{{ $position->id }}">{{ $position->position_description }} ({{ $position->subdepartments->departments->department_title }}) </option>
@@ -205,6 +221,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -218,6 +235,59 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    $(document).ready(function(){
+                        $('#department').on('change',function(){
+                            let id = $(this).val();
+                            $('#subdepartment').empty();
+                            $('#subdepartment').addClass('placeholder');
+                            $('#position').addClass('placeholder');
+                            $('#spinner_subdepartment').removeClass('d-none');
+                            $('#spinner_position').removeClass('d-none');
+                            $('#subdepartment').append('<option value="0" disabled selected >Processing...</option>');
+                            $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                            $.ajax({
+                                type: 'GET',
+                                url: '/addAccount/getSubdepartment/'+id,
+                                success: function (response){
+                                    var response = JSON.parse(response);
+                                    $('#subdepartment').empty();
+                                    $('#position').empty();
+                                    $('#subdepartment').removeClass('placeholder');
+                                    $('#position').removeClass('placeholder');
+                                    $('#spinner_subdepartment').addClass('d-none');
+                                    $('#spinner_position').addClass('d-none');
+                                    $('#subdepartment').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                                    $('#position').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                                    response.forEach(element => {
+                                        $('#subdepartment').append(`<option value="${element['id']}">${element['sub_department_title']}</option>`);
+                                    });
+                                }
+                            });
+                        });
+                        $('#subdepartment').on('change',function(){
+                            let id = $(this).val();
+                            $('#position').empty();
+                            $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                            $('#position').addClass('placeholder');
+                            $('#spinner_position').removeClass('d-none');
+                            $.ajax({
+                                type: 'GET',
+                                url: '/addAccount/getPosition/'+id,
+                                success: function (response){
+                                    var response = JSON.parse(response);
+                                    $('#position').empty();
+                                    $('#position').removeClass('placeholder');
+                                    $('#spinner_position').addClass('d-none');
+                                    $('#position').append('<option value="0" disabled selected>*Select Position</option>');
+                                    response.forEach(element => {
+                                        $('#position').append(`<option value="${element['id']}">${element['position_description']}</option>`);
+                                    });
+                                }
+                            });
+                        });
+                    });
+                </script>
             {{-- End Add Account Modal --}}
         </div>
     </div>

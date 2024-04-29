@@ -22,10 +22,13 @@ class SubDepartmentController extends Controller
         );
     }
     public function admin_organization_subdepartments_list(){
-        $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(20);
+        $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get();
         $departments = Department::all()->where('status_id','sta-1007');
-        return view('profiles.admin.organization.subdepartments_list',compact('subdepartments'),
-            ['departments' => $departments]
+        return view('profiles.admin.organization.subdepartments_list',
+            [
+                'departments' => $departments,
+                'subdepartments' => $subdepartments
+            ]
         );
     }
 

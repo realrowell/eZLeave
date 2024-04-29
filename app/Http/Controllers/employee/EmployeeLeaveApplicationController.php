@@ -375,6 +375,16 @@ class EmployeeLeaveApplicationController extends Controller
                         ->update([
                             'status_id' => 'sta-1002'
                         ]);
+                        $reason_note = 'Leave Credited | Leave Application Approved | '.$leave_application_rn;
+
+                        $employee_leave_credit_logs = LeaveCreditLog::create([
+                            'employee_leave_credits_id' => $new_employee_leave_credits->id,
+                            'leave_application_rn' => $leave_application_rn,
+                            'leave_days_credit' => '-'.$leave_applications->duration,
+                            'reason_note' => $reason_note,
+                            'employee_id' => $employee_id,
+                            'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
+                        ]);
                     }
                 }
                 if(optional($leave_applications)->second_approver_id == null){
@@ -394,12 +404,18 @@ class EmployeeLeaveApplicationController extends Controller
                     $update_leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
                         ->update([
                             'status_id' => 'sta-1002'
-                        ]);
-                    // $leave_credit_logs = LeaveCreditLog::create([
-                    //     'employee_leave_credits_id' => $new_employee_leave_credits->id,
-                    //     'leave_days_credit' => $leave_applications->employee_leave_credits->leave_days_credit,
-                    //     'status_id' => 'sta-1007',
-                    // ]);
+                    ]);
+
+                    $reason_note = 'Leave Credited | Leave Application Approved | '.$leave_application_rn;
+
+                    $employee_leave_credit_logs = LeaveCreditLog::create([
+                        'employee_leave_credits_id' => $new_employee_leave_credits->id,
+                        'leave_application_rn' => $leave_application_rn,
+                        'leave_days_credit' => '-'.$leave_applications->duration,
+                        'reason_note' => $reason_note,
+                        'employee_id' => $employee_id,
+                        'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
+                    ]);
                 }
                 return redirect()->back()->with('success','Leave Application has been approved!');
             }
@@ -407,18 +423,18 @@ class EmployeeLeaveApplicationController extends Controller
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
-        elseif(auth()->user()->role_id == "rol-0001" || auth()->user()->role_id == "rol-0002"){
-            $leave_approvals = LeaveApproval::create([
-                'leave_application_reference' => $leave_application_rn,
-                'approver_id' => auth()->user()->employees->users->id,
-                'status_id' => 'sta-1002'
-            ]);
-            $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
-                ->update([
-                    'status_id' => 'sta-1002'
-                ]);
-            return redirect()->back()->with('success','Leave Application has been approved!');
-        }
+        // elseif(auth()->user()->role_id == "rol-0001" || auth()->user()->role_id == "rol-0002"){
+        //     $leave_approvals = LeaveApproval::create([
+        //         'leave_application_reference' => $leave_application_rn,
+        //         'approver_id' => auth()->user()->employees->users->id,
+        //         'status_id' => 'sta-1002'
+        //     ]);
+        //     $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
+        //         ->update([
+        //             'status_id' => 'sta-1002'
+        //         ]);
+        //     return redirect()->back()->with('success','Leave Application has been approved!');
+        // }
         else{
             return redirect()->back()->with('error','You are not authorize!');
         }

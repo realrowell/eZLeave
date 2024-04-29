@@ -1,4 +1,5 @@
 @extends('profiles.hr_staff.hrstaff_dashboard_layout')
+@section('title','HR Dashboard')
 @section('menu_hr_dashboard','bg-selected-warning text-light')
 @section('menu_leave_credits','text-dark')
 @section('menu_leave_management','text-dark')
@@ -244,42 +245,44 @@
     {{-- End Apply leave Modal --}}
 
 
-    <div class="row gap-3">
-        <div class="col-md p-3 bg-light shadow">
-            <div class="row">
-                <div class="row ">
-                    <div class="col"><h5>Overview</h5></div>
-                    <div class="col d-flex justify-content-end pe-4">
-                        <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a>
+    <div class="container-fluid">
+        <div class="row gap-3">
+            <div class="col-md p-3 bg-light shadow">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col"><h5>Overview</h5></div>
+                        <div class="col d-flex justify-content-end ">
+                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a>
+                        </div>
                     </div>
-                </div>
-                <div class="container-fluid mb-4">
-                    <div class="row justify-content-center align-items-center text-center g-2 mt-3">
-                        <a href="{{ route('hrstaff_leave_pending_approval') }}" class="col-md text-dark">
-                        <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
-                            <div class="row">
-                            <span class="col">Pending Approval</span>
-                            </div>
-                        </a>
-                        <a href="{{ route('hrstaff_leave_approved') }}" class="col-md text-dark">
-                        <span id="approval_numbers" class="col">{{ $approved_leaves_count }}</span>
-                            <div class="row">
-                            <span class="col">Approved</span>
-                            </div>
-                        </a>
-                        <a href="{{ route('hrstaff_leave_cancelled') }}" class="col-md text-dark">
-                            <span id="approval_numbers" class="col">{{ $pending_availment_count }}</span>
-                            <div class="row">
-                                <span class="col">Pending Availment</span>
-                            </div>
-                        </a>
+                    <div class="container-fluid mb-4">
+                        <div class="row justify-content-center align-items-center text-center g-2 mt-3">
+                            <a href="{{ route('hrstaff_leave_pending_approval') }}" class="col-md text-dark">
+                            <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
+                                <div class="row">
+                                <span class="col">Pending Approval</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('hrstaff_leave_approved') }}" class="col-md text-dark">
+                            <span id="approval_numbers" class="col">{{ $approved_leaves_count }}</span>
+                                <div class="row">
+                                <span class="col">Approved</span>
+                                </div>
+                            </a>
+                            <a href="{{ route('hrstaff_leave_cancelled') }}" class="col-md text-dark">
+                                <span id="approval_numbers" class="col">{{ $pending_availment_count }}</span>
+                                <div class="row">
+                                    <span class="col">Pending Availment</span>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md p-3 bg-light shadow">
-            <div class="row">
-                <h5>Recent Activities</h5>
+            <div class="col-md p-3 bg-light shadow">
+                <div class="row">
+                    <h5>Recent Activities</h5>
+                </div>
             </div>
         </div>
     </div>
@@ -304,7 +307,7 @@
                             <th>Department</th>
                             <th>Leave Type</th>
                             <th>Leave Credits</th>
-                            <th>Actions</th>
+                            {{-- <th>Actions</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -321,10 +324,10 @@
                             <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->subdepartments)->departments)->department_title }}</td>
                             <td>{{ optional($employee_leavecredit->leavetypes)->leave_type_title }}</td>
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
-                            <td class="d-flex gap-2">
+                            {{-- <td class="d-flex gap-2">
                                 <a href="#" class="btn-sm btn-primary">Update</a>
                                 <a href="#" class="btn-sm btn-primary">Leave-MS</a>
-                            </td>
+                            </td> --}}
                         </tr>
                         @endforeach
                     </tbody>

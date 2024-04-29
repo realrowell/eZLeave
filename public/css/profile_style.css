@@ -6,6 +6,7 @@
     --warning-color: #FFA70D;
     --light-color: #FEE5B9;
     --dark-color: #222222;
+    --info-color: #1fc7f1;
 
     --primary-color-hover: #17337e;
     --secondary-color-hover: #353535;
@@ -14,9 +15,11 @@
     --warning-color-hover: #f08800;
     --light-color-hover: #4e4e4e;
     --dark-color-hover: #ececec;
+    --info-color-hover: #5ae7fa;
 
     --msg-background-color: #0a8cc9;
 }
+
 
 .bg-msg-custom{
     background-color: var(--msg-background-color);
@@ -67,6 +70,21 @@
     background-color: var(--warning-color-hover);
 }
 
+.text-primary-hover{
+    color: var(--dark-color);
+}
+.text-primary-hover:hover{
+    color: var(--primary-color-hover);
+}
+.text-info-hover{
+    color: var(--dark-color);
+}
+.text-info-hover:hover{
+    color: var(--info-color-hover);
+}
+/* .text-light-hover{
+    color: var(--dark-color);
+} */
 .text-light-hover:hover{
     color: white;
 }

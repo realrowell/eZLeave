@@ -1,4 +1,5 @@
 new DataTable('#loginlogs_table');
+new DataTable('#data_table');
 
 function submitButtonDisabled(){
     document.getElementById('form_submit').disabled = true;

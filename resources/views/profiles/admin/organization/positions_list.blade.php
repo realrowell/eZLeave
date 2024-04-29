@@ -2,7 +2,7 @@
 @section('list_active','bg-selected-warning')
 @section('sub-content')
 
-<div class="row mt-2">
+{{-- <div class="row mt-2">
     <div class="col-lg-6 col-md-6 col-sm-12">
 
     </div>
@@ -17,13 +17,13 @@
             <p>*Search position title here</p>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- LIST PROFILE --}}
 <div class="row">
     <div class="table-responsive">
         <div class="table-wrapper">
-            <table class="table table-striped table-hover bg-light">
-                <thead>
+            <table id="data_table" class="table table-bordered table-hover bg-light shadow">
+                <thead class="bg-success text-light border-light">
                     <tr>
                         <th>Position Title</th>
                         <th>Sub-dpartment</th>
@@ -136,14 +136,14 @@
                             </div>
                         {{-- End Delete Department Modal --}}
                     @endforeach
-                    
+
                 </tbody>
             </table>
             <div class="row">
                 <div class="col">
                     <div class="mt-2 mb-5">
                         <ul class="pagination justify-content-center align-items-center">
-                            {!! $positions->links('pagination::bootstrap-5') !!}
+                            {{-- {!! $positions->links('pagination::bootstrap-5') !!} --}}
                         </ul>
                     </div>
                 </div>

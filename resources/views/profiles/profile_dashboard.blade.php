@@ -95,66 +95,140 @@
 <div class="container-fluid mb-4 pb-5" id="profile_body">
     <div class="row">
         <div class="col mt-2">
-        <h3>Dashboard</h3>
+            <h3>Dashboard</h3>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="row justify-content-center align-items-start g-2">
-                <div class="col-md bg-light border pt-2 ps-2 pb-5 me-2 shadow border-bottom-0 border-end-0 border-top-0 border-warning border-5">
-                    <div class="container-fluid">
-                        <div class="row ">
-                            <div class="col">
-                                <h5>Leave Management</h5>
-                            </div>
-                            <div class="col d-flex justify-content-end pe-4">
-                                <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="btn-sm btn btn-outline-primary">see all</a>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center align-items-center text-center g-2 mt-3">
-                            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col-md text-dark">
-                            <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
-                                <div class="row">
-                                <span class="col">Pending Approval</span>
-                                </div>
-                            </a>
-                            <a href="#" class="col-md text-dark">
-                            <span id="approval_numbers" class="col">{{ $approved_leaves_count }}</span>
-                                <div class="row">
-                                <span class="col">Approved</span>
-                                </div>
-                            </a>
-                        </div>
+    <div class="row gap-3">
+        <div class="col-md p-3 bg-light shadow border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <h5>Leave Management</h5>
+                    </div>
+                    <div class="col text-end">
+                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="btn-sm btn btn-outline-primary">see all</a>
                     </div>
                 </div>
-                <div class="col-md bg-light border pt-2 ps-2 pb-5 me-2 shadow border-bottom-0 border-end-0 border-top-0 border-warning border-5">
-                    <div class="container-fluid">
-                        <div class="row ">
-                            <div class="col-8">
-                                <h5>Leave Credits (Remaining)</h5>
+                <div class="row text-center p-4">
+                    <div class="col">
+                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col-md text-dark">
+                            <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
+                            <div class="row">
+                                <span class="col">Pending Approval</span>
                             </div>
-                            <div class="col-4 d-flex justify-content-end pe-4">
-                                <a href="/" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
-                                    <i class='bx bx-message-square-add' ></i>
-                                    File a Leave
-                                </a>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col-md text-dark">
+                            <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
+                            <div class="row">
+                                <span class="col">Pending Approval</span>
                             </div>
-                        </div>
-                        <div class="row justify-content-center align-items-center text-center g-2 mt-3">
-                            @foreach ($leave_credits as $leave_credit)
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="col-md text-dark">
+                            <span id="approval_numbers" class="col">{{ $for_approval_count }}</span>
+                            <div class="row">
+                                <span class="col">For Approval</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md p-3 bg-light shadow border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <h5>Remaining Leave Credits</h5>
+                    </div>
+                </div>
+                <div class="row text-center p-4">
+                    @foreach ($leave_credits as $leave_credit)
+                        @if ($leave_credit->expiration != null)
+                            @if ($leave_credit->expiration >= now())
                                 <div class="col">
                                     <span id="approval_numbers" class="col">{{ $leave_credit->leave_days_credit }}</span>
                                     <div class="row">
                                         <span class="col">{{ $leave_credit->leavetypes->leave_type_title }}</span>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-                    </div>
+                            @endif
+                        @endif
+                        @if ($leave_credit->expiration == null)
+                            @if ($leave_credit->leavetypes->cut_off_date != null)
+                                @if ($leave_credit->leavetypes->cut_off_date >= now())
+                                    <div class="col">
+                                        <span id="approval_numbers" class="col">{{ $leave_credit->leave_days_credit }}</span>
+                                        <div class="row">
+                                            <span class="col">{{ $leave_credit->leavetypes->leave_type_title }}</span>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                            @if ($leave_credit->leavetypes->cut_off_date == null)
+                                <div class="col">
+                                    <span id="approval_numbers" class="col">{{ $leave_credit->leave_days_credit }}</span>
+                                    <div class="row">
+                                        <span class="col">{{ $leave_credit->leavetypes->leave_type_title }}</span>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
+    @if (auth()->user()->employees?->employee_positions?->positions?->is_hod == true || auth()->user()->employees?->employee_positions?->positions?->position_leave == 'psl-0001')
+        <div class="row mt-5 ">
+            <div class="col">
+                <div class="row ">
+                    <h3>Employees on Leave</h3>
+                </div>
+                <div class="row p-4 border border-warning bg-light border-5 border-bottom-0 border-end-0 border-top-0 shadow">
+                    <div class="table-wrapper">
+                        <table id="data_table" class="table compact row-border table-sm table-hover bg-light">
+                            {{-- <h5>Pending Approval</h5> --}}
+                            <h5>Employees on Leave</h5>
+                            <thead class="bg-success text-light border-light">
+                                <tr>
+                                    <th>Reference Number</th>
+                                    <th>Employee</th>
+                                    <th>Leave Type</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Duration (days)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($leave_applications as $leave_application)
+                                    @if ($leave_application->employees?->employee_positions?->positions?->subdepartments?->department_id == auth()->user()->employees?->employee_positions?->positions?->subdepartments?->department_id)
+                                        <tr>
+                                            <td>
+                                                {{ $leave_application->reference_number }}</td>
+                                            <td>
+                                                {{ optional($leave_application->employees->users)->first_name }}
+                                                {{ optional($leave_application->employees->users)->middle_name }}
+                                                {{ optional($leave_application->employees->users)->last_name }}
+                                                {{ optional($leave_application->employees->users->suffixes)->suffix_title }}
+                                            </td>
+                                            <td>{{ optional($leave_application->leavetypes)->leave_type_title }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} - {{ $leave_application->start_of_date_parts->day_part_title }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} - {{ $leave_application->end_of_date_parts->day_part_title }}</td>
+                                            <td>{{ $leave_application->duration }}</td>
+                                        </tr>
+                                    @endif
+
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <!-- Apply leave Modal -->
         <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

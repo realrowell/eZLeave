@@ -1,4 +1,5 @@
 @extends('profiles.hr_staff.hrstaff_dashboard_layout')
+@section('title','HR Leave Management')
 @section('sidebar_leave_management_active','active')
 @section('sidebar_leave_management_active_custom','active_custom')
 @section('custom_active_leave_icon','var(--accent-color)')

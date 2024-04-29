@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('id',25)->primary();
             $table->string('user_id',25);
             $table->dateTime('date_time');
+            $table->string('ip_address',255)->nullable();
+            $table->string('device',255)->nullable(); // mobile, tablet or web
             $table->timestamps();
         });
     }

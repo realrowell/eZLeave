@@ -133,7 +133,8 @@ class HrStaffLeavePageController extends Controller
 
         $data=[
             'employees' => Employee::all()->where('status_id','sta-2001')
-                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;}),
+                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;})
+                                        ->where(function($employees, $key) {return $employees->users->status_id=='sta-2001';}),
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
@@ -155,7 +156,8 @@ class HrStaffLeavePageController extends Controller
 
         $data=[
             'employees' => Employee::all()->where('status_id','sta-2001')
-                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;}),
+                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;})
+                                        ->where(function($employees, $key) {return $employees->users->status_id=='sta-2001';}),
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
@@ -173,6 +175,8 @@ class HrStaffLeavePageController extends Controller
      */
     public function hrstaff_leave_credits_search(Request $request){
         $search_input = $request['search_input'];
+        $fy = $request['fiscal_year'];
+
         $employee = User::where('first_name',$search_input)->orWhere('last_name',$search_input)->first();
 
         if(is_null($employee)){
@@ -183,8 +187,8 @@ class HrStaffLeavePageController extends Controller
                                             ->sortBy(function($employees, $key) {return $employees->users->last_name;}),
                 'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             ];
-            $employee_leavecredits = EmployeeLeaveCredit::where('status_id','sta-1007')->where('employee_id',$employee->employees->id)->paginate(20);
-
+            $employee_leavecredits = EmployeeLeaveCredit::where('status_id','sta-1007')->where('employee_id',$employee->employees->id)->where('fiscal_year_id',$fy)->paginate(20);
+            dd($employee_leavecredits);
             return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
         }
     }

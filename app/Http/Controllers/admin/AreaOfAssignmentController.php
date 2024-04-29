@@ -6,6 +6,8 @@ use App\Models\AreaOfAssignment;
 use App\Models\SystemSetting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
+use App\Models\EmployeePosition;
 
 class AreaOfAssignmentController extends Controller
 {
@@ -38,11 +40,17 @@ class AreaOfAssignmentController extends Controller
     public function admin_organization_areaofassignemnts_profile($id){
         $area_of_assignments = AreaOfAssignment::find($id);
         $system_settings = SystemSetting::latest('id')->first();
-        // dd($area_of_assignments);
-        return view('profiles.admin.organization.area_of_assignments_profile',
-        ['area_of_assignments' => $area_of_assignments],
-        ['system_settings' => $system_settings]
-        );
+        $employee_positions = EmployeePosition::where('area_of_assignment_id',$area_of_assignments->id)->get();
+        $employees = Employee::where('status_id','sta-2001')->get();
+
+        $data = [
+            'area_of_assignments' => $area_of_assignments,
+            'system_settings' => $system_settings,
+            'employees' => $employees,
+            'employee_positions' => $employee_positions,
+        ];
+
+        return view('profiles.admin.organization.area_of_assignments_profile')->with($data);
     }
 
     public function create_area_of_assignments(Request $request){

@@ -11,6 +11,8 @@
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
+
     {{-- Google Fonts --}}
     {{--
     font-family: 'Open Sans', sans-serif;
@@ -33,22 +35,19 @@
       rel="stylesheet"
     />
 
-    {{-- TinyMCE Editor --}}
-    <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 
-    <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- TinyMCE Editor --}}
+    <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
 
     {{-- Javescript Navbar --}}
-    <script type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
-
-    <script type="text/javascript">
-      $("#alert").delay(4000).slideUp(200, function() {
-          $(this).alert('close');
-      });
-      </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -78,6 +77,9 @@
         font-size: var(--normal-font-size);
         transition: 0.5s;
         background-color: #f1f1f1;
+        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        background-size: 20px 20px;
+        background-attachment: fixed;
       }
 
       a {
@@ -341,7 +343,7 @@
       <div class="position-relative z-1000">
         <div class="position-fixed bottom-0 end-0 me-5">
             @if (session('success'))
-                <div class="alert alert-success fade show" role="alert">
+                <div class="alert alert-success fade show" id="alert" role="alert">
                     <svg class="me-2" style="width: 30px; height: auto;"  viewBox="0 0 200 200">
                         {{ svg('heroicon-o-check-circle') }}
                     </svg>
@@ -349,7 +351,7 @@
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @elseif (session('info'))
-                <div class="alert alert-info fade show" role="alert">
+                <div class="alert alert-info fade show" id="alert" role="alert">
                     <svg class="me-2" style="width: 30px; height: auto;"  viewBox="0 0 200 200">
                         {{ svg('carbon-information') }}
                     </svg>
@@ -357,7 +359,7 @@
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @elseif (session('warning'))
-                <div class="alert alert-warning fade show" role="alert">
+                <div class="alert alert-warning fade show" id="alert" role="alert">
                     <svg class="me-2" style="width: 30px; height: auto;"  viewBox="0 0 200 200">
                         {{ svg('carbon-warning-alt') }}
                     </svg>
@@ -365,7 +367,7 @@
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @elseif (session('error'))
-                <div class="alert alert-danger fade show" role="alert">
+                <div class="alert alert-danger fade show" id="alert" role="alert">
                     <svg class="me-2" style="width: 30px; height: auto;"  viewBox="0 0 200 200">
                         {{ svg('carbon-warning-alt') }}
                     </svg>
@@ -396,6 +398,13 @@
             @endif
         </div>
     </div>
+
+    <script type="text/javascript">
+        $(".alert").delay(4000).slideUp(200, function() {
+              $(this).alert('close');
+          });
+    </script>
+
     <div class="">
         @yield('content')
     </div>

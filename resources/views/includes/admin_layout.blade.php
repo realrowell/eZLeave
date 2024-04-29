@@ -11,8 +11,8 @@
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.jqueryui.css">
+    {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
 
     {{-- Google Fonts --}}
     {{--
@@ -48,6 +48,7 @@
     <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -79,6 +80,7 @@
         background-color: #f4f4f4;
         background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
+        background-attachment: fixed;
       }
 
       a {
@@ -352,7 +354,7 @@
                     <i class="bx bx-user nav_icon"></i>
                     <span class="nav_name">Account Management</span>
                 </a>
-                <a href="#" class="nav_link @yield('sidebar_leave_management_active')">
+                <a href="{{ route('admin.leave.types') }}" class="nav_link @yield('sidebar_leave_management_active')">
                     <i class="bx nav_icon bx-message-square-detail"></i>
                     <span class="nav_name">Leave Management</span>
                 </a>
@@ -504,6 +506,13 @@
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            $(".alert").delay(4000).slideUp(200, function() {
+                  $(this).alert('close');
+              });
+        </script>
+
         @yield('content')
     </div>
 

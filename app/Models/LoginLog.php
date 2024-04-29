@@ -12,11 +12,13 @@ class LoginLog extends Model
 
     protected $fillable = [
         'user_id',
-        'date_time'
+        'date_time',
+        'ip_address',
+        'device'
     ];
 
-    public $incrementing = false; 
-    
+    public $incrementing = false;
+
     public static function boot()
     {
         parent::boot();
