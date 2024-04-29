@@ -2,7 +2,7 @@
 @section('list_active','bg-selected-warning')
 @section('sub-content')
 
-<div class="row mt-2">
+{{-- <div class="row mt-2">
     <div class="col-lg-6 col-md-6 col-sm-12">
 
     </div>
@@ -17,16 +17,15 @@
             <p>*Search department here</p>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- LIST PROFILE --}}
 <div class="row">
     <div class="table-responsive">
         <div class="table-wrapper">
-            <table class="table table-striped table-hover bg-light">
-                <thead>
+            <table id="data_table" class="table table-bordered table-hover bg-light shadow">
+                <thead class="bg-success text-light border-light">
                     <tr>
                         <th>Sub-department</th>
-                        <th># of Employees</th>
                         <th>Parent Department</th>
                         <th class="text-end pe-5">Actions</th>
                     </tr>
@@ -35,7 +34,6 @@
                     @foreach ($subdepartments as $subdepartment)
                         <tr>
                             <td>{{ $subdepartment->sub_department_title }}</td>
-                            <td>32</td>
                             <td>{{ $subdepartment->departments->department_title }} </td>
                             <td class="text-end pe-5">
                                 <a type="button" href="#" class="btn btn-sm btn-primary">
@@ -121,7 +119,7 @@
                 <div class="col">
                     <div class="mt-2 mb-5">
                         <ul class="pagination justify-content-center align-items-center">
-                            {!! $subdepartments->links('pagination::bootstrap-5') !!}
+                            {{-- {!! $subdepartments->links('pagination::bootstrap-5') !!} --}}
                         </ul>
                     </div>
                 </div>
@@ -130,6 +128,6 @@
     </div>
 </div>
 {{-- END LIST --}}
-    
+
 
 @endsection

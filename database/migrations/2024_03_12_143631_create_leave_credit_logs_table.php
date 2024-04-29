@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('leave_days_credit',5,2);
             $table->string('status_id',8)->default('sta-1007');
             $table->string('reason_note',500)->nullable();
+            $table->string('employee_id',256);
+            $table->string('fiscal_year_id',256);
             $table->timestamps();
         });
     }

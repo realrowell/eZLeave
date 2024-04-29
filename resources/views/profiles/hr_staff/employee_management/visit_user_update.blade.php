@@ -64,7 +64,7 @@
                         <a href="{{ route('user_profile',['username'=>$user->user_name]) }}" class="ms-1 me-1 p-2 custom-primary-button bg-selected-warning">
                             Profile
                         </a>
-                        <a href="#regular" class="ms-1 me-1 p-2 custom-primary-button @yield('grid_active') ">
+                        <a href="{{ route('user_profile_leave',['username'=>$user->user_name]) }}" class="ms-1 me-1 p-2 custom-primary-button @yield('grid_active') ">
                             Leave MS
                         </a>
                     </div>
@@ -198,38 +198,69 @@
                                     <div class="mb-2 col-lg-6 col-md-6 col-sm-12">
                                         <h6 class="profile-title">Reports to</h6>
                                         <select class="form-control" id="reports_to" name="reports_to">
-                                            @if (optional(optional($user->employees->employee_positions)->positions)->position_level_id != 'psl-1002' && optional(optional($user->employees->employee_positions)->positions)->position_level_id != 'psl-1001')
-                                                @if ( !empty(optional($user->employees->employee_positions)->reports_to_id))
-                                                    <option selected value="{{ $user->employees->employee_positions->reports_to_id }}">{{ $reports_to }}</option>
-                                                    @foreach ($user_reports_tos as $user_reports_to)
-                                                        @if (optional(optional(optional($user_reports_to->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id)
-                                                            <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                                {{ optional($user_reports_to->users)->first_name }}
-                                                                {{ optional($user_reports_to->users)->middle_name }}
-                                                                {{ optional($user_reports_to->users)->last_name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <option selected disabled > - Please Select - </option>
-                                                    @foreach ($user_reports_tos as $user_reports_to)
-                                                        @if (optional(optional(optional($user_reports_to->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id)
-                                                            <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                                {{ optional($user_reports_to->users)->first_name }}
-                                                                {{ optional($user_reports_to->users)->middle_name }}
-                                                                {{ optional($user_reports_to->users)->last_name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            @else
-                                                <option selected disabled > - Please Select - </option>
+                                            {{-- check if user is hod --}}
+                                            @if (optional(optional($user->employees->employee_positions)->positions)->position_level_id != 'psl-1001' && optional(optional($user->employees->employee_positions)->positions)->is_hod == true )
+                                                <option selected value="{{ optional(optional($user->employees)->employee_positions)->reports_to_id }}">
+                                                    @if ( !empty(optional($user->employees->employee_positions)->reports_to_id))
+                                                        {{ $reports_to }}
+                                                    @else
+                                                        - Please Select -
+                                                    @endif
+                                                </option>
                                                 @foreach ($user_reports_tos as $user_reports_to)
-                                                    @if (optional(optional($user_reports_to->employee_positions)->positions)->position_level_id == optional(optional($user->employee_positions)->positions)->position_level_id || optional(optional($user_reports_to->employee_positions)->positions)->position_level_id <= optional(optional($user->employee_positions)->positions)->position_level_id)
-                                                        <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                            {{ optional($user_reports_to->users)->first_name }}
-                                                            {{ optional($user_reports_to->users)->middle_name }}
-                                                            {{ optional($user_reports_to->users)->last_name }}
+                                                    @if ( $user_reports_to->employees?->employee_positions?->positions?->subdepartments?->department_id == $user->employees->employee_positions?->positions?->subdepartments?->department_id && $user_reports_to->user_name != $user->user_name)
+                                                        @if ( $user_reports_to?->employees?->employee_positions?->positions?->is_hr_manager == false)
+                                                            <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                                {{ $user_reports_to->last_name .', '}}
+                                                                {{ $user_reports_to->first_name }}
+                                                                {{ $user_reports_to->middle_name }}
+                                                            </option>
+                                                        @endif
+                                                    @endif
+                                                    @if ( $user_reports_to->employees?->employee_positions?->positions?->is_hr_manager == true && $user_reports_to?->user_name != $user->employees->employee_positions?->reports_tos?->users?->user_name)
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
+                                                        </option>
+                                                    @endif
+                                                    @if ( optional(optional(optional($user_reports_to->employees)->employee_positions)->positions)->position_level_id == 'psl-1001')
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @elseif ( $user->employees?->employee_positions?->positions?->position_level_id == 'psl-1001')
+                                                <option selected value="{{ optional(optional($user->employees)->employee_positions)->reports_to_id }}">
+                                                    @if ( !empty(optional($user->employees->employee_positions)->reports_to_id))
+                                                        {{ $reports_to }}
+                                                    @else
+                                                        - Please Select -
+                                                    @endif
+                                                </option>
+                                                @foreach ($hrstaffs as $hrstaff)
+                                                    <option value="{{ optional($hrstaff)->id }}">
+                                                        {{ $hrstaff->last_name .', '}}
+                                                        {{ $hrstaff->first_name }}
+                                                        {{ $hrstaff->middle_name }}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                <option selected value="{{ optional(optional($user->employees)->employee_positions)->reports_to_id }}">
+                                                    @if ( !empty(optional($user->employees->employee_positions)->reports_to_id))
+                                                        {{ $reports_to }}
+                                                    @else
+                                                        - Please Select -
+                                                    @endif
+                                                </option>
+                                                @foreach ($user_reports_tos as $user_reports_to)
+                                                    @if (optional(optional(optional(optional($user_reports_to->employees)->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id )
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
                                                         </option>
                                                     @endif
                                                 @endforeach
@@ -241,38 +272,65 @@
                                     <div class="mb-2 col-lg-6 col-md-6 col-sm-12">
                                         <h6 class="profile-title">Second superior</h6>
                                         <select class="form-control" id="second_reports_to" name="second_reports_to">
-                                            @if (optional(optional($user->employees->employee_positions)->positions)->position_level_id != 'psl-1002' && optional(optional($user->employees->employee_positions)->positions)->position_level_id != 'psl-1001')
-                                                @if ( !empty(optional($user->employees->employee_positions)->reports_to_id))
-                                                    <option selected value="{{ $user->employees->employee_positions->second_superior_id }}">{{ $second_reports_to }}</option>
-                                                    @foreach ($user_reports_tos as $user_reports_to)
-                                                        @if (optional(optional(optional($user_reports_to->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id)
-                                                            <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                                {{ optional($user_reports_to->users)->first_name }}
-                                                                {{ optional($user_reports_to->users)->middle_name }}
-                                                                {{ optional($user_reports_to->users)->last_name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
+                                            @if ( $user->employees?->employee_positions?->positions?->position_level_id != 'psl-1001' && $user->employees->employee_positions?->positions?->is_hod == true )
+                                                @if ( !empty($user->employees->employee_positions?->second_superior_id))
+                                                    <option selected value="{{ $user->employees?->employee_positions?->second_superior_id }}">{{ $second_reports_to }}</option>
+                                                    <option value="">- REMOVE -</option>
                                                 @else
-                                                    <option selected disabled > - Please Select - </option>
-                                                    @foreach ($user_reports_tos as $user_reports_to)
-                                                        @if (optional(optional(optional($user_reports_to->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id)
-                                                            <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                                {{ optional($user_reports_to->users)->first_name }}
-                                                                {{ optional($user_reports_to->users)->middle_name }}
-                                                                {{ optional($user_reports_to->users)->last_name }}
+                                                    <option selected value="">- Please Select -</option>
+                                                @endif
+                                                @foreach ($user_reports_tos as $user_reports_to)
+                                                    @if ( $user_reports_to->employees?->employee_positions?->positions?->subdepartments?->department_id == $user->employees->employee_positions?->positions?->subdepartments?->department_id && $user_reports_to->user_name != $user->user_name)
+                                                        @if ( $user_reports_to?->employees?->employee_positions?->positions?->is_hr_manager == false)
+                                                            <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                                {{ $user_reports_to->last_name .', '}}
+                                                                {{ $user_reports_to->first_name }}
+                                                                {{ $user_reports_to->middle_name }}
                                                             </option>
                                                         @endif
-                                                    @endforeach
+                                                    @endif
+                                                    @if ( $user_reports_to->employees?->employee_positions?->positions?->is_hr_manager == true && $user_reports_to?->user_name != $user->employees->employee_positions?->second_reports_tos?->users?->user_name)
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
+                                                        </option>
+                                                    @endif
+                                                    @if ( $user_reports_to->employees?->employee_positions?->positions?->position_level_id == 'psl-1001' && $user_reports_to?->user_name != $user->employees->employee_positions?->second_reports_tos?->users?->user_name)
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            @elseif ( $user->employees?->employee_positions?->positions?->position_level_id == 'psl-1001')
+                                                @if ( !empty($user->employees->employee_positions?->second_superior_id))
+                                                    <option selected value="{{ $user->employees?->employee_positions?->second_superior_id }}">{{ $second_reports_to }}</option>
+                                                    <option value="">- REMOVE -</option>
+                                                @else
+                                                    <option selected value="">- Please Select -</option>
                                                 @endif
+                                                @foreach ($hrstaffs as $hrstaff)
+                                                    <option value="{{ optional($hrstaff)->id }}">
+                                                        {{ $hrstaff->last_name .', '}}
+                                                        {{ $hrstaff->first_name }}
+                                                        {{ $hrstaff->middle_name }}
+                                                    </option>
+                                                @endforeach
                                             @else
-                                                <option selected disabled > - Please Select - </option>
+                                                @if ( !empty($user->employees->employee_positions?->second_superior_id))
+                                                    <option selected value="{{ $user->employees?->employee_positions?->second_superior_id }}">{{ $second_reports_to }}</option>
+                                                    <option value="">- REMOVE -</option>
+                                                @else
+                                                    <option selected value="">- Please Select -</option>
+                                                @endif
                                                 @foreach ($user_reports_tos as $user_reports_to)
-                                                    @if (optional(optional($user_reports_to->employee_positions)->positions)->position_level_id == optional(optional($user->employee_positions)->positions)->position_level_id || optional(optional($user_reports_to->employee_positions)->positions)->position_level_id <= optional(optional($user->employee_positions)->positions)->position_level_id)
-                                                        <option value="{{ optional($user_reports_to->users->employees)->id }}">
-                                                            {{ optional($user_reports_to->users)->first_name }}
-                                                            {{ optional($user_reports_to->users)->middle_name }}
-                                                            {{ optional($user_reports_to->users)->last_name }}
+                                                    @if (optional(optional(optional(optional($user_reports_to->employees)->employee_positions)->positions)->subdepartments)->department_id == optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->department_id )
+                                                        <option value="{{ optional($user_reports_to->employees)->id }}">
+                                                            {{ $user_reports_to->last_name .', '}}
+                                                            {{ $user_reports_to->first_name }}
+                                                            {{ $user_reports_to->middle_name }}
                                                         </option>
                                                     @endif
                                                 @endforeach
@@ -283,30 +341,86 @@
                                 <div class="row mt-3 mb-1">
                                     @if ($user->employees->employee_position_id == null)
                                         <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-                                            <h6 class="profile-title">Position</h6>
+                                            <h6 class="profile-title">Department</h6>
+                                            <select class="form-control" id="department" name="department">
+                                                <option selected disabled value=" ">-- Please Select Here --</option>
+                                                @foreach ($departments as $department)
+                                                    <option value="{{ $department->id }}">{{ $department->department_title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2 col-lg-3 col-md-6 col-sm-12 placeholder-glow">
+                                            <h6 class="profile-title">
+                                                Sub-department
+                                                <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_subdepartment" role="status" >
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </h6>
+                                            <select class="form-control" id="subdepartment" name="subdepartment">
+                                                <option selected disabled value=" ">-- Please Select Here --</option>
+                                                @foreach ($subdepartments as $subdepartment)
+                                                    <option value="{{ $subdepartment->id }}">{{ $subdepartment->sub_department_title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2 col-lg-3 col-md-6 col-sm-12 placeholder-glow">
+                                            <h6 class="profile-title">
+                                                Position
+                                                <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_position" role="status" >
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </h6>
                                             <select class="form-control" id="position" name="position" required>
-                                                <option selected value="{{ optional($user->employees->employee_positions)->position_id }}">{{ optional(optional($user->employees->employee_positions)->positions)->position_description }}</option>
+                                                <option selected disabled value=" ">-- Please Select Here --</option>
                                                 @foreach ($positions as $position)
-                                                    @if ($position->id != optional($user->employees->employee_positions)->position_id)
-                                                        <option value="{{ $position->id }}">{{ $position->position_description }}</option>
-                                                    @endif
+                                                    <option value="{{ $position->id }}">{{ $position->position_description }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
                                             <h6 class="profile-title">Area of assignment</h6>
                                             <select class="form-control" id="area_of_assignment" name="area_of_assignment" required>
-                                                <option selected value="{{ optional($user->employees->employee_positions)->area_of_assignment_id }}">{{ optional(optional($user->employees->employee_positions)->area_of_assignments)->location_address }}</option>
+                                                <option selected disabled value=" ">-- Please Select Here --</option>
                                                 @foreach ($area_of_assignments as $area_of_assignment)
-                                                    @if ($area_of_assignment->id != optional($user->employees->employee_positions)->area_of_assignment_id)
-                                                        <option value="{{ $area_of_assignment->id }}">{{ $area_of_assignment->location_address }}</option>
-                                                    @endif
+                                                    <option value="{{ $area_of_assignment->id }}">{{ $area_of_assignment->location_address }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     @else
                                         <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-                                            <h6 class="profile-title">Position</h6>
+                                            <h6 class="profile-title">Department</h6>
+                                            <select class="form-control" id="department" name="department">
+                                                <option selected value="{{ optional($user->employees->employee_positions)->positions->subdepartments->department_id }}">{{ optional(optional($user->employees->employee_positions)->positions)->subdepartments->departments->department_title }}</option>
+                                                @foreach ($departments as $department)
+                                                    @if ($department->id != optional($user->employees->employee_positions)->positions->subdepartments->department_id)
+                                                        <option value="{{ $department->id }}">{{ $department->department_title }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2 col-lg-3 col-md-6 col-sm-12 placeholder-glow">
+                                            <h6 class="profile-title">
+                                                Sub-department
+                                                <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_subdepartment" role="status" >
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </h6>
+                                            <select class="form-control" id="subdepartment" name="subdepartment">
+                                                <option selected value="{{ optional($user->employees->employee_positions)->positions->subdepartment_id }}">{{ optional(optional($user->employees->employee_positions)->positions)->subdepartments->sub_department_title }}</option>
+                                                @foreach ($subdepartments as $subdepartment)
+                                                    @if ($subdepartment->id != optional($user->employees->employee_positions)->positions->subdepartment_id)
+                                                        <option value="{{ $subdepartment->id }}">{{ $subdepartment->sub_department_title }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-2 col-lg-3 col-md-6 col-sm-12 placeholder-glow">
+                                            <h6 class="profile-title">
+                                                Position
+                                                <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_position" role="status" >
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </h6>
                                             <select class="form-control" id="position" name="position">
                                                 <option selected value="{{ optional($user->employees->employee_positions)->position_id }}">{{ optional(optional($user->employees->employee_positions)->positions)->position_description }}</option>
                                                 @foreach ($positions as $position)
@@ -328,28 +442,6 @@
                                             </select>
                                         </div>
                                     @endif
-
-                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-
-                                    </div>
-                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-
-                                    </div>
-                                </div>
-                                <div class="row mt-2 mb-1">
-                                    <i class="text-danger">*update the position field to automatically update the fields below</i>
-                                </div>
-                                <div class="row mt-2 mb-1">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <h6 class="profile-title">Sub-department</h6>
-                                        <h6 class="profile-title-value">{{ optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</h6>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="mb-2 col-lg-6 col-md-6 col-sm-12">
-                                        <h6 class="profile-title">Department </h6>
-                                        <h6 class="profile-title-value">{{ optional(optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</h6>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -408,6 +500,61 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                        $(document).ready(function(){
+                            $('#department').on('change',function(){
+                                let id = $(this).val();
+                                $('#subdepartment').empty();
+                                $('#subdepartment').addClass('placeholder');
+                                $('#position').addClass('placeholder');
+                                $('#spinner_subdepartment').removeClass('d-none');
+                                $('#spinner_position').removeClass('d-none');
+                                $('#subdepartment').append('<option value="0" disabled selected >Processing...</option>');
+                                $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                                $.ajax({
+                                    type: 'GET',
+                                    url: '/addAccount/getSubdepartment/'+id,
+                                    success: function (response){
+                                        var response = JSON.parse(response);
+                                        console.log(response);
+                                        $('#subdepartment').empty();
+                                        $('#position').empty();
+                                        $('#subdepartment').removeClass('placeholder');
+                                        $('#position').removeClass('placeholder');
+                                        $('#spinner_subdepartment').addClass('d-none');
+                                        $('#spinner_position').addClass('d-none');
+                                        $('#subdepartment').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                                        $('#position').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                                        response.forEach(element => {
+                                            $('#subdepartment').append(`<option value="${element['id']}">${element['sub_department_title']}</option>`);
+                                        });
+                                    }
+                                });
+                            });
+                            $('#subdepartment').on('change',function(){
+                                let id = $(this).val();
+                                $('#position').empty();
+                                $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                                $('#position').addClass('placeholder');
+                                $('#spinner_position').removeClass('d-none');
+                                $.ajax({
+                                    type: 'GET',
+                                    url: '/addAccount/getPosition/'+id,
+                                    success: function (response){
+                                        var response = JSON.parse(response);
+                                        console.log(response);
+                                        $('#position').empty();
+                                        $('#position').removeClass('placeholder');
+                                        $('#spinner_position').addClass('d-none');
+                                        $('#position').append('<option value="0" disabled selected>*Select Position</option>');
+                                        response.forEach(element => {
+                                            $('#position').append(`<option value="${element['id']}">${element['position_description']}</option>`);
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                    </script>
                 </form>
                 {{-- END PROFILE Fields --}}
                 <!-- confirm reset password Modal -->

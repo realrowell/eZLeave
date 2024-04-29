@@ -176,33 +176,20 @@
                                 </div>
                                 <div class="row mt-3 mb-1">
                                     <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
+                                        <h6 class="profile-title">Department</h6>
+                                        <input type="text" class="form-control" id="department" name="department" value="{{ optional($user->employees->employee_positions->positions->subdepartments->departments)->department_title }}" disabled>
+                                    </div>
+                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
+                                        <h6 class="profile-title">Sub-department</h6>
+                                        <input type="text" class="form-control" id="subdepartment" name="subdepartment" value="{{ optional($user->employees->employee_positions->positions->subdepartments)->sub_department_title }}" disabled>
+                                    </div>
+                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
                                         <h6 class="profile-title">Position</h6>
                                         <input type="text" class="form-control" id="position" name="position" value="{{ optional($user->employees->employee_positions->positions)->position_description }}" disabled>
                                     </div>
                                     <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
                                         <h6 class="profile-title">Area of assignment</h6>
                                         <input type="text" class="form-control" id="area_of_assignment" name="area_of_assignment" value="{{ optional($user->employees->employee_positions->area_of_assignments)->location_address }}" disabled>
-                                    </div>
-                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-
-                                    </div>
-                                    <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-
-                                    </div>
-                                </div>
-                                <div class="row mt-2 mb-1">
-                                    <i class="text-danger">*update the position field to automatically update the fields below</i>
-                                </div>
-                                <div class="row mt-2 mb-1">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <h6 class="profile-title">Sub-department</h6>
-                                        <h6 class="profile-title-value">{{ optional($user->employees->employee_positions->positions->subdepartments)->sub_department_title }}</h6>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="mb-2 col-lg-6 col-md-6 col-sm-12">
-                                        <h6 class="profile-title">Department </h6>
-                                        <h6 class="profile-title-value">{{ optional($user->employees->employee_positions->positions->subdepartments->departments)->department_title }}</h6>
                                     </div>
                                 </div>
                             </div>

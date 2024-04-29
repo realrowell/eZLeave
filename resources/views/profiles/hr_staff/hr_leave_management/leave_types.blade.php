@@ -1,4 +1,5 @@
 @extends('profiles.hr_staff.hrstaff_dashboard_layout')
+@section('title','HR Leave Types')
 @section('menu_hr_dashboard','text-dark')
 @section('menu_leave_credits','text-dark')
 @section('menu_leave_management','text-dark')
@@ -160,11 +161,11 @@
                                                             <label for="days_per_year">
                                                                 <h6>Leave per year (Days)</h6>
                                                             </label>
-                                                            <input type="number" step="0.5" class="form-control" id="days_per_year" name="days_per_year" value="{{ $leavetype->leave_days_per_year }}" required>
+                                                            <input type="number" step="0.25" class="form-control" id="days_per_year" name="days_per_year" value="{{ $leavetype->leave_days_per_year }}" required>
                                                             <label class="mt-3" for="max_days">
                                                                 <h6>Max Accumulation (Days)</h6>
                                                             </label>
-                                                            <input type="number" class="form-control" id="max_days" name="max_days" value="{{ $leavetype->max_leave_days }}" required>
+                                                            <input type="number" step="0.25" class="form-control" id="max_days" name="max_days" value="{{ $leavetype->max_leave_days }}" required>
                                                             <label class="mt-3" for="cut_off_date">
                                                                 <h6>Cut off Date</h6>
                                                             </label>
@@ -227,7 +228,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
-                                                <button id="submit_button1" type="submit" class="btn btn-success" data-bs-dismiss="modal">Update</button>
+                                                <button id="submit_button1" type="submit" class="btn btn-success" >Update</button>
                                             </div>
                                         </form>
                                     </div>

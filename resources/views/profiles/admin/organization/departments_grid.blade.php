@@ -2,7 +2,7 @@
 @section('grid_active','bg-selected-warning')
 @section('sub-content')
 
-<div class="row mt-2">
+{{-- <div class="row mt-2">
     <div class="col-lg-6 col-md-6 col-sm-12">
 
     </div>
@@ -17,7 +17,7 @@
             <p>*Search department here</p>
         </div>
     </div>
-</div>
+</div> --}}
 
     {{-- GRID PROFILE --}}
 <div class="row g-4 justify-content-sm-center justify-content-md-start justify-content-lg-start">

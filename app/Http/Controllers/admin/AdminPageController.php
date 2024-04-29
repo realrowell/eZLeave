@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AreaOfAssignment;
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmploymentStatus;
 use App\Models\Gender;
@@ -44,6 +45,31 @@ class AdminPageController extends Controller
             'positions' => Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get(),
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
+            'departments' => Department::all()->where('status_id','sta-1007'),
+            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
+        ];
+
+        return view('profiles.admin.account_management.accounts_grid_view',compact('users'))->with($data);
+    }
+
+    /**
+     * ALL
+     *
+     *
+     * SHOW EMPLOYEES IN GRID
+     */
+    public function admin_accounts_active_grid(){
+        $users = User::where('status_id','sta-2001')->orderBy('last_name','asc')->paginate(12);
+        $data=[
+            // 'users' => User::all()->where('status_id','sta-2001'),
+            'suffixes' => Suffix::all()->where('status_id','sta-1007'),
+            'genders' => Gender::all(),
+            'roles' => Role::all(),
+            'marital_statuses' => MaritalStatus::all(),
+            'positions' => Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get(),
+            'employment_statuses' => EmploymentStatus::all(),
+            'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
+            'departments' => Department::all()->where('status_id','sta-1007'),
             'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
         ];
 
@@ -70,6 +96,7 @@ class AdminPageController extends Controller
             'positions' => Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get(),
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
+            'departments' => Department::all()->where('status_id','sta-1007'),
             'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
         ];
 
@@ -83,7 +110,7 @@ class AdminPageController extends Controller
      * SHOW EMPLOYEES IN LIST
      */
     public function admin_accounts_list(){
-        $users = User::orderBy('last_name','asc')->paginate(30);
+        $users = User::orderBy('last_name','asc')->get();
         $data=[
             // 'users' => User::all()->where('status_id','sta-2001'),
             'suffixes' => Suffix::all()->where('status_id','sta-1007'),
@@ -93,9 +120,11 @@ class AdminPageController extends Controller
             'positions' => Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get(),
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
-            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
+            'departments' => Department::all()->where('status_id','sta-1007'),
+            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007'),
+            'users' => $users
         ];
-        return view('profiles.admin.account_management.accounts_list_view',compact('users'))->with($data);
+        return view('profiles.admin.account_management.accounts_list_view')->with($data);
     }
 
     public function admin_login_logs_view(){
@@ -119,7 +148,13 @@ class AdminPageController extends Controller
         $length_of_service = number_format((float)$length_of_service, 2, '.', '');
 
         if(optional($user->employees->employee_positions)->reports_tos == null){
-            $reports_to = "NONE";
+            $reports_to_hr = User::where('id',$user->employees?->employee_positions?->reports_to_id)->first();
+            if($reports_to_hr == null){
+                $reports_to =  "NONE";
+            }
+            else{
+                $reports_to = $reports_to_hr->first_name." ".$reports_to_hr->last_name;
+            }
         }
         else{
             $reports_to = optional(optional($user->employees->employee_positions->reports_tos)->users)->first_name." ".
@@ -130,7 +165,13 @@ class AdminPageController extends Controller
         }
 
         if(optional($user->employees->employee_positions)->second_reports_tos == null){
-            $second_reports_to = "NONE";
+            $second_reports_to_hr = User::where('id',$user->employees?->employee_positions?->second_superior_id)->first();
+            if($second_reports_to_hr == null){
+                $second_reports_to =  "NONE";
+            }
+            else{
+                $second_reports_to = $second_reports_to_hr->first_name." ".$second_reports_to_hr->last_name;
+            }
         }
         else{
             $second_reports_to = optional(optional($user->employees->employee_positions->second_reports_tos)->users)->first_name." ".
@@ -147,7 +188,7 @@ class AdminPageController extends Controller
             $employee_address = $user->employees->employee_addresses->address_line_1.", ".
                                 $user->employees->employee_addresses->city.", ".
                                 $user->employees->employee_addresses->province.", ".
-                                $user->employees->employee_addresses->region;
+                                $user->employees?->employee_addresses?->region;
         }
 
         return view('profiles.admin.account_management.visit_employee_view',[
@@ -164,13 +205,20 @@ class AdminPageController extends Controller
     public function admin_update_employee_view($username){
         $user=User::where('user_name',$username)->get()->first();
         $employees=Employee::all();
-        $user_reports_tos=Employee::with('employee_positions')->get();
+        $user_reports_tos=User::where('status_id','sta-2001')->orderBy('last_name','asc')->get();
         $profile_photo = ProfilePhoto::where('user_id',$user->id)->where('status_id','sta-1007')->first();
+        $hrstaffs = User::where('role_id','rol-0002')->where('status_id','sta-2001')->get();
 
-        // dd($user_reports_to_name);
+        // dd($user->employees->employee_positions->reports_to_id);
 
         if(optional($user->employees->employee_positions)->reports_tos == null){
-            $reports_to = "NONE";
+            $reports_to_hr = User::where('id',$user->employees?->employee_positions?->reports_to_id)->first();
+            if($reports_to_hr == null){
+                $reports_to =  "NONE";
+            }
+            else{
+                $reports_to = $reports_to_hr->first_name." ".$reports_to_hr->last_name;
+            }
         }
         else{
             $reports_to = optional(optional($user->employees->employee_positions->reports_tos)->users)->first_name." ".
@@ -180,7 +228,13 @@ class AdminPageController extends Controller
         }
 
         if(optional($user->employees->employee_positions)->second_reports_tos == null){
-            $second_reports_to = "NONE";
+            $second_reports_to_hr = User::where('id',$user->employees?->employee_positions?->second_superior_id)->first();
+            if($second_reports_to_hr == null){
+                $second_reports_to =  "NONE";
+            }
+            else{
+                $second_reports_to = $second_reports_to_hr->first_name." ".$second_reports_to_hr->last_name;
+            }
         }
         else{
             $second_reports_to = optional(optional($user->employees->employee_positions->second_reports_tos)->users)->first_name." ".
@@ -194,12 +248,14 @@ class AdminPageController extends Controller
             'suffixes' => Suffix::all()->where('status_id','sta-1007'),
             'genders' => Gender::all(),
             'marital_statuses' => MaritalStatus::all(),
-            'positions' => Position::all()->where('status_id','sta-1007'),
+            'positions' => Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get(),
             'employment_statuses' => EmploymentStatus::all(),
-            'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
-            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007'),
+            'departments' => Department::where('status_id','sta-1007')->orderBy('department_title','asc')->get(),
+            'subdepartments' => SubDepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get(),
+            'area_of_assignments' => AreaOfAssignment::where('status_id','sta-1007')->orderBy('location_address','asc')->get(),
             'user_reports_to_name' => optional(optional($user->employees->employee_positions)->reports_tos)->last_name.', '.
                                         optional(optional($user->employees->employee_positions)->reports_tos)->first_name,
+            'hrstaffs' => $hrstaffs,
         ];
 
         return view('profiles.admin.account_management.visit_employee_update_view',[

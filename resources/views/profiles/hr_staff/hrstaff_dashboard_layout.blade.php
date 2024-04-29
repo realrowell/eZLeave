@@ -1,5 +1,4 @@
 @extends('includes.hrstaff_layout')
-@section('title','HR Dashboard')
 @section('content')
 
 <div class="container-fluid mb-4 pb-5" id="profile_body">
@@ -16,15 +15,6 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_leave_credits')" style="min-height: 1rem" >
-            <a href="{{ route('hrstaff_leave_credits') }}" class="@yield('menu_leave_credits')">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Leave Credits</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_leave_management')" style="min-height: 1rem" >
             <a href="{{ route('hrstaff_leave_management') }}" class="@yield('menu_leave_management')">
                 <div class="col text-light-hover">
@@ -34,7 +24,16 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_leave_types')" style="min-height: 1rem" >
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_leave_credits')" style="min-height: 1rem" >
+            <a href="{{ route('hrstaff_leave_credits') }}" class="@yield('menu_leave_credits')">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Leave Credits</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {{-- <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_leave_types')" style="min-height: 1rem" >
             <a href="{{ route('hrstaff_leave_types') }}" class="@yield('menu_leave_types')">
                 <div class="col text-light-hover">
                     <div class="card-body">
@@ -42,7 +41,7 @@
                     </div>
                 </div>
             </a>
-        </div>
+        </div> --}}
     </div>
 
     @yield('sub-content')

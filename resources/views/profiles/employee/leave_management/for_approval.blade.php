@@ -46,7 +46,7 @@
         <h5>Leave Menu</h5>
     </div>
     <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
             <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
@@ -55,16 +55,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="text-light">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>For Approval</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
             <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
@@ -73,11 +64,29 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
             <a href="{{ route('profile_leave_management_history_grid') }}" class="text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
                         <h6>History</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch ms-5 bg-selected-primary" style="min-height: 1rem" >
+            <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="text-light">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>For Approval</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch " style="min-height: 1rem" >
+            <a href="{{ route('profile.leave_management.approval_history.list') }}" class="text-dark">
+                <div class="col text-light-hover">
+                    <div class="card-body">
+                        <h6>Approval History</h6>
                     </div>
                 </div>
             </a>

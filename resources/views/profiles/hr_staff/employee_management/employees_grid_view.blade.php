@@ -22,7 +22,7 @@
     </div>
 </div>
 {{-- GRID PROFILE --}}
-<div class="row g-4 justify-content-sm-center justify-content-md-start justify-content-lg-start">
+<div class="row g-4 justify-content-sm-start justify-content-md-start justify-content-lg-start">
     @foreach ($users as $user)
         <div class="col-lg-4 col-md-6 col-sm-10">
             <div class="card w-100 p-2 shadow">
@@ -46,7 +46,7 @@
                         <div class="row mt-2">
                             <div class="col">
                                 <a href="/hr/user/profile/{{ $user->user_name }}" class="btn-sm btn-primary text-center">Profile</a>
-                                <a href="#" class="btn-sm btn-primary text-center">Leave-MS</a>
+                                <a href="{{ route('user_profile_leave',$username = $user->user_name) }}" class="btn-sm btn-primary text-center">Leave-MS</a>
                             </div>
                         </div>
                     </div>

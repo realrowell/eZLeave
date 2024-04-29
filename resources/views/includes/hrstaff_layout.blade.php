@@ -12,6 +12,9 @@
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
+
     {{-- Google Fonts --}}
     {{--
     font-family: 'Open Sans', sans-serif;
@@ -34,15 +37,19 @@
       rel="stylesheet"
     />
 
+    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+
     {{-- TinyMCE Editor --}}
     <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
     <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
 
     {{-- Javescript Navbar --}}
-    <script type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" ></script> --}}
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -72,6 +79,9 @@
         font-size: var(--normal-font-size);
         transition: 0.5s;
         background-color: #f1f1f1;
+        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        background-size: 20px 20px;
+        background-attachment: fixed;
       }
 
       a {
@@ -285,7 +295,7 @@
                     <ul class="dropdown-menu shadow" >
                         <li><span class="dropdown-item-text">{{ auth()->user()->first_name." ".auth()->user()->last_name." ".optional(auth()->user()->suffixes)->suffix_title }}</span></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ route('hrstaff_profile') }}">Profile</a></li>
                         <li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -296,37 +306,6 @@
                 </div>
             </div>
         </div>
-            {{-- <div class="align-items-end justify-content-end">
-              <span class="nav_logo-name">Admin</span>
-
-              @guest
-                @if (Route::has('login'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                </li>
-              @endif
-              @else
-                <span class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav_logo-name dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->first_name }}
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                      <a href="/profile/user_profile" class="dropdown-item">Profile</a>
-                      <a class="dropdown-item" href="{{ route('logout') }}"
-                          onclick="event.preventDefault();
-                                      document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
-                  </span>
-              @endguest
-
-            </div> --}}
     </header>
     <div class="l-navbar container-fluid" id="nav-bar">
         <nav class="nav">
@@ -348,7 +327,7 @@
                         <i class="bx nav_icon bx-calendar"></i>
                         <span class="nav_name">Leave Management</span>
                     </a>
-                    <a href="/admin/policy/menu" class="nav_link @yield('sidebar_policy_active')" data-bs-toggle="tooltip" data-bs-placement="right" title="Policy">
+                    {{-- <a href="/admin/policy/menu" class="nav_link @yield('sidebar_policy_active')" data-bs-toggle="tooltip" data-bs-placement="right" title="Policy">
                         <i class="ms-0" style="width: 22px">
                             {{ svg('carbon-policy') }}
                         </i>
@@ -359,7 +338,7 @@
                             {{ svg('tabler-report') }}
                         </i>
                         <span class="nav_name">Report</span>
-                    </a>
+                    </a> --}}
                 </div>
             </div>
             <a id="logout_submit" class="nav_link pb-5" href="#{{ route('logout') }}"
@@ -434,7 +413,7 @@
         </div>
 
         <div class="mb-5">
-            <div class="container-fluid d-print-none" id="profile_body">
+            <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
                 <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
                     <div class="col ">
                         <div class="row">
@@ -468,7 +447,7 @@
                             <div class="col-lg-2 col-md-2 col-sm-12 p-2">
                                 <div class="row">
                                     <div class="row">
-                                        <a href="{{ route('admin_profile') }}" class="nav_link">
+                                        <a href="{{ route('hrstaff_profile') }}" class="nav_link">
                                           <i class="nav_icon" >@svg('css-profile')</i>
                                           <span class="nav_name">Profile</span>
                                         </a>
@@ -486,6 +465,13 @@
                     </div>
                 </div>
             </div>
+
+            <script type="text/javascript">
+                $(".alert").delay(4000).slideUp(200, function() {
+                      $(this).alert('close');
+                  });
+            </script>
+
         @yield('content')
     </div>
 

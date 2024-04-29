@@ -10,6 +10,7 @@ use App\Models\FiscalYear;
 use App\Models\LeaveApplication;
 use App\Models\LeaveApplicationNote;
 use App\Models\LeaveApproval;
+use App\Models\LeaveCreditLog;
 use App\Models\LeaveType;
 use Carbon\Carbon;
 use DateTime;
@@ -339,6 +340,8 @@ class LeaveApplicationController extends Controller
         $employee_id = $leave_applications->employee_id;
         // leave  type id initialization
         $leave_type_id = $leave_applications->leave_type_id;
+        //
+        $leave_application_duration = $leave_applications->duration;
 
         if(auth()->user()->role_id == "rol-0001" || auth()->user()->role_id == "rol-0002"){
             $leave_approvals = LeaveApproval::create([
@@ -364,6 +367,17 @@ class LeaveApplicationController extends Controller
                 ->update([
                     'status_id' => 'sta-1002'
                 ]);
+
+            $data['reason_note'] = 'Leave Credited | Leave Application Approved | '.$leave_application_rn;
+
+            $employee_leave_credit_logs = LeaveCreditLog::create([
+                'employee_leave_credits_id' => $new_employee_leave_credits->id,
+                'leave_application_rn' => $leave_application_rn,
+                'leave_days_credit' => '-'.$leave_application_duration,
+                'reason_note' => $data['reason_note'],
+                'employee_id' => $employee_id,
+                'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
+            ]);
             return redirect()->back()->with('success','Leave Application has been approved!');
         }
         else{
@@ -437,6 +451,8 @@ class LeaveApplicationController extends Controller
         $leave_credited = $current_leave_credits->leave_days_credit + $leave_applications->duration;
         // leave application employee id initialization
         $employee_id = $leave_applications->employee_id;
+        //
+        $leave_application_duration = $leave_applications->duration;
 
         // dd($employee_leave_credit);
         if ($leave_applications->status_id == "sta-1002") {
@@ -466,7 +482,19 @@ class LeaveApplicationController extends Controller
                 ->update([
                     'status_id' => 'sta-1005'
                 ]);
-                return redirect()->back()->with('warning','Leave Application has been cancelled!');
+
+            $data['reason_note'] = 'Leave Credit Return | Leave Application Cancelled | '.$leave_application_rn;
+
+            $employee_leave_credit_logs = LeaveCreditLog::create([
+                'employee_leave_credits_id' => $new_employee_leave_credits->id,
+                'leave_application_rn' => $leave_application_rn,
+                'leave_days_credit' => $leave_application_duration,
+                'reason_note' => $data['reason_note'],
+                'employee_id' => $employee_id,
+                'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
+            ]);
+
+            return redirect()->back()->with('warning','Leave Application has been cancelled!');
         }
         else{
             return redirect()->back()->with('error','You are not authorize!');

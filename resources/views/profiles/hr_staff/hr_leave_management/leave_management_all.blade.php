@@ -123,7 +123,7 @@
                                 <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-vertical-rounded' ></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a class="dropdown-item bg-primary text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
@@ -140,34 +140,37 @@
                                         </a>
                                     </li>
                                     <li class="mt-1">
-                                        <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
-                                            <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
+                                        <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
+                                            <i class='bx bx-x me-2 pt-1'></i>Approve
                                         </a>
+                                        {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
+                                            <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
+                                        </a> --}}
                                     </li>
                                 </ul>
                             @elseif ( $leave_application->status_id == 'sta-1002' )
                                 <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-vertical-rounded' ></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
                                         </a>
                                     </li>
                                     <li class="mt-1">
-                                        @if (Carbon\Carbon::now() <= $leave_application->start_date)
+                                        {{-- @if (Carbon\Carbon::now() <= $leave_application->start_date) --}}
                                             <button type="button" class="dropdown-item bg-danger text-light pb-2" data-bs-toggle="modal" data-bs-target="#cancelLeaveModal{{ $leave_application->reference_number }}">
                                                 <i class='bx bxs-x-circle me-2 pt-1' ></i>Cancel
                                             </button>
-                                        @endif
+                                        {{-- @endif --}}
                                     </li>
                                 </ul>
                             @elseif ( $leave_application->status_id == 'sta-1003')
                                 <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-vertical-rounded' ></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
@@ -184,16 +187,19 @@
                                         </a>
                                     </li>
                                     <li class="mt-1">
-                                        <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
-                                            <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
+                                        <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
+                                            <i class='bx bx-x me-2 pt-1'></i>Approve
                                         </a>
+                                        {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
+                                            <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
+                                        </a> --}}
                                     </li>
                                 </ul>
                             @elseif ( $leave_application->status_id == 'sta-1004')
                                 <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-vertical-rounded' ></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
@@ -204,7 +210,7 @@
                                 <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class='bx bx-dots-vertical-rounded' ></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
@@ -725,7 +731,60 @@
                                 </form>
                             </div>
                         </div>
-                    {{-- cancel leave Modal --}}
+                    {{-- end cancel leave Modal --}}
+                    <!-- approve leave Modal -->
+                        <div class="modal fade" id="approveLeaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <form action="{{ route('leave_application_approval', $leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid text-start">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="employee">
+                                                            <h4 class="">CONFIRM LEAVE APPROVAL</h4>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="employee">
+                                                            <h6 class="">Reference Number</h6>
+                                                        </label>
+                                                        <h4>{{ $leave_application->reference_number }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6>Reason / Note:</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success">
+                                                        Confirm Approval
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {{-- end approve leave Modal --}}
                     @endforeach
                 </tbody>
             </table>

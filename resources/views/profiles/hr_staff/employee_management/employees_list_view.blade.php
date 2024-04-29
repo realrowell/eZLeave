@@ -2,7 +2,7 @@
 @section('list_active','bg-selected-warning')
 @section('sub-content')
 
-<div class="row mt-2">
+{{-- <div class="row mt-2">
     <div class="col-lg-6 col-md-6 col-sm-12">
 
     </div>
@@ -20,13 +20,13 @@
             <p>*Search employee by first name or by last name here</p>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- LIST PROFILE --}}
 <div class="row">
     <div>
         <div class="table-responsive">
             <div class="table-wrapper">
-                <table class="table table-bordered table-hover bg-light ">
+                <table id="data_table" class="table table-bordered table-hover bg-light ">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
@@ -56,8 +56,23 @@
                             <td>{{ optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td>
                             <td>{{ optional(optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</td>
                             <td class="d-flex gap-2">
-                                <a href="/hr/user/profile/{{ $user->user_name }}" class="btn-sm btn-primary">Profile</a>
-                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
+                                {{-- <a href="/hr/user/profile/{{ $user->user_name }}" class="btn-sm btn-primary">Profile</a>
+                                <a href="#" class="btn-sm btn-primary">Leave-MS</a> --}}
+                                <button class="btn btn-primary btn-sm rounded-3 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class='bx bx-dots-vertical-rounded' ></i>
+                                </button>
+                                <ul class="dropdown-menu shadow-lg dropdown-menu-dark text-light">
+                                    <li>
+                                        <a href="{{ route('user_profile',['username' => $user->user_name]) }}" class="dropdown-item pb-2">
+                                            <i class='bx bxs-user me-2'></i>Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('user_profile_leave',['username' => $user->user_name]) }}" class="dropdown-item pb-2">
+                                            <i class='bx bx-calendar me-2' ></i>Leave-MS
+                                        </a>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                         @endforeach
@@ -71,7 +86,7 @@
         <div class="col">
             <div class="mt-5">
                 <ul class="pagination justify-content-center align-items-center">
-                    {!! $users->links('pagination::bootstrap-5') !!}
+                    {{-- {!! $users->links('pagination::bootstrap-5') !!} --}}
                 </ul>
             </div>
         </div>

@@ -2,7 +2,7 @@
 @section('list_active','bg-selected-warning')
 @section('sub-content')
 
-<div class="row mt-2">
+{{-- <div class="row mt-2">
     <div class="col-lg-6 col-md-6 col-sm-12">
 
     </div>
@@ -17,37 +17,23 @@
             <p>*Search area of assignment here</p>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- LIST PROFILE --}}
 <div class="row">
     <div>
         <div class="table-responsive">
             <div class="table-wrapper">
-                <table class="table table-striped table-hover bg-light">
-                    <thead>
+                <table id="data_table" class="table table-bordered table-hover bg-light shadow">
+                    <thead class="bg-success text-light border-light">
                         <tr>
-                            <th>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="selectAll">
-                                    <label for="selectAll"></label>
-                                </span>
-                            </th>
                             <th>Area of Assignments</th>
-                            <th># of Employees</th>
                             <th class="">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($area_of_assignments as $area_of_assignment)
                             <tr>
-                                <td>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                        <label for="checkbox1"></label>
-                                    </span>
-                                </td>
                                 <td>{{ $area_of_assignment->location_address }}</td>
-                                <td>4</td>
                                 <td class="">
                                     <a href="#" class="" title="View">
                                         <svg class="m-1" width="23px" height="23px" viewBox="0 0 20 20">
@@ -61,12 +47,12 @@
                                     </a>
                                     <a href="#Delete_area_of_assignment" class="text-danger" data-bs-toggle="modal" data-bs-target="#delete_area_of_assignment_{{ $area_of_assignment->id }}" title="Delete">
                                         <svg class="m-1" width="23px" height="23px" viewBox="0 0 23 23">
-                                            {{ svg('css-trash') }} 
+                                            {{ svg('css-trash') }}
                                         </svg>Delete
                                     </a>
                                 </td>
                             </tr>
-                            
+
                             <!-- Update Department Modal -->
                             <div class="modal fade" id="update_area_of_assignment{{ $area_of_assignment->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
@@ -137,28 +123,16 @@
                             </div>
                             {{-- End Delete Department Modal --}}
                         @endforeach
-                        
+
                     </tbody>
                 </table>
-                <div class="clearfix">
-                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
     </div>
 </div>
 {{-- END LIST --}}
-    
+
 </div>
 
 @endsection

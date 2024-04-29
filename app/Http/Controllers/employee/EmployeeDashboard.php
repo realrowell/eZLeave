@@ -10,6 +10,7 @@ use App\Models\LeaveApplicationNote;
 use App\Models\LeaveApproval;
 use App\Models\LeaveType;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 
 class EmployeeDashboard extends Controller
@@ -26,12 +27,28 @@ class EmployeeDashboard extends Controller
 
     public function employee_dashboard(){
         $current_year = Carbon::now();
+        $current_date = new DateTime($current_year);
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
 
+        // dd($current_date);
         $data=[
             'pending_leaves_count' => LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1001')->count(),
             'approved_leaves_count' => LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->count(),
-            'leave_credits' => EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)->where('employee_id',auth()->user()->employees->id)->where('show_on_employee',true)->where('status_id','sta-1007')->orderBy('id','desc')->get(),
+            'for_approval_count' => LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)
+                                                        ->where('fiscal_year_id',$current_fiscal_year->id)
+                                                        ->where('status_id','sta-1001')
+                                                        ->where('approver_id',auth()->user()->employees->id)
+                                                        ->orWhere('status_id','sta-1003')
+                                                        ->where('second_approver_id',auth()->user()->employees->id)
+                                                        ->count(),
+            'leave_credits' => EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)
+                                                    ->where('employee_id',auth()->user()->employees->id)
+                                                    ->where('show_on_employee',true)
+                                                    ->where('status_id','sta-1007')
+                                                    // ->where('expiration','<=',$current_date)
+                                                    ->orderBy('id','asc')
+                                                    ->get(),
+            'leave_applications' => LeaveApplication::where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->get(),
             'leave_application_notes' => LeaveApplicationNote::all(),
             'leave_approvals' => LeaveApproval::orderBy('created_at', 'asc')->get(),
             'leavetypes' => LeaveType::where('status_id','sta-1007')->where('show_on_employee',true)->get(),

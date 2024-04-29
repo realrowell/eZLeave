@@ -1,4 +1,5 @@
 @extends('profiles.hr_staff.hrstaff_dashboard_layout')
+@section('title','HR Leave Credits')
 @section('menu_hr_dashboard','text-dark')
 @section('menu_leave_credits','bg-selected-warning text-light')
 @section('menu_leave_management','text-dark')
@@ -103,6 +104,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <label for="reason_note">
+                                                    <h6>Note</h6>
+                                                </label>
+                                                <textarea class="form-control" name="reason_note" id="reason_note" cols="30" rows="2"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -118,14 +127,14 @@
     {{-- End Add Leave Credits Modal --}}
 
     {{-- Employee Management Table --}}
-    <div class="row bg-light p-3 m-1">
+    <div class="row bg-light p-3 m-1 shadow">
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="row mb-3">
-                    <div class="col-lg-4 col-md-5 col-sm-12">
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <div class="row ">
+                    <div class="col-lg-4 col-md-5 col-sm-12 mb-2">
                         <h5>Employee Leave Credits</h5>
                     </div>
-                    <div class="col-lg-8 col-md-7 col-sm-12">
+                    <div class="col-lg-3 col-md-5 col-sm-8 mb-2">
                         <div class="btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Fiscal Year:
@@ -146,12 +155,18 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="col-lg-5 col-md-2 col-sm-4 mb-2">
+                        <div class="btn-group">
+                            <a class="btn btn-primary btn-sm" href="{{ route('export') }}">Export CSV</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col text-end col-lg-6 col-md-6 col-sm-12">
+            <div class="col text-end col-lg-4 col-md-6 col-sm-12">
                 <form action="{{ route('hrstaff_leave_credits_search') }}" class="input-group">
-                    {{-- @csrf --}}
+                    @csrf
                     <input class="form-control " type="text" name="search_input" id="myInput" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here">
+                    <input type="text" name="fiscal_year" id="fiscal_year" value="{{ $current_fiscal_year->id }}" hidden>
                     <button type="submit" id="search_btn" class="btn btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
                 </form>
             </div>

@@ -6,7 +6,7 @@ use App\Models\Department;
 use App\Models\Position;
 use App\Models\PositionLevel;
 use App\Models\PositionTitles;
-use App\Models\Subdepartment;
+use App\Models\SubDepartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -25,8 +25,8 @@ class PositionController extends Controller
      */
     public function admin_organization_positions_grid(){
         $positions = Position::all()->where('status_id','sta-1007');
-        $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get();
-        $view_subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(5);
+        $subdepartments = SubDepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get();
+        $view_subdepartments = SubDepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(5);
         $departments = Department::all()->where('status_id','sta-1007');
         $position_levels = PositionLevel::all();
         $position_titles = PositionTitles::where('status_id','sta-1007')->orderBy('position_title','asc')->get();
@@ -50,7 +50,7 @@ class PositionController extends Controller
      * POSITIONS LIST VIEW
      */
     public function admin_organization_positions_list(){
-        $positions = Position::where('status_id','sta-1007')->orderBy('position_description','asc')->paginate(20);
+        $positions = Position::where('status_id','sta-1007')->orderBy('position_description','asc')->get();
         $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get();
         $departments = Department::all()->where('status_id','sta-1007');
         $position_levels = PositionLevel::all();
@@ -69,7 +69,7 @@ class PositionController extends Controller
 
         $data = $request->validate([
             'position_title' => 'required|max:50',
-            'position_description' => 'required|max:300|unique:positions,position_description',
+            'position_description' => 'required|max:300',
             'subdepartment_title' => 'required',
             'position_level' => 'required',
             'is_hod' => 'nullable',
@@ -77,6 +77,11 @@ class PositionController extends Controller
         ],[
             'position_description.unique' => 'The :attribute: :input is already available!',
         ]);
+
+        $positions = Position::where('position_description',$data['position_description'])->where('subdepartment_id',$data['subdepartment_title'])->where('status_id','sta-1007')->first();
+        if($positions != null){
+            return redirect()->back()->with('error','Position is already available!');
+        }
 
         $data['position_title'] = strip_tags($data['position_title']);
         $data['position_description'] = strip_tags($data['position_description']);

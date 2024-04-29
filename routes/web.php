@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\admin\AccountManagementController;
 use App\Http\Controllers\admin\AdminDashboard;
+use App\Http\Controllers\admin\AdminLeaveMaintenanceController;
 use App\Http\Controllers\admin\AdminLeaveManagementController;
+use App\Http\Controllers\admin\AdminLeavePageController;
 use App\Http\Controllers\admin\AdminPageController;
 use App\Http\Controllers\admin\AreaOfAssignmentController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +65,7 @@ Route::get('/profile/update/view', [EmployeeProfileController::class, 'employee_
 Route::patch('/profile/update', [EmployeeProfileController::class, 'employee_update_profile'])->name('employee_update_profile');
 Route::get('/leave_management/menu', [EmployeePageController::class, 'profile_leave_management_menu'])->name('profile_leave_management_menu');
 Route::get('/leave_management/for_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_for_approval_grid'])->name('profile_leave_management_for_approval_grid');
+Route::get('/leave_management/approval_history/list_view', [EmployeePageController::class, 'profile_leave_management_approval_history_list'])->name('profile.leave_management.approval_history.list');
 Route::get('/leave_management/leave_details/{leave_application_rn}', [EmployeePageController::class, 'leaveDetailsPage'])->name('leave_details_page');
 Route::get('/leave_management/for_approval/list_view', [EmployeePageController::class, 'profile_leave_management_for_approval_list'])->name('profile_leave_management_for_approval_list');
 Route::get('/leave_management/pending_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_pending_approval_grid'])->name('profile_leave_management_pending_approval_grid');
@@ -105,6 +108,9 @@ Route::get('/hr/employee_management/employees/probationary/list', [HrStaffPageCo
 Route::get('/hr/profile', [HrStaffPageController::class, 'hrstaff_visit_profile'])->name('hrstaff_profile');
 Route::get('/hr/profile/update', [HrStaffPageController::class, 'hrstaff_visit_profile_update'])->name('hrstaff_profile_update');
 
+Route::get('/addAccount/getSubdepartment/{id}', [AccountManagementController::class, 'GetSubdepartmentFromDepartment'])->name('addAccount_getSubdepart');
+Route::get('/addAccount/getPosition/{id}', [AccountManagementController::class, 'GetPositionFromSubdepartment'])->name('addAccount_getPosition');
+
 Route::get('/hr/leave_management/menu', [HrStaffLeavePageController::class, 'hrstaff_leave_menu'])->name('hrstaff_leave_menu');
 Route::get('/hr/leave_management', [HrStaffLeavePageController::class, 'hrstaff_leave_management'])->name('hrstaff_leave_management');
 Route::get('/hr/leave_management/all/{fiscal_year}', [HrStaffLeavePageController::class, 'hrstaff_fy_leave_management'])->name('hrstaff_fy_leave_management');
@@ -119,9 +125,9 @@ Route::get('/hr/leave_management/approved', [HrStaffLeavePageController::class, 
 Route::get('/hr/leave_management/cancelled', [HrStaffLeavePageController::class, 'hrstaff_leave_cancelled'])->name('hrstaff_leave_cancelled');
 Route::get('/hr/leave_management/rejected', [HrStaffLeavePageController::class, 'hrstaff_leave_rejected'])->name('hrstaff_leave_rejected');
 Route::get('/hr/leave_management/leavetypes', [HrStaffLeavePageController::class, 'hrstaff_leave_types'])->name('hrstaff_leave_types');
-Route::post('/hr/create_leavetypes', [LeaveTypesController::class, 'create_leavetypes'])->name('create_leavetypes');
-Route::get('/hr/update_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'update_leavetypes'])->name('update_leavetypes');
-Route::get('/hr/delete_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'delete_leavetypes'])->name('delete_leavetypes');
+// Route::post('/hr/create_leavetypes', [LeaveTypesController::class, 'create_leavetypes'])->name('create_leavetypes');
+// Route::get('/hr/update_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'update_leavetypes'])->name('update_leavetypes');
+// Route::get('/hr/delete_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'delete_leavetypes'])->name('delete_leavetypes');
 Route::post('/hr/create_leavecredits', [LeaveCreditController::class, 'create_leavecredits'])->name('create_leavecredits');
 Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
 Route::post('/hr/create_leavecredits', [LeaveCreditController::class, 'create_leavecredits'])->name('create_leavecredits');
@@ -135,6 +141,7 @@ Route::get('/hr/leave_management/cancellation/{leave_application_rn}', [LeaveApp
 Route::get('/hr/user/profile/{username}', [HrStaffPageController::class, 'visit_profile_view'])->name('user_profile');
 Route::get('/hr/user/update/{username}', [HrStaffPageController::class, 'visit_profile_update'])->name('visit_user_update');
 Route::get('/hr/user/profile/leave/{username}', [HrStaffPageController::class, 'visit_profile_leave_view'])->name('user_profile_leave');
+Route::get('leave/credits/export', [LeaveCreditController::class, 'export'])->name('export');
 
 
 /*
@@ -154,6 +161,9 @@ Route::get('/admin/policy/update', [Page_Controller::class, 'admin_policy_update
 Route::get('/admin/policy/menu', [Page_Controller::class, 'admin_policy_menu'])->name('admin_policy_menu');
 Route::get('/admin/login-logs', [AdminPageController::class, 'admin_login_logs_view'])->name('admin_login_logs');
 
+Route::controller(AdminPageController::class)->group(function (){
+    Route::get( '/admin/accounts/active/grid', 'admin_accounts_active_grid' )->name('admin.active.grid');
+});
 Route::get('/admin/accounts/grid', [AdminPageController::class, 'admin_accounts_grid'])->name('admin_accounts_grid');
 Route::get('/admin/accounts/list', [AdminPageController::class, 'admin_accounts_list'])->name('admin_accounts_list');
 Route::get('/admin/accounts/grid/search', [AdminPageController::class, 'admin_accounts_search_grid'])->name('admin_accounts_search_grid');
@@ -208,6 +218,16 @@ Route::post('/organization/create_area_of_assignments', [AreaOfAssignmentControl
 Route::get('/organization/update_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'update_area_of_assignments'])->name('admin_update_areaofassignemnt');
 // Route::put('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'delete_area_of_assignments']);
 Route::get('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'delete_area_of_assignments'])->name('admin_delete_areaofassignemnt');
+
+Route::controller(AdminLeavePageController::class)->group(function (){
+    Route::get( '/admin/leave-menu', 'admin_leave_menu' )->name('admin.leave.menu');
+    Route::get( '/admin/leave-types', 'admin_leave_types' )->name('admin.leave.types');
+});
+Route::controller(AdminLeaveMaintenanceController::class)->group(function (){
+    Route::post( '/admin/create_leavetype', 'create_leavetypes' )->name('admin.create.leavetype');
+    Route::get( '/admin/update_leavetype/{leavetype_id}', 'update_leavetypes')->name('admin.update.leavetype');
+    Route::get( '/admin/delete_leavetype/{leavetype_id}', 'delete_leavetypes')->name('admin.delete.leavetype');
+});
 
 Route::get('/admin/system_settings', [SystemSettingsController::class, 'system_settings_view'])->name('admin_system_settings');
 
