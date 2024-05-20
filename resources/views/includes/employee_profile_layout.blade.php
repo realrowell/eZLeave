@@ -561,7 +561,7 @@
                 <p>© {{ now()->year }}
                   <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
                     Bioseed Research Philippines, Inc.
-                  </a> | All Rights Reserved. | Beta v0.2
+                  </a> | All Rights Reserved. | Beta v0.2.0
                 </p>
               </a>
             </div>
