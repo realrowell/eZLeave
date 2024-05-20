@@ -10,6 +10,7 @@ use App\Models\LeaveApplication;
 use App\Models\LeaveApplicationNote;
 use App\Models\LeaveApproval;
 use App\Models\LeaveType;
+use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -42,6 +43,17 @@ class EmployeePageController extends Controller
         return view('profiles.employee.leave_management.leave_menu');
     }
 
+    public function user_notifications_page(){
+        // dd(Carbon::now()->timespan());
+        $data=[
+            'system_notifications' => Notification::where('notification_type_id','nt-1001')->where('status_id','sta-1007')->where('employee_id',auth()->user()->id)->orderBy('created_at','desc')->paginate(20),
+            'leave_notifications' => Notification::where('notification_type_id','nt-1002')->where('status_id','sta-1007')->where('employee_id',auth()->user()->id)->orderBy('created_at','desc')->paginate(20),
+        ];
+
+        return view ('profiles.employee.profile.notifications')->with($data);
+    }
+
+
     /**
      *
      *
@@ -59,6 +71,7 @@ class EmployeePageController extends Controller
             'current_fiscal_year' => $current_fiscal_year,
             'leave_credits' => EmployeeLeaveCredit::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('show_on_employee',true)->where('status_id','sta-1007')->orderBy('id','asc')->get(),
         ];
+
         $leave_applications = LeaveApplication::where('status_id','sta-1001')->where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'asc')->paginate(8);
         $partial_leave_applications = LeaveApplication::where('status_id','sta-1003')->where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'asc')->paginate(8);
 
@@ -94,6 +107,11 @@ class EmployeePageController extends Controller
      */
     public function leaveDetailsPage($leave_application_rn){
         $leave_application = LeaveApplication::where('reference_number',$leave_application_rn)->first();
+
+        if($leave_application->employee_id != auth()->user()->employees->id && $leave_application->approver_id != auth()->user()->employees->id && $leave_application->second_approver_id != auth()->user()->employees->id){
+            abort(404);
+        }
+
         $employee_name =    $leave_application->employees->users->last_name.", ".
                             $leave_application->employees->users->first_name." ".
                             optional($leave_application->employees->users->suffixes)->suffix_title;
@@ -105,6 +123,10 @@ class EmployeePageController extends Controller
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
 
+        $notification = Notification::where('body',$leave_application_rn)->where('employee_id',auth()->user()->id)
+                        ->update([
+                            'is_open' => true,
+                        ]);
         $data=[
             'leave_application_notes' => LeaveApplicationNote::all(),
             'leave_approvals' => LeaveApproval::all()->where('leave_application_reference',$leave_application_rn)->sortByDesc('created_at'),

@@ -1,5 +1,8 @@
 new DataTable('#loginlogs_table');
-new DataTable('#data_table');
+new DataTable('#data_table',{
+    pagingType: 'first_last_numbers'
+});
+
 
 function submitButtonDisabled(){
     document.getElementById('form_submit').disabled = true;

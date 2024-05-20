@@ -6,7 +6,6 @@
     <title>@yield('title')</title>
     <link rel="icon" type="image/x-icon" href="/img/logo_icon.png">
 
-
     {{-- Bootstrap 5 --}}
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> --}}
     {{-- End Bootstrap 5 --}}
@@ -49,7 +48,7 @@
     <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
-    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" ></script> --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -420,7 +419,7 @@
                             <div class="col-lg-2 col-md-2 col-sm-12 p-2">
                                 {{-- <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt=""> --}}
                                 @if (auth()->user()->profile_photos == null)
-                                    <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="profile photo">
+                                    <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
                                 @else
                                     <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
                                 @endif
@@ -484,7 +483,7 @@
                         <p>© {{ now()->year }}
                         <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
                             Bioseed Research Philippines, Inc.
-                        </a> | Powered by Bioseed Information Management Systems
+                        </a> | Powered by Bioseed Information Management Systems | Beta v0.2
                         </p>
                     </a>
                     </div>

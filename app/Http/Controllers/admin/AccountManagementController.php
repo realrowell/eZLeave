@@ -12,6 +12,7 @@ use App\Models\EmploymentStatus;
 use App\Models\Gender;
 use App\Models\HrStaff;
 use App\Models\MaritalStatus;
+use App\Models\Notification;
 use App\Models\Position;
 use App\Models\ProfilePhoto;
 use App\Models\SubDepartment;
@@ -508,6 +509,14 @@ class AccountManagementController extends Controller
         $users = User::where( 'id', $user->id )
             ->update([
                 'password' => Hash::make(Carbon::parse($user->employees->birthdate)->isoFormat('MMDDY'))
+        ]);
+        $notifications = Notification::create([
+            'title' => 'Your Password has been Reset!',
+            'subject' => 'If you did not make the request, please contact your System Admin immediately!',
+            'body' => null,
+            'notification_type_id' => 'nt-1001',
+            'author_id' => auth()->user()->id,
+            'employee_id' => $user->id,
         ]);
 
         return redirect()->back()->with('success','Password has been reset succefully!');

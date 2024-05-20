@@ -53,7 +53,7 @@
     </div>
     <div class="row mt-2" id="form_submit">
         <div class="table-wrapper">
-            <table class="table table-bordered table-hover bg-light">
+            <table class="table table-sm table-bordered table-hover bg-light">
                 {{-- <h5>Pending Approval</h5> --}}
                 <thead class="bg-success text-light border-light">
                     <tr>
@@ -64,8 +64,8 @@
                         <th>End date</th>
                         <th>Duration (days)</th>
                         <th>Filed at</th>
-                        <th>Approver</th>
-                        <th>Second Approver</th>
+                        {{-- <th>Approver</th>
+                        <th>Second Approver</th> --}}
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -81,11 +81,11 @@
                             {{ optional($leave_application->employees->users->suffixes)->suffix_title }}
                         </td>
                         <td>{{ optional($leave_application->leavetypes)->leave_type_title }}</td>
-                        <td>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} - {{ $leave_application->start_of_date_parts->day_part_title }}</td>
-                        <td>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} - {{ $leave_application->end_of_date_parts->day_part_title }}</td>
+                        <td>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('m/d/Y') }} - {{ $leave_application->start_of_date_parts->day_part_title }}</td>
+                        <td>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('m/d/Y') }} - {{ $leave_application->end_of_date_parts->day_part_title }}</td>
                         <td>{{ $leave_application->duration }}</td>
-                        <td>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('M d, Y; h:i a') }}</td>
-                        <td id="table_reports_to" class="text-wrap">
+                        <td>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('m/d/Y \\a\\t h:ia') }}</td>
+                        {{-- <td id="table_reports_to" class="text-wrap">
                             @if (!empty($leave_application->approver_id))
                                 {{ optional($leave_application->approvers->users)->first_name }}
                                 {{ optional($leave_application->approvers->users)->middle_name }}
@@ -104,7 +104,7 @@
                             @else
                                 Not Available
                             @endif
-                        </td>
+                        </td> --}}
                         <td>
                             @if ($leave_application->status_id == 'sta-1001')
                                 <span class="badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
@@ -129,11 +129,11 @@
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
                                         </a>
                                     </li>
-                                    <li class="mt-1">
+                                    {{-- <li class="mt-1">
                                         <button type="button" class="dropdown-item bg-danger text-light pb-2" data-bs-toggle="modal" data-bs-target="#cancelLeaveModal{{ $leave_application->reference_number }}">
                                             <i class='bx bxs-x-circle me-2 pt-1' ></i>Cancel
                                         </button>
-                                    </li>
+                                    </li> --}}
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-danger text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-x me-2 pt-1'></i>Reject
@@ -176,11 +176,11 @@
                                             <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
                                         </a>
                                     </li>
-                                    <li class="mt-1">
+                                    {{-- <li class="mt-1">
                                         <button type="button" class="dropdown-item bg-danger text-light pb-2" data-bs-toggle="modal" data-bs-target="#cancelLeaveModal{{ $leave_application->reference_number }}">
                                             <i class='bx bxs-x-circle me-2 pt-1' ></i>Cancel
                                         </button>
-                                    </li>
+                                    </li> --}}
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-danger text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave_application->reference_number }}">
                                             <i class='bx bx-x me-2 pt-1'></i>Reject
@@ -350,7 +350,7 @@
                                                                 @if ($leave_application_note->leave_application_reference == $leave_application->reference_number)
                                                                     <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
                                                                     @if ($leave_application_note->author_id != null)
-                                                                        <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} at {{ $leave_application_note->created_at }}</p>
+                                                                        <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at) }} </p>
                                                                     @endif
                                                                 @endif
                                                             @endforeach
@@ -375,7 +375,7 @@
                                                                         @if ($leave_approval->status_id == 'sta-1001')
                                                                             <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach
@@ -385,7 +385,7 @@
                                                                         @if ($leave_approval->status_id == 'sta-1001')
                                                                             <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach
@@ -395,9 +395,9 @@
                                                                         @if ($leave_approval->status_id == 'sta-1001')
                                                                             <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1004')
-                                                                            <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach
@@ -407,11 +407,11 @@
                                                                         @if ($leave_approval->status_id == 'sta-1001')
                                                                             <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1004')
-                                                                            <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @elseif ($leave_approval->status_id == 'sta-1005')
-                                                                            <p class="bg-warning text-dark ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                            <p class="bg-warning text-dark ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at) }}</p>
                                                                         @endif
                                                                     @endif
                                                                 @endforeach
@@ -434,7 +434,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-primary text-center">View in Detailed</a>
+                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-primary text-center">View more details</a>
                                         <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
@@ -517,7 +517,7 @@
                                                         </div>
                                                         <div class="row mt-2 text-end">
                                                             <div class="col">
-                                                                <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" target="_blank" class="btn btn-sm btn-primary">Update Date</a>
+                                                                <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" target="_blank" class="btn btn-sm btn-primary">Update Date</a>
                                                             </div>
                                                         </div>
                                                         <div class="row">

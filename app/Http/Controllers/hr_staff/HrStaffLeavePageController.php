@@ -39,7 +39,8 @@ class HrStaffLeavePageController extends Controller
 
         $data=[
             'employees' => Employee::all()->where('status_id','sta-2001')
-                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;}),
+                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;})
+                                        ->where(function($employees, $key) {return $employees->users->status_id=='sta-2001';}),
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'leave_application_notes'=>LeaveApplicationNote::all(),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
@@ -81,7 +82,7 @@ class HrStaffLeavePageController extends Controller
      * RETURN HR Leave Application Search View
      */
     public function hrstaff_leave_management_search(Request $request){
-        $input_search = explode(' ',$request->search_input);
+        $input_search = $request->search_input;
         // dd($input_search[1]);
         $input_filter = $request->search_filter;
 
@@ -105,7 +106,10 @@ class HrStaffLeavePageController extends Controller
             return view('profiles.hr_staff.hr_leave_management.leave_management_all',compact('leave_applications'))->with($data);
         }
         elseif($input_filter == '2'){
-            $employee = User::where('first_name',$input_search)->orWhere('last_name',$input_search)->first();
+            $employee = User::where('first_name','LIKE','%'.$input_search.'%')
+                                ->orWhere('last_name','LIKE','%'.$input_search.'%')
+                                ->orWhere('middle_name','LIKE','%'.$input_search.'%')
+                                ->first();
             if($employee==null){
                 return redirect()->back()->with('error','No Data Found!');
             }
@@ -177,19 +181,24 @@ class HrStaffLeavePageController extends Controller
         $search_input = $request['search_input'];
         $fy = $request['fiscal_year'];
 
-        $employee = User::where('first_name',$search_input)->orWhere('last_name',$search_input)->first();
+        $employee = User::where('first_name',$search_input)
+                        ->orWhere('last_name',$search_input)
+                        ->orWhere('middle_name',$search_input)
+                        ->first();
 
         if(is_null($employee)){
             return back() -> with('error','Employee not found!');
         }else{
+            $employee_leavecredits = EmployeeLeaveCredit::where('status_id','sta-1007')->where('employee_id',$employee->employees->id)->where('fiscal_year_id',$fy)->paginate(20);
             $data=[
                 'employees' => Employee::all()->where('status_id','sta-2001')
                                             ->sortBy(function($employees, $key) {return $employees->users->last_name;}),
                 'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
+                'employee_leavecredits' => $employee_leavecredits,
             ];
-            $employee_leavecredits = EmployeeLeaveCredit::where('status_id','sta-1007')->where('employee_id',$employee->employees->id)->where('fiscal_year_id',$fy)->paginate(20);
+
             dd($employee_leavecredits);
-            return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
+            return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits')->with($data);
         }
     }
 
@@ -262,7 +271,7 @@ class HrStaffLeavePageController extends Controller
         $users = User::where('status_id','sta-2001')->paginate(10);
         // $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1001')->orWhere('status_id','sta-1003')->orderBy('created_at', 'desc')->paginate(20);
 
-        $leave_applications = LeaveApplication::where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->orderBy('created_at', 'asc')->paginate(20);
+        $leave_applications = LeaveApplication::where('start_date','<=',$current_year->toDateString())->where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->orderBy('created_at', 'asc')->paginate(20);
 
         $data=[
             'employees' => Employee::all()->where('status_id','sta-2001')

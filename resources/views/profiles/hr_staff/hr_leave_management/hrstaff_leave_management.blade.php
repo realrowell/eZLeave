@@ -145,11 +145,16 @@
                                             </div>
                                         </div>
                                         <div class="row mt-2">
-                                            <div class="col">
+                                            <div class="col placeholder-glow">
                                                 <label class="" for="leavetype">
-                                                    <h6 class="">Leave Type</h6>
+                                                    <h6 class="">
+                                                        Leave Type
+                                                        <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_leavetype" role="status" >
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </h6>
                                                 </label>
-                                                <select class="form-select" id="leavetype" name="leavetype" required>
+                                                <select class="form-select " id="leavetype" name="leavetype" required>
                                                     <option selected disabled value=""></option>
                                                     @foreach ($leavetypes as $leavetype)
                                                         <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
@@ -234,9 +239,39 @@
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function(){
+                $('#employee').on('change',function(){
+                    let id = $(this).val();
+                    console.log(id);
+                    $('#leavetype').empty();
+                    $('#leavetype').addClass('placeholder');
+                    $('#spinner_leavetype').removeClass('d-none');
+                    $('#leavetype').append('<option value="0" disabled selected >Processing...</option>');
+                    $.ajax({
+                        type: 'GET',
+                        url: '/create_leave/getLeaveType/'+id,
+                        success: function (response){
+                            var response = JSON.parse(response);
+                            // console.log(response);
+                            $('#leavetype').empty();
+                            $('#leavetype').removeClass('placeholder');
+                            $('#spinner_leavetype').addClass('d-none');
+                            $('#leavetype').append('<option value="0" disabled selected>*Select Leave type</option>');
+                            if($.trim(response) == ''){
+                                $('#leavetype').append(`<option value="" disabled>No Leave Credits Available</option>`);
+                            }
+                            response.forEach(element => {
+                                $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title} - ${element['leave_days_credit']}</option>`);
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
     {{-- End Apply leave Modal --}}
     <!-- Apply leave Modal -->
-        <div class="modal fade" id="ApplyLeaveModals" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        {{-- <div class="modal fade" id="ApplyLeaveModals" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="z-index: 1060; display: none;">
@@ -337,7 +372,7 @@
                     </form>
                 </div>
             </div>
-    </div>
+    </div> --}}
     {{-- End Apply leave Modal --}}
 
     <div class="sub-content mb-5" id="form_submit" >

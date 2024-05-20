@@ -285,7 +285,94 @@
                         <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
                     </div>
                 </div>
-                <div class="col-3 align-self-center text-end align-items-center">
+                <div class="col-1 text-end align-items-center align-self-center">
+                    <a href="#" class="text-light position-relative" style="font-size: 1.5rem"data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class='bx bxs-bell'></i>
+                        @if (user_notifications()->where('is_open',false)->count() != 0)
+                            <span class="position-absolute top-0 start-100 translate-middle ">
+                                <span class="badge rounded-pill bg-danger" style="font-size: 10px">{{ user_notifications()->where('is_open',false)->count() }}</span>
+                            </span>
+                        @endif
+                    </a>
+                    <ul class="dropdown-menu shadow" style="border-radius: 10px;">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        @forelse ( user_notifications()->where('is_open',false)->take(5) as $notification )
+                            <li>
+                                @if ($notification->notification_type_id == 'nt-1001')
+                                    <a class="dropdown-item" href="{{ route('user.notification.page') }}">
+                                        <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
+                                        <h6 class="text-secondary" style="margin-bottom: 0px;">{{ $notification->subject }}</h6>
+                                        <p class="text-secondary" style="margin-bottom: 3px">
+                                            <i class='bx bx-time' style="translate: 0px 2px;"></i>
+                                            @php
+                                                $current_time = \Carbon\Carbon::now();
+                                            @endphp
+                                            @if ($notification->created_at->diffInMinutes($current_time) <= 59)
+                                                @if ($notification->created_at->diffInMinutes($current_time) == 0)
+                                                    just now
+                                                @else
+                                                    {{ $notification->created_at->diffInMinutes($current_time) }}m ago
+                                                @endif
+                                            @elseif ($notification->created_at->diffInHours($current_time) <= 5)
+                                                {{ $notification->created_at->diffInHours($current_time) }}h ago
+                                            @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
+                                                    Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                    Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                @endif
+                                            @else
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
+                                            @endif
+                                        </p>
+                                    </a>
+                                @elseif ($notification->notification_type_id == 'nt-1002')
+                                    <a class="dropdown-item" href="{{ route('leave_details_page',['leave_application_rn'=>$notification->body]) }}">
+                                        <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
+                                        <h6 class="text-secondary" style="margin-bottom: 0px">{{ $notification->subject }}</h6>
+                                        <p class="text-secondary" style="margin-bottom: 3px">
+                                            <i class='bx bx-time' style="translate: 0px 2px;"></i>
+                                            @php
+                                                $current_time = \Carbon\Carbon::now();
+                                            @endphp
+                                            @if ($notification->created_at->diffInMinutes($current_time) <= 59)
+                                                @if ($notification->created_at->diffInMinutes($current_time) == 0)
+                                                    just now
+                                                @else
+                                                    {{ $notification->created_at->diffInMinutes($current_time) }}m ago
+                                                @endif
+                                            @elseif ($notification->created_at->diffInHours($current_time) <= 5)
+                                                {{ $notification->created_at->diffInHours($current_time) }}h ago
+                                            @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
+                                                    Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                    Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                @endif
+                                            @else
+                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
+                                            @endif
+                                        </p>
+                                    </a>
+                                @endif
+                            </li>
+                        @empty
+                            <li class="dropdown-item text-center">No Recent Notification</li>
+                        @endforelse
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="text-center">
+                            <a class="dropdown-item position-relative" href="{{ route('user.notification.page') }}">
+                                view all
+                            @if (user_notifications()->where('is_open',false)->count() >= 6)
+                                <span class="position-absolute translate-middle " style="translate: 75% 0px;">
+                                    <span class="badge rounded-pill bg-danger text-danger" style="font-size: 5px">.</span>
+                                </span>
+                            @endif
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-2 align-self-center text-start align-items-center">
                     <a class="nav_logo-name dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
                         {{ auth()->user()->first_name }}
                     </a>
@@ -405,6 +492,62 @@
           });
     </script>
 
+
+    <div class="container-fluid" id="profile_body" style="display: @yield('profile_bar_display')">
+        <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+            <div class="col ">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12 p-2">
+                        @if (auth()->user()->profile_photos == null)
+                            <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
+                        @else
+                            <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
+                        @endif
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 p-2">
+                        <div class="row">
+                            {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} {{ optional(Auth::user()->suffixes)->suffix_title }}
+                        </div>
+                        <div class="row">
+                            {{ optional(optional(Auth::user()->employees->employee_positions)->positions)->position_description }}
+                        </div>
+                        <div class="row">
+                            {{ optional(optional(optional(optional(Auth::user()->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 p-2">
+                        <div class="row">
+                            {{ Auth::user()->email }}
+                        </div>
+                        <div class="row">
+                            {{ Auth::user()->employees->contact_number }}
+                        </div>
+                        <div class="row">
+                            {{ optional(optional(optional(Auth::user()->employees->employee_positions)->positions)->area_of_assignments)->location_address }}
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 p-2">
+                        <div class="row">
+                            <a href="{{ route('employee_profile') }}" class="nav_link">
+                                <i class='bx bx-user-circle nav_icon' style="font-size: 1.5rem"></i>
+                                <span class="nav_name">Profile</span>
+                            </a>
+                        </div>
+                        <div class="row">
+                            <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="bx bx-log-out nav_icon" style="font-size: 1.5rem"></i>
+                                <span class="nav_name">SignOut</span>
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="">
         @yield('content')
     </div>
@@ -418,7 +561,7 @@
                 <p>© {{ now()->year }}
                   <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
                     Bioseed Research Philippines, Inc.
-                  </a> | All Rights Reserved.
+                  </a> | All Rights Reserved. | Beta v0.2
                 </p>
               </a>
             </div>

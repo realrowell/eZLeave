@@ -163,17 +163,17 @@
                 </div>
             </div>
             <div class="col text-end col-lg-4 col-md-6 col-sm-12">
-                <form action="{{ route('hrstaff_leave_credits_search') }}" class="input-group">
+                {{-- <form action="{{ route('hrstaff_leave_credits_search') }}" class="input-group">
                     @csrf
                     <input class="form-control " type="text" name="search_input" id="myInput" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here">
                     <input type="text" name="fiscal_year" id="fiscal_year" value="{{ $current_fiscal_year->id }}" hidden>
                     <button type="submit" id="search_btn" class="btn btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
-                </form>
+                </form> --}}
             </div>
         </div>
         <div class="row mt-3">
             <div class="table-wrapper">
-                <table class="table table-bordered table-hover bg-light">
+                <table id="data_table" class="table table-bordered table-hover bg-light table-sm compact">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
@@ -201,7 +201,7 @@
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
                             <td class="d-flex gap-2">
                                 <a href="#" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateLeaveCreditModal{{ $employee_leavecredit->id }}">Update</a>
-                                <a href="#" class="btn-sm btn-primary">Leave-MS</a>
+                                <a href="{{ route('user_profile_leave',['username' => $employee_leavecredit->employees?->users?->user_name]) }}" class="btn-sm btn-primary">Leave-MS</a>
                             </td>
                         </tr>
 
@@ -241,7 +241,7 @@
                                                                     <label for="credits">
                                                                         <h6>Credits (Days)</h6>
                                                                     </label>
-                                                                    <input type="number" step="0.5" class="form-control" id="credits" name="credits" value="{{ $employee_leavecredit->leave_days_credit }}">
+                                                                    <input type="number" step="0.5" class="form-control" id="credits" name="credits" disabled value="{{ $employee_leavecredit->leave_days_credit }}">
                                                                 </div>
                                                             </div>
                                                             <div class="row mt-3">
@@ -285,7 +285,7 @@
                     <div class="col">
                         <div class="mt-5">
                             <ul class="pagination justify-content-center align-items-center">
-                                {!! $employee_leavecredits->links('pagination::bootstrap-5') !!}
+                                {{-- {!! $employee_leavecredits->links('pagination::bootstrap-5') !!} --}}
                             </ul>
                         </div>
                     </div>

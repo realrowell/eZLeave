@@ -3,10 +3,6 @@
 @section('sidebar_user_active','active')
 @section('content')
 
-{{-- <div class="banner-gradient p-5 text-center text-light ">
-    <img style="max-width: 100%; height: auto;" src="/img/dashboard_banner_01.jpg" alt="">
-    {{ now()->format('l') }}
-</div> --}}
 <div class="container-fluid mb-4 pb-5 p-4">
     <div class="row">
         <h5>Menu</h5>
@@ -72,9 +68,12 @@
             </div>
         </div>
         <div class="col-lg-8 col-md-8 col-sm-10">
-            <div class="row bg-light z-1 p-1 ps-4 m-1 shadow">
+            <div class="row bg-light z-1 p-1 ps-4 m-1 shadow position-relative">
+                <div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none;">
+                    <span class="visually-hidden" >Loading...</span>
+                </div>
                 {{-- PROFILE Fields --}}
-                <form action="{{ route('employee_update_profile') }}" method="POST" onsubmit="submitButtonDisabled()">
+                <form action="{{ route('employee_update_profile') }}" method="POST" onsubmit="onFormSubmit()" id="form_to_submit">
                     @csrf
                     @method('PATCH')
                     <div class="row">
@@ -251,10 +250,17 @@
                     </div>
                 </form>
                 {{-- END PROFILE Fields --}}
-                <!-- confirm reset password Modal -->
-                <div class="modal fade" id="reset_password_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+            </div>
+        </div>
+        <!-- confirm reset password Modal -->
+            <div class="modal fade" id="reset_password_modal" data-bs-keyboard="false" tabindex="1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" id="form_to_submit_2" >
+                    <form action="{{ route('account_reset_password',['username'=>auth()->user()->user_name]) }}" method="PUT" onsubmit="onFormSubmit_1()" id="form_to_submit_2">
+                        @csrf
+                        <div class="modal-content position-relative">
+                            <div class="spinner-border text-primary position-absolute" id="loading_spinner_2" role="status" style="display: none;">
+                                <span class="visually-hidden" >Loading...</span>
+                            </div>
                             <div class="modal-header">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -269,17 +275,13 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
-                                <form action="{{ route('account_reset_password',['username'=>auth()->user()->user_name]) }}" method="PUT" onsubmit="onClickApprove()">
-                                    @csrf
-                                    <button class="btn btn-danger" type="submit">Confirm</button>
-                                </form>
+                                <button class="btn btn-danger" type="submit" id="submit_button2">Confirm</button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            {{-- end confirm reset password Modal --}}
             </div>
-        </div>
+        {{-- end confirm reset password Modal --}}
     </div>
 </div>
 

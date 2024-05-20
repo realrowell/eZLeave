@@ -461,7 +461,7 @@
                         <div class="col-lg-2 col-md-2 col-sm-12 p-2">
                             {{-- <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt=""> --}}
                             @if (auth()->user()->profile_photos == null)
-                                <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="profile photo">
+                                <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
                             @else
                                 <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
                             @endif
@@ -525,7 +525,7 @@
                 <p>© {{ now()->year }}
                   <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
                     Bioseed Research Philippines, Inc.
-                  </a> | Powered by Bioseed Information Systems. | Beta v0.1
+                  </a> | Powered by Bioseed Information Systems. | Beta v0.2
                 </p>
               </a>
             </div>

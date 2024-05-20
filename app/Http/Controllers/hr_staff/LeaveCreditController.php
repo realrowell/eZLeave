@@ -122,7 +122,12 @@ class LeaveCreditController extends Controller
             if($leave_types->accumulable == true){
                 if($past_fy_leave_credits != null){
                     $leave_log_note = $leave_log_note." | last fy credit: ".$past_fy_leave_credits->leave_days_credit;
-                    $leave_credits = $past_fy_leave_credits->leave_days_credit + $data['credits'];
+                    if($past_fy_leave_credits->leave_days_credit <= 0){
+                        $data['credits'];
+                    }
+                    else{
+                        $leave_credits = $past_fy_leave_credits->leave_days_credit + $data['credits'];
+                    }
                 }
                 else{
                     $new_leave_credits = $leave_credits;

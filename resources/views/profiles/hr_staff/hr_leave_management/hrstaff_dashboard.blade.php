@@ -39,7 +39,7 @@
     <div class="col"></div>
 </div>
 <div class="row gap-3">
-    <div class="row">
+    {{-- <div class="row">
         <div class="col text-end align-items-end">
             <div class="col text-end align-items-end">
                 <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
@@ -56,10 +56,10 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Add Leave Credits Modal -->
-        <div class="modal fade" id="AddLeaveCreditModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        {{-- <div class="modal fade" id="AddLeaveCreditModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApprove()">
@@ -122,10 +122,10 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                {{-- <label for="credits">
+                                                <label for="credits">
                                                     <h6>Credits (Days)</h6>
                                                 </label>
-                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required> --}}
+                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
                                             </div>
                                         </div>
                                     </div>
@@ -139,16 +139,15 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> --}}
     {{-- End Add Leave Credits Modal --}}
     <!-- Apply leave Modal -->
-    <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <form action="{{ route('create_leaveapplication') }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Apply Leave</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -241,7 +240,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- End Apply leave Modal --}}
 
 
@@ -269,7 +268,7 @@
                                 <span class="col">Approved</span>
                                 </div>
                             </a>
-                            <a href="{{ route('hrstaff_leave_cancelled') }}" class="col-md text-dark">
+                            <a href="{{ route('hrstaff_leave_pending_availment') }}" class="col-md text-dark">
                                 <span id="approval_numbers" class="col">{{ $pending_availment_count }}</span>
                                 <div class="row">
                                     <span class="col">Pending Availment</span>
@@ -290,7 +289,7 @@
     <div class="row bg-light p-3 m-1 shadow">
         <div class="row">
             <div class="col">
-                <h5>Employee Leave Credits</h5>
+                <h5>Employee Leave Credits Overview</h5>
             </div>
             <div class="col text-end">
                 <a href="{{ route('hrstaff_leave_credits') }}" class="btn-sm btn-primary">See All</a>
@@ -298,7 +297,7 @@
         </div>
         <div class="row">
             <div class="table-wrapper">
-                <table class="table table-bordered table-hover bg-light">
+                <table class="table table-sm table-bordered table-hover bg-light">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
@@ -321,7 +320,7 @@
                             </td>
                             <td>{{ optional(optional($employee_leavecredit->employees->employee_positions)->positions)->position_description }}</td>
                             <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td>
-                            <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->subdepartments)->departments)->department_title }}</td>
+                            <td>{{ $employee_leavecredit->employees->employee_positions?->positions?->subdepartments?->departments?->department_title }}</td>
                             <td>{{ optional($employee_leavecredit->leavetypes)->leave_type_title }}</td>
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
                             {{-- <td class="d-flex gap-2">
@@ -343,7 +342,7 @@
     <div class="row bg-light p-3 m-1 shadow" id='form_submit'>
         <div class="row">
             <div class="col">
-                <h5>Leave Management</h5>
+                <h5>Leave Management Overview</h5>
             </div>
             <div class="col text-end">
                 <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">See All</a>
@@ -351,7 +350,7 @@
         </div>
         <div class="row">
             <div class="table-wrapper">
-                <table class="table table-bordered table-hover bg-light">
+                <table class="table table-sm table-bordered table-hover bg-light">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Reference Number</th>
@@ -390,15 +389,15 @@
                             <td>{{ $leave_application->duration }}</td>
                             <td>
                                 @if ($leave_application->status_id == 'sta-1001')
-                                    <p class="bg-secondary text-light ps-3 pe-2">{{ $leave_application->statuses->status_title }}</p>
+                                    <span class="badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                                 @elseif ($leave_application->status_id == 'sta-1002')
-                                    <p class="bg-success text-light ps-3 pe-2">{{ $leave_application->statuses->status_title }}</p>
+                                    <span class="badge bg-success rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                                 @elseif ($leave_application->status_id == 'sta-1003')
-                                    <p class="bg-success text-light ps-3 pe-2">{{ $leave_application->statuses->status_title }}</p>
+                                    <span class="badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                                 @elseif ($leave_application->status_id == 'sta-1004')
-                                    <p class="bg-danger text-light ps-3 pe-2">{{ $leave_application->statuses->status_title }}</p>
+                                    <span class="badge bg-danger rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                                 @elseif ($leave_application->status_id == 'sta-1005')
-                                    <p class="bg-warning text-dark ps-3 pe-2">{{ $leave_application->statuses->status_title }}</p>
+                                    <span class="badge text-dark bg-warning rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                                 @endif
                             </td>
                         </tr>

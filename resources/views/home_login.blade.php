@@ -5,7 +5,7 @@
     hello world
 </aside> --}}
 <section id="main">
-    <div id="home_content" class="" style="">
+    <div id="home_content" class="" style="background-image: {{ asset('img/bg_home.jpg') }} ">
         <div class="container text-start">
             <div class="row align-items-start">
                 <div class="col-md-6 col-lg-6" style="">
@@ -18,7 +18,7 @@
                     <div class="card-body" style="">
                         <div class="container-fluid text-center">
                             <div class="row justify-content-center">
-                                <img id="logo" class="" src="/img/bioseed_logo.png" alt="bioseed_logo" style="width: 100px">
+                                <img id="logo" class="" src="{{ asset('img/bioseed_logo.png') }}" alt="bioseed_logo" style="width: 100px">
                                 <h2 class="card-title">Welcome Back! </h2>
                             </div>
                             <div class="row mt-4 card-body">

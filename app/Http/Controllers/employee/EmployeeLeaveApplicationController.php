@@ -10,6 +10,7 @@ use App\Models\LeaveApplicationNote;
 use App\Models\LeaveApproval;
 use App\Models\LeaveCreditLog;
 use App\Models\LeaveType;
+use App\Models\Notification;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -149,6 +150,14 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id
                 ]);
             }
+            $notification = Notification::create([
+                'title' => 'New Leave Application',
+                'subject' => $leaveapplication->reference_number.' is ready for your Approval',
+                'body' => $leaveapplication->reference_number,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $leaveapplication->approvers->users->id,
+            ]);
         }
         else{
             $leaveapplication = LeaveApplication::create([
@@ -183,6 +192,14 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id
                 ]);
             }
+            $notification = Notification::create([
+                'title' => 'New Leave Application',
+                'subject' => $leaveapplication->reference_number.' is ready for your Approval',
+                'body' => $leaveapplication->reference_number,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $leaveapplication->approvers->users->id,
+            ]);
         }
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
@@ -204,6 +221,23 @@ class EmployeeLeaveApplicationController extends Controller
             'attachment' => 'nullable'
         ]);
 
+
+        if($leave_applications->employees?->gender_id == 'gen-0001'){
+            $notification_title = ' updated his Leave Application';
+        }
+        elseif($leave_applications->employees?->gender_id == 'gen-0002'){
+            $notification_title = ' updated her Leave Application';
+        }
+        else{
+            $notification_title = ' updated the Leave Application';
+        }
+
+        if($leave_applications->status_id == 'sta-1001'){
+            $notification_receiver = $leave_applications->approvers?->users?->id;
+        }
+        elseif($leave_applications->status_id == 'sta-1003'){
+            $notification_receiver = $leave_applications->second_approvers?->users?->id;
+        }
 
         if($request->has('startdate') && $request->has('enddate')){
             //initialize start and end date
@@ -290,6 +324,15 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id
                 ]);
             }
+
+            $notification = Notification::create([
+                'title' => $leave_applications->employees->users->first_name.$notification_title,
+                'subject' => $leave_applications->reference_number.' is ready for your Approval',
+                'body' => $leave_applications->reference_number,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $notification_receiver,
+            ]);
         }
         else{
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
@@ -300,6 +343,16 @@ class EmployeeLeaveApplicationController extends Controller
                 'end_part_of_day' => $end_part_of_day,
                 'duration' => $durationDays,
             ]);
+
+            $notification = Notification::create([
+                'title' => $leave_applications->employees->users->first_name.$notification_title,
+                'subject' => $leave_applications->reference_number.' is ready for your Approval',
+                'body' => $leave_applications->reference_number,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $notification_receiver,
+            ]);
+
             if($request->input('reason')){
                 $leave_application_note = LeaveApplicationNote::create([
                     'leave_application_reference' => $leave_application_rn,
@@ -346,7 +399,17 @@ class EmployeeLeaveApplicationController extends Controller
                     $update_leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
                         ->update([
                             'status_id' => 'sta-1003'
+                    ]);
+                    if($leave_applications?->second_approver_id != null){
+                        $notification = Notification::create([
+                            'title' => 'Leave Application Approval',
+                            'subject' => $leave_application_rn.' is ready for your approval',
+                            'body' => $leave_application_rn,
+                            'notification_type_id' => 'nt-1002',
+                            'author_id' => auth()->user()->id,
+                            'employee_id' => $leave_applications->second_approvers->users->id,
                         ]);
+                    }
                 }
                 if(optional($leave_applications)->second_approver_id != null && $leave_applications->second_approver_id == auth()->user()->employees->id){
 
@@ -387,7 +450,7 @@ class EmployeeLeaveApplicationController extends Controller
                         ]);
                     }
                 }
-                if(optional($leave_applications)->second_approver_id == null){
+                if( $leave_applications?->second_approver_id == null){
                     $new_employee_leave_credits = EmployeeLeaveCredit::create([
                         'leave_type_id' => $current_leave_credits->leave_type_id,
                         'employee_id' => $employee_id,
@@ -417,6 +480,14 @@ class EmployeeLeaveApplicationController extends Controller
                         'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
                     ]);
                 }
+                $notification = Notification::create([
+                    'title' => 'Leave Application Approved!',
+                    'subject' => $leave_application_rn.' has been approved!',
+                    'body' => $leave_application_rn,
+                    'notification_type_id' => 'nt-1002',
+                    'author_id' => auth()->user()->id,
+                    'employee_id' => $leave_applications->employees->users->id,
+                ]);
                 return redirect()->back()->with('success','Leave Application has been approved!');
             }
             else{
@@ -453,6 +524,8 @@ class EmployeeLeaveApplicationController extends Controller
 
         $data['reason'] = strip_tags($data['reason']);
 
+        $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)->first();
+
         if($request->input('reason')){
             $leave_application_note = LeaveApplicationNote::create([
                 'leave_application_reference' => $leave_application_rn,
@@ -460,7 +533,39 @@ class EmployeeLeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id
             ]);
         }
-        return redirect()->back()->with('success','Leave Application has been updated!');
+        if($leave_applications->employee_id == auth()->user()->employees->id){
+            if($leave_applications->status_id == 'sta-1001'){
+                $notification = Notification::create([
+                    'title' => auth()->user()->first_name.' leave a note',
+                    'subject' => auth()->user()->first_name.' leave a note for '.$leave_application_rn,
+                    'body' => $leave_application_rn,
+                    'notification_type_id' => 'nt-1002',
+                    'author_id' => auth()->user()->id,
+                    'employee_id' => $leave_applications->approvers->users->id,
+                ]);
+            }
+            elseif($leave_applications->status_id == 'sta-1003'){
+                $notification = Notification::create([
+                    'title' => auth()->user()->first_name.' leave a note',
+                    'subject' => auth()->user()->first_name.' leave a note for '.$leave_application_rn,
+                    'body' => $leave_application_rn,
+                    'notification_type_id' => 'nt-1002',
+                    'author_id' => auth()->user()->id,
+                    'employee_id' => $leave_applications->second_approvers->users->id,
+                ]);
+            }
+        }
+        elseif($leave_applications->approver_id == auth()->user()->employees->id || $leave_applications->second_approver_id == auth()->user()->employees->id){
+            $notification = Notification::create([
+                'title' => auth()->user()->first_name.' leave a note',
+                'subject' => auth()->user()->first_name.' leave a note for '.$leave_application_rn,
+                'body' => $leave_application_rn,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $leave_applications->employees->users->id,
+            ]);
+        }
+        return redirect()->back()->with('success','You successfully add a note!');
     }
 
     /**
@@ -483,11 +588,19 @@ class EmployeeLeaveApplicationController extends Controller
                     'reason_note' => $data['reason'],
                     'status_id' => 'sta-1004'
                 ]);
-                $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
+                $update_leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
                     ->update([
                         'status_id' => 'sta-1004'
                     ]);
-                    return redirect()->back()->with('warning','Leave Application has been rejected!');
+                $notification = Notification::create([
+                    'title' => 'Leave Application Rejected!',
+                    'subject' => $leave_application_rn.' has been rejected',
+                    'body' => $leave_application_rn,
+                    'notification_type_id' => 'nt-1002',
+                    'author_id' => auth()->user()->id,
+                    'employee_id' => $leave_applications->employees->users->id,
+                ]);
+                return redirect()->back()->with('warning','Leave Application has been rejected!');
             }
             else{
                 return redirect()->back()->with('error','You are not authorize!');
@@ -500,11 +613,19 @@ class EmployeeLeaveApplicationController extends Controller
                 'reason_note' => $data['reason'],
                 'status_id' => 'sta-1004'
             ]);
-            $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
+            $update_leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
                 ->update([
                     'status_id' => 'sta-1004'
                 ]);
-                return redirect()->back()->with('warning','Leave Application has been rejected!');
+            $notification = Notification::create([
+                'title' => 'Leave Application Rejected!',
+                'subject' => $leave_application_rn.' has been rejected',
+                'body' => $leave_application_rn,
+                'notification_type_id' => 'nt-1002',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $leave_applications->employees->users->id,
+            ]);
+            return redirect()->back()->with('warning','Leave Application has been rejected!');
         }
         else{
             return redirect()->back()->with('error','You are not authorize!');

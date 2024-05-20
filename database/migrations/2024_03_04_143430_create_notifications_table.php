@@ -15,7 +15,8 @@ return new class extends Migration
             $table->string('id',30)->primary();
             $table->string('title');
             $table->string('subject');
-            $table->string('body');
+            $table->string('body')->nullable();
+            $table->string('notification_type_id')->nullable();
             $table->string('author_id');
             $table->string('employee_id')->nullable();
             $table->boolean('is_open')->default(false);

@@ -165,7 +165,7 @@
                                                     <div class="row mt-2 mb-1">
                                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                                             <label for="department"><h6 class="profile-title">Department</h6></label>
-                                                            <select class="form-control" id="department" name="department" required>
+                                                            <select class="form-control" id="department" name="department">
                                                                 <option disabled selected value="">Select department</option>
                                                                 @foreach ($departments as $department)
                                                                     <option value="{{ $department->id }}">{{ $department->department_title }}</option>
@@ -177,7 +177,7 @@
                                                             <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_subdepartment" role="status" >
                                                                 <span class="visually-hidden">Loading...</span>
                                                             </div>
-                                                            <select class="form-control" id="subdepartment" name="subdepartment" required>
+                                                            <select class="form-control" id="subdepartment" name="subdepartment">
                                                                 <option value="" disabled selected>Select Sub-department</option>
                                                             </select>
                                                         </div>
@@ -251,6 +251,7 @@
                                 url: '/addAccount/getSubdepartment/'+id,
                                 success: function (response){
                                     var response = JSON.parse(response);
+                                    console.log(response);
                                     $('#subdepartment').empty();
                                     $('#position').empty();
                                     $('#subdepartment').removeClass('placeholder');
@@ -276,6 +277,7 @@
                                 url: '/addAccount/getPosition/'+id,
                                 success: function (response){
                                     var response = JSON.parse(response);
+                                    console.log(response);
                                     $('#position').empty();
                                     $('#position').removeClass('placeholder');
                                     $('#spinner_position').addClass('d-none');

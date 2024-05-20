@@ -24,6 +24,7 @@ use App\Http\Controllers\employee\EmployeeDashboard;
 use App\Http\Controllers\employee\EmployeeLeaveApplicationController;
 use App\Http\Controllers\employee\EmployeePageController;
 use App\Http\Controllers\employee\EmployeeProfileController;
+use App\Http\Controllers\employee\NotificationController;
 use App\Http\Controllers\hr_staff\HrStaffLeavePageController;
 use App\Http\Controllers\hr_staff\HrStaffPageController;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +63,9 @@ Route::get('/profile/user_profile/edit', [User_Profile_Controller::class, 'profi
 Route::get('/dashboard', [EmployeeDashboard::class, 'employee_dashboard'])->name('employee_dashboard');
 Route::get('/profile', [EmployeeProfileController::class, 'employee_profile'])->name('employee_profile');
 Route::get('/profile/update/view', [EmployeeProfileController::class, 'employee_profile_update_view'])->name('employee_profile_update_view');
+Route::get('/notifications', [EmployeePageController::class, 'user_notifications_page'])->name('user.notification.page');
+Route::get('/notifications/mark_read/{id}', [NotificationController::class, 'notification_mark_read'])->name('user.notification.mark_read');
+Route::get('/notifications/mark_unread/{id}', [NotificationController::class, 'notification_mark_unread'])->name('user.notification.mark_unread');
 Route::patch('/profile/update', [EmployeeProfileController::class, 'employee_update_profile'])->name('employee_update_profile');
 Route::get('/leave_management/menu', [EmployeePageController::class, 'profile_leave_management_menu'])->name('profile_leave_management_menu');
 Route::get('/leave_management/for_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_for_approval_grid'])->name('profile_leave_management_for_approval_grid');
@@ -137,6 +141,9 @@ Route::patch('/hr/update_leaveapplication/{leave_application_rn}', [LeaveApplica
 Route::get('/hr/leave_management/approval/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_approval'])->name('leave_application_approval');
 Route::get('/hr/leave_management/rejection/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_rejection'])->name('leave_application_rejection');
 Route::get('/hr/leave_management/cancellation/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_cancellation'])->name('leave_application_cancellation');
+
+Route::get('/create_leave/getLeaveType/{id}', [LeaveApplicationController::class, 'GetLeaveTypeFromEmployee'])->name('createLeave.getLeaveType');
+
 
 Route::get('/hr/user/profile/{username}', [HrStaffPageController::class, 'visit_profile_view'])->name('user_profile');
 Route::get('/hr/user/update/{username}', [HrStaffPageController::class, 'visit_profile_update'])->name('visit_user_update');

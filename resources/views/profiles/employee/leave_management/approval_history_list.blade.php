@@ -6,24 +6,28 @@
     <div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
         <span class="visually-hidden" >Loading...</span>
     </div>
-    <div id="table_container">
+    <div class="ps-5 pe-5 pb-5 pt-3 bg-light shadow" id="table_container">
         <div class="table-wrapper">
-            <table id="data_table" class="table table-sm compact table-bordered table-hover bg-light shadow">
+            <table id="data_table" class="table table-sm compact table-bordered table-hover bg-light">
                 <thead class="bg-success text-light border-light">
                     <tr>
                         <th>Reference Number</th>
                         <th>Employee</th>
                         <th>Leave Type</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Duration (days)</th>
-                        <th>Approved at</th>
+                        {{-- <th>Start date</th> --}}
+                        {{-- <th>End date</th> --}}
+                        {{-- <th>Duration (days)</th> --}}
+                        <th class="prefer">Approved at</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($leave_approvals as $leave_approval)
                         <tr>
-                            <td>{{ $leave_approval->leave_applications->reference_number }}</td>
+                            <td>
+                                <a class="custom-bg-primary-hover " href="{{ route('leave_details_page',$leave_approval->leave_applications->reference_number) }}">
+                                    {{ $leave_approval->leave_applications->reference_number }}
+                                </a>
+                            </td>
                             <td id="table_reports_to">
                                 @if (!empty($leave_approval->leave_applications->employees))
                                     {{ optional($leave_approval->leave_applications->employees->users)->first_name }}
@@ -34,10 +38,10 @@
                                 @endif
                             </td>
                             <td>{{ optional($leave_approval->leave_applications->leavetypes)->leave_type_title }}</td>
-                            <td>{{ \Carbon\Carbon::parse($leave_approval->leave_applications->start_date)->format('M d, Y') }} - {{ $leave_approval->leave_applications->start_of_date_parts->day_part_title }}</td>
-                            <td>{{ \Carbon\Carbon::parse($leave_approval->leave_applications->end_date)->format('M d, Y') }} - {{ $leave_approval->leave_applications->end_of_date_parts->day_part_title }}</td>
-                            <td>{{ $leave_approval->leave_applications->duration }}</td>
-                            <td>{{ \Carbon\Carbon::parse($leave_approval->created_at)->format('M d, Y - h:i:sA') }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($leave_approval->leave_applications->start_date)->format('M d, Y') }} - {{ $leave_approval->leave_applications->start_of_date_parts->day_part_title }}</td> --}}
+                            {{-- <td>{{ \Carbon\Carbon::parse($leave_approval->leave_applications->end_date)->format('M d, Y') }} - {{ $leave_approval->leave_applications->end_of_date_parts->day_part_title }}</td> --}}
+                            {{-- <td>{{ $leave_approval->leave_applications->duration }}</td> --}}
+                            <td>{{ \Carbon\Carbon::parse($leave_approval->created_at)->format('m/d/Y \\a\\t\ H:ia') }}</td>
                         </tr>
                     @empty
                         {{-- <tr>

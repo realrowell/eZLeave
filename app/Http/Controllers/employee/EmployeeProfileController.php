@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\EmployeeAddress;
 use App\Models\EmployeePosition;
+use App\Models\Notification;
 use App\Models\ProfilePhoto;
 use App\Models\User;
 use Carbon\Carbon;
@@ -167,7 +168,7 @@ class EmployeeProfileController extends Controller
         $data = $request->validate([
             'user_name' => 'required|max:50|unique:users,user_name,'.$user->id,
             'contact_number' => 'max:11',
-            'password' => 'nullable|confirmed|min:6|max:255',
+            'password' => 'nullable|confirmed|min:8|max:255',
             'address_line_1' => 'sometimes|max:255',
             'address_city' => 'sometimes|max:255',
             'address_province' => 'sometimes|max:255',
@@ -253,6 +254,14 @@ class EmployeeProfileController extends Controller
             ->update([
                 'password' => Hash::make($request['password']),
             ]);
+            $notifications = Notification::create([
+                'title' => 'Your Password has been Updated!',
+                'subject' => 'If you did not make the request, please contact your System Admin immediately!',
+                'body' => null,
+                'notification_type_id' => 'nt-1001',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $user->id,
+            ]);
             $message = 'User account details has been updated!';
             $message_type = 'success';
         }
@@ -261,6 +270,14 @@ class EmployeeProfileController extends Controller
             ->update([
                 'user_name' => $request['user_name'],
                 'password' => Hash::make($request['password']),
+            ]);
+            $notifications = Notification::create([
+                'title' => 'Your Password has been Updated!',
+                'subject' => 'If you did not make the request, please contact your System Admin immediately!',
+                'body' => null,
+                'notification_type_id' => 'nt-1001',
+                'author_id' => auth()->user()->id,
+                'employee_id' => $user->id,
             ]);
             $message = 'User account details has been updated!';
             $message_type = 'success';

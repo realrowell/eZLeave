@@ -150,7 +150,7 @@
                 <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
                     <span class="visually-hidden" >Loading...</span>
                 </div>
-                <form action="{{ route('create_employee_leaveapplication') }}" method="POST" onsubmit="return submitButtonDisabled()" enctype="multipart/form-data" id="form_submit">
+                <form action="{{ route('create_employee_leaveapplication') }}" method="POST" onsubmit="onClickLeaveApplySpinnerShow()" enctype="multipart/form-data" id="form_submit">
                     @csrf
                     @method('POST')
                     <div class="modal-header">
@@ -266,12 +266,65 @@
                         <div class="spinner-border text-primary" id="loading_spinner1" role="status" style="display: none;">
                             <span class="visually-hidden" >Loading...</span>
                         </div>
-                        <button id="submit_button1" type="submit" class="btn btn-success" onclick="onClickLeaveApplySpinnerShow()">Apply Leave</button>
+                        <button id="submit_button1" type="submit" class="btn btn-success" >Apply Leave</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function(){
+            $('#department').on('change',function(){
+                let id = $(this).val();
+                $('#subdepartment').empty();
+                $('#subdepartment').addClass('placeholder');
+                $('#position').addClass('placeholder');
+                $('#spinner_subdepartment').removeClass('d-none');
+                $('#spinner_position').removeClass('d-none');
+                $('#subdepartment').append('<option value="0" disabled selected >Processing...</option>');
+                $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '/addAccount/getSubdepartment/'+id,
+                    success: function (response){
+                        var response = JSON.parse(response);
+                        $('#subdepartment').empty();
+                        $('#position').empty();
+                        $('#subdepartment').removeClass('placeholder');
+                        $('#position').removeClass('placeholder');
+                        $('#spinner_subdepartment').addClass('d-none');
+                        $('#spinner_position').addClass('d-none');
+                        $('#subdepartment').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                        $('#position').append('<option value="0" disabled selected>*Select Sub-department</option>');
+                        response.forEach(element => {
+                            $('#subdepartment').append(`<option value="${element['id']}">${element['sub_department_title']}</option>`);
+                        });
+                    }
+                });
+            });
+            $('#subdepartment').on('change',function(){
+                let id = $(this).val();
+                $('#position').empty();
+                $('#position').append('<option value="0" disabled selected>Processing...</option>');
+                $('#position').addClass('placeholder');
+                $('#spinner_position').removeClass('d-none');
+                $.ajax({
+                    type: 'GET',
+                    url: '/addAccount/getPosition/'+id,
+                    success: function (response){
+                        var response = JSON.parse(response);
+                        $('#position').empty();
+                        $('#position').removeClass('placeholder');
+                        $('#spinner_position').addClass('d-none');
+                        $('#position').append('<option value="0" disabled selected>*Select Position</option>');
+                        response.forEach(element => {
+                            $('#position').append(`<option value="${element['id']}">${element['position_description']}</option>`);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
     {{-- End Apply leave Modal --}}
 </div>
 <div class="container-fluid mb-4 pb-5" id="profile_body">

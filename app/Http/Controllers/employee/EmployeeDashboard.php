@@ -9,6 +9,7 @@ use App\Models\LeaveApplication;
 use App\Models\LeaveApplicationNote;
 use App\Models\LeaveApproval;
 use App\Models\LeaveType;
+use App\Models\Notification;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -46,13 +47,14 @@ class EmployeeDashboard extends Controller
                                                     ->where('show_on_employee',true)
                                                     ->where('status_id','sta-1007')
                                                     // ->where('expiration','<=',$current_date)
-                                                    ->orderBy('id','asc')
+                                                    ->orderBy('id','desc')
                                                     ->get(),
-            'leave_applications' => LeaveApplication::where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->get(),
+            'leave_applications' => LeaveApplication::where('start_date','<=',$current_year->toDateString())->where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->get(),
             'leave_application_notes' => LeaveApplicationNote::all(),
             'leave_approvals' => LeaveApproval::orderBy('created_at', 'asc')->get(),
             'leavetypes' => LeaveType::where('status_id','sta-1007')->where('show_on_employee',true)->get(),
+            'notifications' => Notification::where('employee_id',auth()->user()->id)->orWhere('author_id',auth()->user()->id)->where('status_id','sta-1007')->get(),
         ];
-        return view('profiles.profile_dashboard')->with($data);
+        return view('profiles.employee.profile.profile_dashboard')->with($data);
     }
 }

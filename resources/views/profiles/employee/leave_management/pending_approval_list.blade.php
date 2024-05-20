@@ -95,7 +95,7 @@
                                 </td>
                                 <td class="d-flex gap-2 pb-3">
                                     <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $partial_leave_application->reference_number }}">View Details</button>
-                                    <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button>
+                                    {{-- <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
                                 </td>
                             </tr>
                             <!-- leave details Modal -->
@@ -209,7 +209,7 @@
                                                                         @if ($leave_application_note->leave_application_reference == $partial_leave_application->reference_number)
                                                                             <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
                                                                             @if ($leave_application_note->author_id != null)
-                                                                                <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} at {{ $leave_application_note->created_at }}</p>
+                                                                                <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
                                                                             @endif
                                                                         @endif
                                                                     @endforeach
@@ -232,7 +232,7 @@
                                                                                 @if ($leave_approval->status_id == 'sta-1001')
                                                                                     <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                                 @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
                                                                                 @endif
                                                                             @endif
                                                                         @endforeach
@@ -256,10 +256,10 @@
                                             </div>
                                             <div class="modal-footer">
                                                 @if ($partial_leave_application->status_id == 'sta-1001')
-                                                    <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button>
+                                                    {{-- <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
                                                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
                                                 @elseif ($partial_leave_application->status_id == 'sta-1003')
-                                                    <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button>
+                                                    {{-- <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
                                                     <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
                                                 @endif
                                             </div>
@@ -379,7 +379,7 @@
                                                                             @if ($leave_application_note->leave_application_reference == $partial_leave_application->reference_number)
                                                                                 <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
                                                                                 @if ($leave_application_note->author_id != null)
-                                                                                    <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} at {{ $leave_application_note->created_at }}</p>
+                                                                                    <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
                                                                                 @endif
                                                                             @endif
                                                                         @endforeach
@@ -407,7 +407,7 @@
                                                                                     @if ($leave_approval->status_id == 'sta-1001')
                                                                                         <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                                     @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                                        <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                                        <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -428,7 +428,7 @@
                                 </div>
                             {{--  add note Modal --}}
                             <!-- cancel details Modal -->
-                                <div class="modal fade" id="cancelleaveModal{{ $partial_leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                {{-- <div class="modal fade" id="cancelleaveModal{{ $partial_leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <form action="{{ route('employee_leave_cancellation',$partial_leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
@@ -462,7 +462,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             {{-- cancel details Modal --}}
                         @empty
                             <tr>
@@ -665,7 +665,7 @@
                                                                             @if ($leave_application_note->leave_application_reference == $leave_application->reference_number)
                                                                                 <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
                                                                                 @if ($leave_application_note->author_id != null)
-                                                                                    <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} at {{ $leave_application_note->created_at }}</p>
+                                                                                    <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
                                                                                 @endif
                                                                             @endif
                                                                         @endforeach
@@ -688,7 +688,7 @@
                                                                                     @if ($leave_approval->status_id == 'sta-1001')
                                                                                         <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                                     @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                                        <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                                        <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -847,7 +847,7 @@
                                                                                 @if ($leave_application_note->leave_application_reference == $leave_application->reference_number)
                                                                                     <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
                                                                                     @if ($leave_application_note->author_id != null)
-                                                                                        <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} at {{ $leave_application_note->created_at }}</p>
+                                                                                        <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
                                                                                     @endif
                                                                                 @endif
                                                                             @endforeach
@@ -880,7 +880,7 @@
                                                                                         @if ($leave_approval->status_id == 'sta-1001')
                                                                                             <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                                                                         @elseif ($leave_approval->status_id == 'sta-1002')
-                                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} {{ \Carbon\Carbon::parse($leave_approval->created_at)->format('(M d, Y h:i:sa)')}}</p>
+                                                                                            <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
                                                                                         @endif
                                                                                     @endif
                                                                                 @endforeach
