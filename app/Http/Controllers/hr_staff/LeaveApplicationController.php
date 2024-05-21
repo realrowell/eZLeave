@@ -244,7 +244,7 @@ class LeaveApplicationController extends Controller
         $start_part_of_day = $leave_applications->start_part_of_day;
         $end_part_of_day = $leave_applications->end_part_of_day;
 
-        if($request->has('startdate') || $request('enddate')) {
+        if($request->has('startdate') || $request->has('enddate')) {
             // check if the request date is a half day
             if( $startDate == $endDate){
                 if($request->start_am_check==true || $request->end_pm_check==true){

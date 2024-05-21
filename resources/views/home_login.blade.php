@@ -5,7 +5,7 @@
     hello world
 </aside> --}}
 <section id="main">
-    <div id="home_content" class="" style="background-image: {{ asset('img/bg_home.jpg') }} ">
+    <div id="home_content" class="" style="background-image: url({{ asset('img/bg_home.jpg') }}) ">
         <div class="container text-start">
             <div class="row align-items-start">
                 <div class="col-md-6 col-lg-6" style="">
