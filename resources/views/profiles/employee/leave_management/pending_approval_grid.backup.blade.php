@@ -6,6 +6,459 @@
     <span class="visually-hidden" >Loading...</span>
 </div>
 <div class="row g-4 justify-content-sm-center justify-content-md-start justify-content-lg-start" id="form_submit_1">
+
+    <div class="row">
+        <div class="col">
+            <h5>Partially Approved</h5>
+        </div>
+    </div>
+    @forelse ($partial_leave_applications as $partial_leave_application)
+        <div class="col-lg-3 col-md-6 col-sm-10">
+            <div class="card w-100 p-2 shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-center">{{ $partial_leave_application->leavetypes->leave_type_title }}</h4>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text" id="approval_p">Reference #:</p>
+                            <h5> {{ $partial_leave_application->reference_number }}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="card-text" id="approval_p">Start date:</p>
+                            <h5> {{ \Carbon\Carbon::parse($partial_leave_application->start_date)->format('M d, Y')}}</h5>
+                        </div>
+                        <div class="col-4">
+                            <p class="card-text" id="approval_p">End date:</p>
+                            <h5> {{ \Carbon\Carbon::parse($partial_leave_application->end_date)->format('M d, Y')}}</h5>
+                        </div>
+                        <div class="col-4">
+                            <p class="card-text" id="approval_p">Duration:</p>
+                            <h5>{{ $partial_leave_application->duration }}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text" id="approval_p">Date of application:</p>
+                            <h5> {{ \Carbon\Carbon::parse($partial_leave_application->created_at)->format('M d, Y - h:i:sa')}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <p class="card-text" id="approval_p">Approver:</p>
+                            <h6>
+                                {{ optional($partial_leave_application->approvers->users)->first_name }}
+                                {{ optional($partial_leave_application->approvers->users)->last_name }}
+                                {{ optional(optional($partial_leave_application->approvers->users)->suffixes)->suffix_title }}
+                            </h6>
+                        </div>
+                        <div class="col">
+                            @if ($partial_leave_application->second_approver_id != null)
+                                <p class="card-text" id="approval_p">Second Approver:</p>
+                                <h6 class="">
+                                    {{ optional(optional($partial_leave_application->second_approvers)->users)->first_name }}
+                                    {{ optional(optional($partial_leave_application->second_approvers)->users)->last_name }}
+                                    {{ optional(optional(optional($partial_leave_application->second_approvers)->users)->suffixes)->suffix_title }}
+                                </h6>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="card-text" id="approval_p">Status:</p>
+                            <p class="bg-secondary text-light ps-3">{{ $partial_leave_application->statuses->status_title }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $partial_leave_application->reference_number }}">View Details</button>
+                                {{-- <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- leave details Modal -->
+            <div class="modal fade" id="detailsModal{{ $partial_leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="modal-title">Leave Details</h5>
+                                    </div>
+                                    <div class="col text-end">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid text-start">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
+                                        <h2></h2>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 col-sm-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="employee">
+                                                    <h6 class="">Reference Number</h6>
+                                                </label>
+                                                <h4>{{ $partial_leave_application->reference_number }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="" for="leavetype">
+                                                    <h6 class="">Leave Type</h6>
+                                                </label>
+                                                <h4>{{ optional($partial_leave_application->leavetypes)->leave_type_title }}</h4>
+                                            </div>
+                                            <div class="col">
+                                                <label for="duration">
+                                                    <h6>Duration</h6>
+                                                </label>
+                                                <h4>{{ $partial_leave_application->duration }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label for="startdate">
+                                                    <h6>Start date</h6>
+                                                </label>
+                                                <h4>{{ \Carbon\Carbon::parse($partial_leave_application->start_date)->format('M d, Y') }} ({{ $partial_leave_application->start_of_date_parts->day_part_title }})</h4>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="enddate">
+                                                    <h6>End date</h6>
+                                                </label>
+                                                <h4>{{ \Carbon\Carbon::parse($partial_leave_application->end_date)->format('M d, Y') }} ({{ $partial_leave_application->end_of_date_parts->day_part_title }})</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="enddate">
+                                                    <h6>Date filed</h6>
+                                                </label>
+                                                <h4>{{ \Carbon\Carbon::parse($partial_leave_application->created_at)->format('M d, Y h:i:s A') }}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <label for="employee">
+                                                    <h6 class="">Approver</h6>
+                                                </label>
+                                                <h4>
+                                                    {{ optional($partial_leave_application->approvers->users)->first_name }}
+                                                    {{ optional($partial_leave_application->approvers->users)->last_name }}
+                                                    {{ optional($partial_leave_application->approvers->users->suffixes)->suffix_title }}
+                                                </h4>
+                                            </div>
+                                            <div class="col">
+                                                <label for="employee">
+                                                    <h6 class="">Second Approver</h6>
+                                                </label>
+                                                <h4>
+                                                    @if ($partial_leave_application->second_approver_id == null)
+                                                        N/A
+                                                    @else
+                                                        {{ optional(($partial_leave_application->second_approvers)->users)->first_name }}
+                                                        {{ optional($partial_leave_application->second_approvers->users)->last_name }}
+                                                        {{ optional($partial_leave_application->second_approvers->users->suffixes)->suffix_title }}
+                                                    @endif
+                                                </h4>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                @if (!empty($partial_leave_application->attachment))
+                                                    <a target="_blank" href="{{ asset('storage/images/'.$partial_leave_application->attachment) }}">View Attachment</a>
+                                                @else
+                                                    <label for="">No Attachment</label>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <label class="" for="reason">
+                                                    <h6 class="">Reason / Note</h6>
+                                                </label>
+                                                @foreach ($leave_application_notes as $leave_application_note)
+                                                    @if ($leave_application_note->leave_application_reference == $partial_leave_application->reference_number)
+                                                        <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
+                                                        @if ($leave_application_note->author_id != null)
+                                                            <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <label class="" for="status">
+                                                    <h6 class="">Status</h6>
+                                                </label>
+                                                @if ($partial_leave_application->status_id == 'sta-1001')
+                                                    @foreach ($leave_approvals as $leave_approval)
+                                                        @if ($leave_approval->leave_application_reference == $partial_leave_application->reference_number)
+                                                            <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                        @endif
+                                                    @endforeach
+                                                @elseif ($partial_leave_application->status_id == 'sta-1003')
+                                                    @foreach ($leave_approvals as $leave_approval)
+                                                        @if ($leave_approval->leave_application_reference == $partial_leave_application->reference_number)
+                                                            @if ($leave_approval->status_id == 'sta-1001')
+                                                                <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                            @elseif ($leave_approval->status_id == 'sta-1002')
+                                                                <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="" for="update">
+                                                    @if ($partial_leave_application->status_id == 'sta-1001' || $partial_leave_application->status_id == 'sta-1003')
+                                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal{{ $partial_leave_application->reference_number }}">
+                                                            Add Note
+                                                        </button>
+                                                    @endif
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if ($partial_leave_application->status_id == 'sta-1001')
+                                {{-- <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
+                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                            @elseif ($partial_leave_application->status_id == 'sta-1003')
+                                {{-- <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $partial_leave_application->reference_number }}">Cancel</button> --}}
+                                <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{-- leave details Modal --}}
+        <!-- add note Modal -->
+            <div class="modal fade" id="addNoteModal{{ $partial_leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('update_employee_leaveapplication',['leave_application_rn'=>$partial_leave_application->reference_number]) }}" method="POST" onsubmit="onFormSubmit()" enctype="multipart/form-data">
+                            @csrf
+                            @method('PATCH')
+                            <div class="modal-body">
+                                <div class="container-fluid text-start">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
+                                            <h2></h2>
+                                        </div>
+                                        <div class="col-lg-9 col-md-12 col-sm-12">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="employee">
+                                                        <h6 class="">Reference Number</h6>
+                                                    </label>
+                                                    <h4>{{ $partial_leave_application->reference_number }}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <label class="" for="leavetype">
+                                                        <h6 class="">Leave Type</h6>
+                                                    </label>
+                                                    <input type="text" class="form-control text-start" value="{{ optional($partial_leave_application->leavetypes)->leave_type_title }}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-6">
+                                                    <label for="startdate">
+                                                        <h6>Start date</h6>
+                                                    </label>
+                                                    <input type="date" class="form-control" id="datetime_startdate_update" name="startdate" placeholder="" value="{{ \Carbon\Carbon::parse($partial_leave_application->start_date)->format('Y-m-d') }}" disabled>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="enddate">
+                                                        <h6>End date</h6>
+                                                    </label>
+                                                    <input type="date" class="form-control" id="datetime_enddate_update" name="enddate" placeholder="" value="{{ \Carbon\Carbon::parse($partial_leave_application->end_date)->format('Y-m-d') }}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label for="startdate">
+                                                        <h6>{{ $partial_leave_application->start_of_date_parts->day_part_description }}</h6>
+                                                    </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="enddate">
+                                                        <h6>{{ $partial_leave_application->end_of_date_parts->day_part_description }}</h6>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="">Duration (days)</label>
+                                                    <input type="text" name="duration" placeholder="" id="duration_input_up" class="form-control" value="{{ $partial_leave_application->duration }}" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col">
+                                                    <label for="employee">
+                                                        <h6 class="">Approver</h6>
+                                                    </label>
+                                                    <h5>
+                                                        {{ optional($partial_leave_application->approvers->users)->first_name }}
+                                                        {{ optional($partial_leave_application->approvers->users)->last_name }}
+                                                        {{ optional($partial_leave_application->approvers->users->suffixes)->suffix_title }}
+                                                    </h5>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="employee">
+                                                        <h6 class="">Second Approver</h6>
+                                                    </label>
+                                                    <h5>
+                                                        @if ($partial_leave_application->second_approver_id == null)
+                                                            N/A
+                                                        @else
+                                                            {{ optional(($partial_leave_application->second_approvers)->users)->first_name }}
+                                                            {{ optional($partial_leave_application->second_approvers->users)->last_name }}
+                                                            {{ optional($partial_leave_application->second_approvers->users->suffixes)->suffix_title }}
+                                                        @endif
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    @if (!empty($partial_leave_application->attachment))
+                                                        <a target="_blank" href="{{ asset('storage/images/'.$partial_leave_application->attachment) }}">View Attachment</a>
+                                                    @else
+                                                        <label class="" for="attachment">
+                                                            <h6 class="">Attachment</h6>
+                                                        </label>
+                                                        <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <label class="" for="reason">
+                                                        <h6 class="">Reason / Note</h6>
+                                                    </label>
+                                                    @foreach ($leave_application_notes as $leave_application_note)
+                                                        @if ($leave_application_note->leave_application_reference == $partial_leave_application->reference_number)
+                                                            <textarea class="form-control" disabled>{{ $leave_application_note->reason_note }}</textarea>
+                                                            @if ($leave_application_note->author_id != null)
+                                                                <p> - {{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} • {{ timestamp_leadtime($leave_application_note->created_at)}}</p>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col">
+                                                    <textarea class="form-control" id="reason" name="reason" placeholder="add note"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <label class="" for="status">
+                                                        <h6 class="">Status</h6>
+                                                    </label>
+                                                    @if ($partial_leave_application->status_id == 'sta-1001')
+                                                        @foreach ($leave_approvals as $leave_approval)
+                                                            @if ($leave_approval->leave_application_reference == $partial_leave_application->reference_number)
+                                                                <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                            @endif
+                                                        @endforeach
+                                                    @elseif ($partial_leave_application->status_id == 'sta-1003')
+                                                        @foreach ($leave_approvals as $leave_approval)
+                                                            @if ($leave_approval->leave_application_reference == $partial_leave_application->reference_number)
+                                                                @if ($leave_approval->status_id == 'sta-1001')
+                                                                    <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                                @elseif ($leave_approval->status_id == 'sta-1002')
+                                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {{--  add note Modal --}}
+        <!-- cancel details Modal -->
+            {{-- <div class="modal fade" id="cancelleaveModal{{ $partial_leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form action="{{ route('employee_leave_cancellation',$partial_leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                            @csrf
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid text-start">
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <h2>Are you sure to Cancel this Leave Request?</h2>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <h5>Reason / Note:</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <textarea class="form-control" id="reason" name="reason" rows="6" cols=50 maxlength=250 placeholder="add reason / note" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-danger" type="submit" >Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> --}}
+        {{-- cancel details Modal --}}
+    @empty
+        <div class="row align-items-center justify-content-center mt-5">
+            <div class="col text-center">
+                <h2>No leave application found!</h2>
+            </div>
+        </div>
+    @endforelse
+
+    <div class="row mt-5">
+        <div class="col">
+            <h5>Pending Approval</h5>
+        </div>
+    </div>
     @if ($leave_applications->isNotEmpty())
         @foreach ($leave_applications as $leave_application)
             <div class="col-lg-3 col-md-6 col-sm-10">

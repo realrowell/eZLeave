@@ -45,18 +45,18 @@
         </div>
     </div>
     <div class="row gap-3">
-        <div class="col-md p-3 bg-light shadow border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+        <div class="col-md p-3 bg-light shadow-sm border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
                         <h5>Leave Management</h5>
                     </div>
                     <div class="col text-end">
-                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="btn-sm btn btn-outline-primary">see all</a>
+                        <a href="{{ route('profile_leave_management_history_grid') }}" class="btn-sm btn btn-outline-primary">see all</a>
                     </div>
                 </div>
                 <div class="row text-center p-4">
-                    <div class="col">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
                         <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col-md text-dark">
                             <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
                             <div class="row">
@@ -64,23 +64,23 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col">
-                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col-md text-dark">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="col-md text-dark">
                             <span id="approval_numbers" class="col">{{ $approved_leaves_count }}</span>
                             <div class="row">
-                                <span class="col">Approved</span>
+                                <span class="col">Upcoming Leaves</span>
                             </div>
                         </a>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
                         <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="col-md text-dark">
                             <span id="approval_numbers" class="col">
                                 {{ $for_approval_count }}
                             </span>
                             <div class="row position-relative">
-                                <span class="col">For Approval</span>
+                                <span class="col">For your Approval</span>
                                 @if ( $for_approval_count != 0)
-                                    <span class="position-absolute translate-middle " style="translate: 70% 0%;">
+                                    <span class="position-absolute translate-middle " style="translate: 80% 0%;">
                                         <span class="badge rounded-pill bg-danger text-danger" style="font-size: 5px">.</span>
                                     </span>
                                 @endif
@@ -90,7 +90,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md p-3 bg-light shadow border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+        <div class="col-md p-3 bg-light shadow-sm border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
@@ -130,6 +130,32 @@
                             @endif
                         @endif
                     @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 bg-light shadow-sm p-3 border border-warning border-5 border-bottom-0 border-end-0 border-top-0" >
+        <div class="col">
+            <div class="row text-center align-items-center justify-content-center">
+                <div class="col-lg-8 col-md-8 col-sm-12 text-start">
+                    <h5>Search Leave Request</h5>
+                </div>
+            </div>
+            <div class="row text-center align-items-center justify-content-center">
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <form action="{{ route('leave_details.search') }}" method="GET">
+                    @csrf
+                        <div class="input-group">
+                            <span class="input-group-text bg-light ps-3 pe-3" id="basic-addon1"><i class='bx bx-search-alt' style="font-size: 1.4rem; margin-bottom: -1px"></i></span>
+                            <input type="text" class="form-control form-control-sm" name="reference_number" id="reference_number" size="100" >
+                            <button type="submit" class="btn btn-primary ps-5 pe-5" id="btn_search">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row text-center align-items-center justify-content-center">
+                <div class="col-lg-8 col-md-8 col-sm-12 text-start">
+                    <h6>*input leave REFERENCE NUMBER here</h6>
                 </div>
             </div>
         </div>

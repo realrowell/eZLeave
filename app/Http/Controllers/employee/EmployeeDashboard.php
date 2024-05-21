@@ -34,7 +34,7 @@ class EmployeeDashboard extends Controller
         // dd($current_date);
         $data=[
             'pending_leaves_count' => LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1001')->count(),
-            'approved_leaves_count' => LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->count(),
+            'approved_leaves_count' => LeaveApplication::where('status_id','sta-1002')->where('employee_id',auth()->user()->employees->id)->where('end_date','>=',$current_year->toDateString())->count(),
             'for_approval_count' => LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)
                                                         ->where('fiscal_year_id',$current_fiscal_year->id)
                                                         ->where('status_id','sta-1001')

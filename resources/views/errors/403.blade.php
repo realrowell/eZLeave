@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>503 Service Unavailable</title>
+    <title>403 Forbidden</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="/img/logo_icon.png">
@@ -58,11 +58,11 @@
             <div class="row">
                 <div class="col">
                     <article class="text-center" style=" padding-top: 5%">
-                        <h1 class="text-start" style="font-family: 'Poppins', sans-serif; font-size: 10rem">503</h1>
-                        <p class="text-start " style="margin-top: -10px; font-size: 3rem">Service Unavailable</p>
-                        <p class="text-start " style="margin-top: 50px; font-size: 2rem">We apologize for any inconvenience.</p>
-                        <p class="text-start " style="margin-top: -10px; font-size: 2rem">Scheduled maintenance is currently in progress. Please check back soon.</p>
-                        <p class="text-start" id="signature">&mdash; <a href="mailto:{{ env('ADMIN_EMAIL') }}">{{ config('app.name') }} </a></p>
+                        <h1 class="text-start" style="font-family: 'Poppins', sans-serif; font-size: 10rem">403</h1>
+                        <p class="text-start " style="margin-top: -10px; font-size: 3rem">Forbidden</p>
+                        <p class="text-start " style="margin-top: 50px; font-size: 2rem">Oops! You don't have permission to access this resource.</p>
+                        <p class="text-start " style="margin-top: -10px; font-size: 2rem">Please contact the administrator if you believe this is an error.</p>
+                        <p class="text-start" id="signature" style=" font-size: 2rem"><a href="{{ route('index') }}">go back to home </a></p>
                     </article>
                 </div>
             </div>
