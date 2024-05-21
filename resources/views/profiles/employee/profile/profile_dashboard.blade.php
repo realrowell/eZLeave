@@ -155,11 +155,7 @@
             </div>
             <div class="row text-center align-items-center justify-content-center">
                 <div class="col-lg-8 col-md-8 col-sm-12 text-start">
-<<<<<<< HEAD
-                    <h6>*input leave REFERENCE NUMBER here3</h6>
-=======
-                    <h6>*input leave REFERENCE NUMBER heres</h6>
->>>>>>> localDev
+                    <h6>*input leave REFERENCE NUMBER here</h6>
                 </div>
             </div>
         </div>
