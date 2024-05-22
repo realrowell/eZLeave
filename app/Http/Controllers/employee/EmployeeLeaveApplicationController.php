@@ -361,6 +361,7 @@ class EmployeeLeaveApplicationController extends Controller
                 ]);
             }
         }
+
         return redirect()->back()->with('success','Leave Application has been updated!');
     }
 

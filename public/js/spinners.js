@@ -5,6 +5,30 @@ function onClickApprove(){
     document.getElementById('submit_button1').classList.add('disabled');
 }
 
+function onClickApproveId(id){
+    document.getElementById('loading_spinner_approve'+id).classList.remove('d-none');
+    document.getElementById('form_container'+id).style.opacity = "0.2";
+    document.getElementById('btn_submit'+id).classList.add('disabled');
+    document.getElementById('btn_close'+id).classList.add('disabled');
+    document.getElementById('btn_modal_x'+id).classList.add('disabled');
+}
+
+function onClickCancelId(id){
+    document.getElementById('loading_spinner_cancel'+id).classList.remove('d-none');
+    document.getElementById('form_container_onCancel'+id).style.opacity = "0.2";
+    document.getElementById('btn_cancel'+id).classList.add('disabled');
+    document.getElementById('btn_close_onCancel'+id).classList.add('disabled');
+    document.getElementById('btn_modal_x_onCancel'+id).classList.add('disabled');
+}
+
+function onClickRejectId(id){
+    document.getElementById('loading_spinner_reject'+id).classList.remove('d-none');
+    document.getElementById('form_container_onReject'+id).style.opacity = "0.2";
+    document.getElementById('btn_reject'+id).classList.add('disabled');
+    document.getElementById('btn_close_onReject'+id).classList.add('disabled');
+    document.getElementById('btn_modal_x_onReject'+id).classList.add('disabled');
+}
+
 function onClickLeaveApplySpinnerShow(){
     document.getElementById('loading_spinner').style.display="block";
 }
@@ -13,7 +37,7 @@ function onFormSubmit(){
     document.getElementById('loading_spinner_1').style.display="block";
     document.getElementById('submit_button1').classList.add('disabled');
     document.getElementById('submit_button2').classList.add('disabled');
-    // document.getElementById('form_to_submit').style.opacity = "0.3";
+    document.getElementById('form_to_submit').style.opacity = "0.3";
 }
 
 function onFormSubmit_1(){

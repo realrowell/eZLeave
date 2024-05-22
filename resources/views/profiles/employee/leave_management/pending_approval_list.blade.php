@@ -29,7 +29,9 @@
                         @if ($leave_applications->isNotEmpty())
                             @foreach ($leave_applications as $leave_application)
                                 <tr>
-                                    <td>{{ $leave_application->reference_number }}</td>
+                                    <td>
+                                        {{ $leave_application->reference_number }}
+                                    </td>
                                     <td id="table_reports_to">
                                         @if (!empty($leave_application->approvers))
                                             {{ optional($leave_application->approvers->users)->first_name }}

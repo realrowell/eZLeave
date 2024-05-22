@@ -217,81 +217,9 @@ class LeaveApplicationController extends Controller
         $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn);
 
         $data = $request->validate([
-            'startdate' => 'nullable',
-            'enddate' => 'nullable',
             'reason' => 'max:255',
             'attachment' => 'nullable',
-            'start_am_check' => 'nullable',
-            'start_pm_check' => 'nullable',
-            'end_am_check' => 'nullable',
-            'end_pm_check' => 'nullable',
         ]);
-
-        $startDate = $leave_applications->start_date;
-        $endDate = $leave_applications->end_date;
-
-
-        if($request->has('startdate')){
-            $startDate = $data['startdate'];
-        }
-        if($request->has('enddate')){
-            $endDate = $data['enddate'];
-        }
-
-        $startDate = new DateTime($startDate);
-        $endDate = new DateTime($endDate);
-        $durationDays = $leave_applications->duration;
-        $start_part_of_day = $leave_applications->start_part_of_day;
-        $end_part_of_day = $leave_applications->end_part_of_day;
-
-        if($request->has('startdate') || $request->has('enddate')) {
-            // check if the request date is a half day
-            if( $startDate == $endDate){
-                if($request->start_am_check==true || $request->end_pm_check==true){
-                    if($request->start_am_check==true){
-                        $durationDays = $durationDays+0.5;
-                        $start_part_of_day = 'dprt-1002';
-                    }
-                    if($request->end_pm_check==true){
-                        $durationDays = $durationDays+0.5;
-                        $end_part_of_day = 'dprt-1003';
-                    }
-                    // $durationDays = 1;
-
-                }
-                else{
-                    // Check if the start date is greater than or equal to end date
-                    if ($startDate > $endDate) {
-                        return response(['message'=>"Invalid Date Range"],400);
-                    }
-
-                    // Get number of days between two dates
-                    $durationInterval = $startDate->diff($endDate);
-                    $durationDays = $durationInterval->format('%a');
-
-                    // Add one day to get correct number of days (because diff() method counts the start day too)
-                    $durationDays++;
-                }
-            }
-            else{
-                // Get number of days between two dates
-                $durationInterval = $startDate->diff($endDate);
-                $durationDays = $durationInterval->format('%a');
-
-                // Add one day to get correct number of days (because diff() method counts the start day too)
-                $durationDays++;
-                if($request->start_pm_check==true || $request->end_am_check==true){
-                    if($request->start_pm_check==true){
-                        $durationDays = $durationDays-0.5;
-                        $start_part_of_day = 'dprt-1003';
-                    }
-                    if($request->end_am_check==true){
-                        $durationDays = $durationDays-0.5;
-                        $end_part_of_day = 'dprt-1002';
-                    }
-                }
-            }
-        }
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
@@ -302,11 +230,6 @@ class LeaveApplicationController extends Controller
 
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
             ->update([
-                'start_date' => $data['startdate'],
-                'start_part_of_day' => $start_part_of_day,
-                'end_date' => $data['enddate'],
-                'end_part_of_day' => $end_part_of_day,
-                'duration' => $durationDays,
                 'attachment' => $fileNameToStore,
             ]);
             if($request->input('reason')){
@@ -318,14 +241,6 @@ class LeaveApplicationController extends Controller
             }
         }
         else{
-            $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
-            ->update([
-                'start_date' => $data['startdate'],
-                'start_part_of_day' => $start_part_of_day,
-                'end_date' => $data['enddate'],
-                'end_part_of_day' => $end_part_of_day,
-                'duration' => $durationDays,
-            ]);
             if($request->input('reason')){
                 $leave_application_note = LeaveApplicationNote::create([
                     'leave_application_reference' => $leave_application_rn,
@@ -347,6 +262,7 @@ class LeaveApplicationController extends Controller
         $data = $request->validate([
             'reason' => 'required',
         ]);
+        // abort(419);
 
         $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)->first();
         $current_leave_credits = EmployeeLeaveCredit::where('employee_id',$leave_applications->employee_id)->where('leave_type_id', $leave_applications->leave_type_id)->where('fiscal_year_id',$leave_applications->fiscal_year_id)->where('status_id','sta-1007')->first();
@@ -436,6 +352,7 @@ class LeaveApplicationController extends Controller
                     ]);
                 }
             }
+            // abort(419);
             return redirect()->back()->with('success','Leave Application has been approved!');
         }
         else{
@@ -572,6 +489,7 @@ class LeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id,
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
+
             return redirect()->back()->with('warning','Leave Application has been cancelled!');
         }
         else{

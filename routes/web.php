@@ -82,7 +82,7 @@ Route::get('/leave_management/pending_availment/list_view', [EmployeePageControl
 Route::get('/leave_management/history/grid_view', [EmployeePageController::class, 'profile_leave_management_history_grid'])->name('profile_leave_management_history_grid');
 Route::get('/leave_management/history/list_view', [EmployeePageController::class, 'profile_leave_management_history_list'])->name('profile_leave_management_history_list');
 Route::post('/employee/create_leaveapplication', [EmployeeLeaveApplicationController::class, 'create_employee_leaveapplication'])->name('create_employee_leaveapplication');
-Route::patch('/employee/update_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'update_employee_leaveapplication'])->name('update_employee_leaveapplication');
+Route::post('/employee/update_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'update_employee_leaveapplication'])->name('update_employee_leaveapplication');
 Route::post('/employee/create_note_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'create_note_employee_leaveapplication'])->name('create_note_employee_leaveapplication');
 Route::get('/employee/approve_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_approval'])->name('employee_leave_approval');
 Route::get('/employee/reject_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_rejection'])->name('employee_leave_rejection');
@@ -138,10 +138,10 @@ Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::c
 Route::post('/hr/create_leavecredits', [LeaveCreditController::class, 'create_leavecredits'])->name('create_leavecredits');
 Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
 Route::post('/hr/create_leaveapplication', [LeaveApplicationController::class, 'create_leaveapplication'])->name('create_leaveapplication');
-Route::patch('/hr/update_leaveapplication/{leave_application_rn}', [LeaveApplicationController::class, 'update_leaveapplication'])->name('update_leaveapplication');
-Route::get('/hr/leave_management/approval/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_approval'])->name('leave_application_approval');
-Route::get('/hr/leave_management/rejection/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_rejection'])->name('leave_application_rejection');
-Route::get('/hr/leave_management/cancellation/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_cancellation'])->name('leave_application_cancellation');
+Route::post('/hr/update_leaveapplication/{leave_application_rn}', [LeaveApplicationController::class, 'update_leaveapplication'])->name('update_leaveapplication');
+Route::post('/hr/leave_management/approval/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_approval'])->name('leave_application_approval');
+Route::post('/hr/leave_management/rejection/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_rejection'])->name('leave_application_rejection');
+Route::post('/hr/leave_management/cancellation/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_cancellation'])->name('leave_application_cancellation');
 
 Route::get('/create_leave/getLeaveType/{id}', [LeaveApplicationController::class, 'GetLeaveTypeFromEmployee'])->name('createLeave.getLeaveType');
 
@@ -230,6 +230,7 @@ Route::get('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentCon
 Route::controller(AdminLeavePageController::class)->group(function (){
     Route::get( '/admin/leave-menu', 'admin_leave_menu' )->name('admin.leave.menu');
     Route::get( '/admin/leave-types', 'admin_leave_types' )->name('admin.leave.types');
+    Route::get( '/admin/fiscal-years', 'admin_fiscal_years' )->name('admin.fiscal.years');
 });
 Route::controller(AdminLeaveMaintenanceController::class)->group(function (){
     Route::post( '/admin/create_leavetype', 'create_leavetypes' )->name('admin.create.leavetype');

@@ -469,3 +469,13 @@ h3{
 .z-1000{
     z-index: 1000;
 }
+
+.h6-label{
+    font-weight: 600;
+    color: rgb(105, 105, 105);
+}
+
+.h4-value{
+    font-weight: 500 !important;
+    color: rgb(201, 201, 201) !important;
+}

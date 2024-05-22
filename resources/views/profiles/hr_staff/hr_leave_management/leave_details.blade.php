@@ -16,7 +16,6 @@
                 <div class="row" id="form_to_submit">
                     <form action="{{ route('update_employee_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="onFormSubmit()" enctype="multipart/form-data">
                         @csrf
-                        @method('PATCH')
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col">

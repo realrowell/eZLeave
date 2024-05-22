@@ -237,7 +237,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="container-fluid text-start">
+                                        <div class="container-fluid text-start" style="">
                                             <div class="row">
                                                 <div class="col-lg-2 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
                                                     <h2></h2>
@@ -246,9 +246,9 @@
                                                     <div class="row">
                                                         <div class="col">
                                                             <label for="employee">
-                                                                <h6 class="">Reference Number</h6>
+                                                                <h6 class="h6-label">Reference Number</h6>
                                                             </label>
-                                                            <h4>{{ $leave_application->reference_number }}</h4>
+                                                            <h4 class="h4-value">{{ $leave_application->reference_number }}</h4>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -450,7 +450,6 @@
                                     </div>
                                     <form action="{{ route('update_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PATCH')
                                         <div class="modal-body">
                                             <div class="container-fluid text-start">
                                                 <div class="row">
@@ -627,16 +626,16 @@
                         </div>
                     {{-- update leave details Modal --}}
                     <!-- reject leave Modal -->
-                        <div class="modal fade" id="rejectLeaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="rejectLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('leave_application_rejection', $leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                                <form action="{{ route('leave_application_rejection', $leave_application->reference_number) }}" method="POST" onsubmit="onClickApprove()">
                                     @csrf
-                                    <div class="modal-content">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onReject{{ $leave_application->reference_number }}"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="container-fluid text-start">
+                                            <div class="container-fluid text-start" id="form_container_onReject{{ $leave_application->reference_number }}" >
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="employee">
@@ -659,7 +658,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required></textarea>
+                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required oninput="submitBtnEnable_onReject('{{ $leave_application->reference_number }}')"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -667,9 +666,12 @@
                                         <div class="modal-footer">
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger">
-                                                        Confirm Reject
+                                                    <button type="button" class="btn btn-transparent " id="btn_close_onReject{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger disabled" id="btn_reject{{ $leave_application->reference_number }}" onclick="onClickRejectId('{{ $leave_application->reference_number }}')">
+                                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_reject{{ $leave_application->reference_number }}">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        Confirm Rejection
                                                     </button>
                                                 </div>
                                             </div>
@@ -680,16 +682,16 @@
                         </div>
                     {{-- reject leave Modal --}}
                     <!-- cancel leave Modal -->
-                        <div class="modal fade" id="cancelLeaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="cancelLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('leave_application_cancellation', $leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                                <form action="{{ route('leave_application_cancellation', $leave_application->reference_number) }}" method="POST" >
                                     @csrf
-                                    <div class="modal-content">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onCancel{{ $leave_application->reference_number }}"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="container-fluid text-start">
+                                            <div class="container-fluid text-start" id="form_container_onCancel{{ $leave_application->reference_number }}" >
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="employee">
@@ -712,7 +714,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required></textarea>
+                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required oninput="submitBtnEnable_onCancel('{{ $leave_application->reference_number }}')"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -720,8 +722,11 @@
                                         <div class="modal-footer">
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger">
+                                                    <button type="button" class="btn btn-transparent " id="btn_close_onCancel{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger disabled" id="btn_cancel{{ $leave_application->reference_number }}" onclick="onClickCancelId('{{ $leave_application->reference_number }}')">
+                                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_cancel{{ $leave_application->reference_number }}">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
                                                         Confirm Cancellation
                                                     </button>
                                                 </div>
@@ -733,16 +738,20 @@
                         </div>
                     {{-- end cancel leave Modal --}}
                     <!-- approve leave Modal -->
-                        <div class="modal fade" id="approveLeaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('leave_application_approval', $leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                        <div class="modal fade" id="approveLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered positions-relative" id="form_container" style="opacity: 1">
+                                {{-- <div class="spinner-border text-primary position-absolute d-none" id="loading_spinner_approve{{ $leave_application->reference_number }}" role="status" >
+                                    <span class="visually-hidden" >Loading...</span>
+                                </div> --}}
+
+                                <form action="{{ route('leave_application_approval', $leave_application->reference_number) }}" method="POST" id="form_submit_approve">
                                     @csrf
-                                    <div class="modal-content">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="container-fluid text-start">
+                                            <div class="container-fluid text-start" id="form_container{{ $leave_application->reference_number }}" >
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="employee">
@@ -765,7 +774,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
-                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required></textarea>
+                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" required oninput="submitBtnEnable('{{ $leave_application->reference_number }}')"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -773,8 +782,11 @@
                                         <div class="modal-footer">
                                             <div class="row">
                                                 <div class="col">
-                                                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-success">
+                                                    <button type="button" class="btn btn-transparent " id="btn_close{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success disabled" id="btn_submit{{ $leave_application->reference_number }}" onclick="onClickApproveId('{{ $leave_application->reference_number }}')">
+                                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_approve{{ $leave_application->reference_number }}">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
                                                         Confirm Approval
                                                     </button>
                                                 </div>
@@ -784,6 +796,16 @@
                                 </form>
                             </div>
                         </div>
+                        {{-- <script>
+                            $(document).ready(function(){
+                                $('#form_submit_approve').submit(function(){
+                                    $('#loading_spinner_approve').removeClass('d-none');
+                                    $('#btn_submit').addClass(' disabled');
+                                    // $('#form_container').css({"opacity": "0.8"});
+                                    $('#approveLeaveModal')+id.modal('toggle');
+                                });
+                            });
+                        </script> --}}
                     {{-- end approve leave Modal --}}
                     @endforeach
                 </tbody>

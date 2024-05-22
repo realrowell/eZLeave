@@ -138,17 +138,22 @@
         <div class="col">
             <div class="row text-center align-items-center justify-content-center">
                 <div class="col-lg-8 col-md-8 col-sm-12 text-start">
-                    <h5>Search Leave Request</h5>
+                    <h5>
+                        Search Leave Request
+                        <div class="spinner-border spinner-border-sm text-primary position-relative float-start" id="loading_spinner_1" role="status" style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </h5>
                 </div>
             </div>
             <div class="row text-center align-items-center justify-content-center">
                 <div class="col-lg-8 col-md-8 col-sm-12">
-                    <form action="{{ route('leave_details.search') }}" method="GET">
+                    <form action="{{ route('leave_details.search') }}" method="GET" onsubmit="onFormSubmit()" id="form_to_submit">
                     @csrf
                         <div class="input-group">
                             <span class="input-group-text bg-light ps-3 pe-3" id="basic-addon1"><i class='bx bx-search-alt' style="font-size: 1.4rem; margin-bottom: -1px"></i></span>
-                            <input type="text" class="form-control form-control-sm" name="reference_number" id="reference_number" size="100" >
-                            <button type="submit" class="btn btn-primary ps-5 pe-5" id="btn_search">Search</button>
+                            <input type="text" class="form-control form-control-sm" name="reference_number" id="reference_number" size="100" oninput="searchBtnEnable()">
+                            <button type="submit" class="btn btn-primary ps-5 pe-5 disabled" id="search_btn" >Search</button>
                         </div>
                     </form>
                 </div>
