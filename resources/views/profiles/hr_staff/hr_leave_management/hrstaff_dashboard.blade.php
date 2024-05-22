@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     <div class="container-fluid mb-4">
-                        <div class="row justify-content-center align-items-center text-center g-2 mt-3">
+                        <div class="row align-items-center text-center g-2 mt-3">
                             <a href="{{ route('hrstaff_leave_pending_approval') }}" class="col-md text-dark">
                             <span id="approval_numbers" class="col">{{ $pending_leaves_count }}</span>
                                 <div class="row">
@@ -280,7 +280,46 @@
             </div>
             <div class="col-md p-3 bg-light shadow">
                 <div class="row">
-                    <h5>Recent Activities</h5>
+                    <div class="container-fluid">
+                        <div class="row ">
+                            <div class="col"><h5>Recent Activities</h5></div>
+                            <div class="col d-flex justify-content-end ">
+                                {{-- <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a> --}}
+                            </div>
+                        </div>
+                        <div class="container-fluid mt-3 mb-3">
+                            @forelse ($notifications as $notification)
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-action mt-1">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ $notification->title }}
+                                            </div>
+                                            <div class="col text-end">
+                                                {{ timestamp_leadtime($notification->created_at) }}
+                                            </div>
+                                        </div>
+                                        {{-- <div class="row">
+                                            <div class="col">
+                                                {{ $notification->author_id }}
+                                                {{ $notification->employee_id }}
+                                            </div>
+                                        </div> --}}
+                                    </li>
+                                </ul>
+                            @empty
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-action mt-1">
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                No Recent Activities
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

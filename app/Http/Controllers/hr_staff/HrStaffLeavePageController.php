@@ -143,7 +143,7 @@ class HrStaffLeavePageController extends Controller
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
         ];
-        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1007')->orderBy('created_at','desc')->paginate(20);
+        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1007')->orderBy('created_at','desc')->get();
 
         return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
     }
@@ -210,6 +210,10 @@ class HrStaffLeavePageController extends Controller
      */
     public function hr_leaveDetailsPage($leave_application_rn){
         $leave_application = LeaveApplication::where('reference_number',$leave_application_rn)->first();
+        if($leave_application == null){
+            abort(419);
+        }
+
         $employee_name =    $leave_application->employees->users->last_name.", ".
                             $leave_application->employees->users->first_name." ".
                             optional($leave_application->employees->users->suffixes)->suffix_title;
@@ -271,7 +275,7 @@ class HrStaffLeavePageController extends Controller
         $users = User::where('status_id','sta-2001')->paginate(10);
         // $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1001')->orWhere('status_id','sta-1003')->orderBy('created_at', 'desc')->paginate(20);
 
-        $leave_applications = LeaveApplication::where('start_date','<=',$current_year->toDateString())->where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->orderBy('created_at', 'asc')->paginate(20);
+        $leave_applications = LeaveApplication::where('status_id','sta-1002')->where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'asc')->paginate(20);
 
         $data=[
             'employees' => Employee::all()->where('status_id','sta-2001')

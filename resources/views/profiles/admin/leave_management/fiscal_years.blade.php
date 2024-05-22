@@ -1,5 +1,5 @@
 @extends('includes.admin_layout')
-@section('title','Leave Types')
+@section('title','Fiscal Years')
 @section('profile_bar_display','none')
 @section('sidebar_leave_management_active','active')
 @section('sidebar_leave_management_active_custom','active_custom')
@@ -14,8 +14,8 @@
         <h5>Menu</h5>
     </div>
     <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning text-light" style="min-height: 1rem" >
-            <a href="{{ route('admin.leave.types') }}" class="bg-selected-warning text-light">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
+            <a href="{{ route('admin.leave.types') }}" class=" text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
                         <h6>Leave Types</h6>
@@ -23,8 +23,8 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch  " style="min-height: 1rem" >
-            <a href="{{ route('admin.fiscal.years') }}" class=" text-dark">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning " style="min-height: 1rem" >
+            <a href="{{ route('admin.fiscal.years') }}" class=" text-light">
                 <div class="col text-light-hover">
                     <div class="card-body">
                         <h6>Fiscal Years</h6>
@@ -35,7 +35,7 @@
     </div>
     <div class="row">
         <div class="col mt-2">
-          <h3>Leave Management / Leave Types</h3>
+          <h3>Leave Management / Fiscal Years</h3>
         </div>
     </div>
     <div class="row">
@@ -51,65 +51,61 @@
         </div>
 
         <!-- Add Type Modal -->
-        <div class="modal fade" id="AddTypeModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <form action="{{ route('admin.create.leavetype') }}" method="POST" onsubmit="onClickApprove()">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Add Leave Type</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid text-start">
-                                <div class="row mt-2 mb-3" >
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <label for="leavetype_title">
-                                            <h6 class="">Leave Type Title</h6>
-                                        </label>
-                                        <input type="text" class="form-control" id="leavetype_title" name="leavetype_title" placeholder="" required>
-                                        <label class="mt-3" for="leavetype_description">
-                                            <h6 class="">Leave Type Description</h6>
-                                        </label>
-                                        <textarea class="form-control" id="leavetype_description" name="leavetype_description" rows="5" cols="50" required></textarea>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <label for="days_per_year">
-                                            <h6>Leave per year (Days)</h6>
-                                        </label>
-                                        <input type="number" step="0.5" class="form-control" id="days_per_year" name="days_per_year" placeholder="" required>
-                                        <label class="mt-3" for="max_days">
-                                            <h6>Max Accumulation (Days)</h6>
-                                        </label>
-                                        <input type="number" class="form-control" id="max_days" name="max_days" placeholder="" required>
-                                        <label class="mt-3" for="cut_off_date">
-                                            <h6>Cut off Date</h6>
-                                        </label>
-                                        <input type="date" class="form-control" id="cut_off_date" name="cut_off_date" placeholder="">
-                                        {{-- <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="show_on_employee" name="show_on_employee" value="1">
-                                            <label class="form-check-label" for="show_on_employee">Show this to Employee</label>
-                                        </div> --}}
-                                        <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="is_accumulable" name="is_accumulable" value="1">
-                                            <label class="form-check-label" for="is_accumulable">is Accumulable?</label>
+            {{-- <div class="modal fade" id="AddTypeModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <form action="{{ route('admin.create.leavetype') }}" method="POST" onsubmit="onClickApprove()">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Add Leave Type</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid text-start">
+                                    <div class="row mt-2 mb-3" >
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="leavetype_title">
+                                                <h6 class="">Leave Type Title</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="leavetype_title" name="leavetype_title" placeholder="" required>
+                                            <label class="mt-3" for="leavetype_description">
+                                                <h6 class="">Leave Type Description</h6>
+                                            </label>
+                                            <textarea class="form-control" id="leavetype_description" name="leavetype_description" rows="5" cols="50" required></textarea>
                                         </div>
-                                        <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="apply_predate" name="apply_predate" value="1">
-                                            <label class="form-check-label" for="apply_predate">Apply Predate</label>
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <label for="days_per_year">
+                                                <h6>Leave per year (Days)</h6>
+                                            </label>
+                                            <input type="number" step="0.5" class="form-control" id="days_per_year" name="days_per_year" placeholder="" required>
+                                            <label class="mt-3" for="max_days">
+                                                <h6>Max Accumulation (Days)</h6>
+                                            </label>
+                                            <input type="number" class="form-control" id="max_days" name="max_days" placeholder="" required>
+                                            <label class="mt-3" for="cut_off_date">
+                                                <h6>Cut off Date</h6>
+                                            </label>
+                                            <input type="date" class="form-control" id="cut_off_date" name="cut_off_date" placeholder="">
+                                            <div class="form-check form-switch mt-3">
+                                                <input class="form-check-input" type="checkbox" id="is_accumulable" name="is_accumulable" value="1">
+                                                <label class="form-check-label" for="is_accumulable">is Accumulable?</label>
+                                            </div>
+                                            <div class="form-check form-switch mt-3">
+                                                <input class="form-check-input" type="checkbox" id="apply_predate" name="apply_predate" value="1">
+                                                <label class="form-check-label" for="apply_predate">Apply Predate</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                            <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                                <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div> --}}
         {{-- End Add Type Modal --}}
     </div>
     <div class="row " id="table_container">

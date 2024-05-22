@@ -19,10 +19,13 @@
     font-family: 'Open Sans', sans-serif;
     font-family: 'Poppins', sans-serif;
     font-family: 'Raleway', sans-serif; 200, 400, 600, 800
+    font-family: 'Roboto', sans-serif; 100, 300, 400, 500, 700, 900,
     --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Poppins:wght@900&family=Raleway:wght@200;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300
+    &family=Poppins:wght@900&family=Raleway:wght@200;400;600;800
+    &family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     {{-- End Google Fonts --}}
 
     <link
@@ -45,7 +48,7 @@
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
@@ -60,7 +63,7 @@
         --first-color-light: #00AF46;
         --accent-color:  #f3b200;
         --accent-color-2:  #f3b200;
-        --body-font: "Nunito", sans-serif;
+        --body-font: "Open Sans", sans-serif;
         --normal-font-size: 1rem;
         --z-fixed: 100;
       }
@@ -76,6 +79,7 @@
         padding: 0 0rem;
         font-family: var(--body-font);
         font-size: var(--normal-font-size);
+        color: rgb(44, 44, 44);
         transition: 0.5s;
         background-color: #f4f4f4;
         background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);

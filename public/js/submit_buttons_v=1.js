@@ -264,6 +264,12 @@ function searchBtnEnable(){
 function submitBtnEnable(id){
     document.getElementById('btn_submit'+id).classList.remove('disabled');
 }
+function submitBtnEnable_onCancel(id){
+    document.getElementById('btn_cancel'+id).classList.remove('disabled');
+}
+function submitBtnEnable_onReject(id){
+    document.getElementById('btn_reject'+id).classList.remove('disabled');
+}
 
 function onKeyUpAddress(){
     document.getElementById('address_line_1').required=true;

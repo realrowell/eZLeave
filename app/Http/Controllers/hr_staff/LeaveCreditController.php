@@ -175,7 +175,7 @@ class LeaveCreditController extends Controller
      */
     public function update_leavecredits(Request $request, $leavecredit_id){
         $data = $request->validate([
-            'credits' => 'sometimes',
+            // 'credits' => 'sometimes',
             'show_on_employee' => 'nullable'
         ]);
 
@@ -188,7 +188,7 @@ class LeaveCreditController extends Controller
 
         $leavecredits = EmployeeLeaveCredit::where('id',$leavecredit_id)
         ->update([
-            'leave_days_credit' => $data['credits'],
+            // 'leave_days_credit' => $data['credits'],
             'show_on_employee'=> $data['show_on_employee'],
         ]);
         return redirect()->back()->with('success','Leave credit has been updated!');

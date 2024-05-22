@@ -16,6 +16,7 @@ use App\Models\LeaveApproval;
 use App\Models\LeaveCreditLog;
 use App\Models\LeaveType;
 use App\Models\MaritalStatus;
+use App\Models\Notification;
 use App\Models\Position;
 use App\Models\ProfilePhoto;
 use App\Models\Role;
@@ -55,6 +56,7 @@ class HrStaffPageController extends Controller
             'leave_applications' => LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'desc')->get()->take(5),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
+            'notifications' => Notification::where('author_id','!=','employee_id')->where('author_id','!=',auth()->user()->id)->where('status_id','sta-1007')->orderBy('created_at','asc')->get()->take(5),
         ];
         return view('profiles.hr_staff.hr_leave_management.hrstaff_dashboard')->with($data);
     }
