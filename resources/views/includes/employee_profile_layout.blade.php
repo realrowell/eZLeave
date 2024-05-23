@@ -47,7 +47,7 @@
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>

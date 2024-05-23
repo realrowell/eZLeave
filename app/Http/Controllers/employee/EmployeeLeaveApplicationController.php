@@ -643,6 +643,7 @@ class EmployeeLeaveApplicationController extends Controller
         $data = $request->validate([
             'reason' => 'required',
         ]);
+        return redirect()->back()->with('warning','Leave Application has been cancelled!');
 
         $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)->first();
 

@@ -127,20 +127,17 @@
 </div>
 
 <!-- Apply leave Modal -->
-<div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
-                <span class="visually-hidden" >Loading...</span>
-            </div>
-            <form action="{{ route('create_employee_leaveapplication') }}" method="POST" onsubmit="onClickLeaveApplySpinnerShow()" enctype="multipart/form-data" id="form_submit">
+            <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit">
                 @csrf
                 @method('POST')
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="form_container_onApply">
                     <div class="row">
                         <div class="col text-center">
                             <svg width="80px" height="80px" viewBox="-2.4 -2.4 28.80 28.80">
@@ -245,11 +242,13 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
-                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" >Discard</button>
-                    <div class="spinner-border text-primary" id="loading_spinner1" role="status" style="display: none;">
-                        <span class="visually-hidden" >Loading...</span>
-                    </div>
-                    <button id="submit_button1" type="submit" class="btn btn-success" >Apply Leave</button>
+                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
+                    <button id="btn_apply" type="submit" class="btn btn-success" onclick="onClickApplyLeave()">
+                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        Apply Leave
+                    </button>
                 </div>
             </form>
         </div>
