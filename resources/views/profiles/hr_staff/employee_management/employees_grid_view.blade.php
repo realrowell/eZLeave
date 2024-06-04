@@ -29,7 +29,7 @@
                 <div class="card-body row">
                     <div class="col-lg-4 col-md-4 col-4 ">
                         @if ($user->profile_photos == null)
-                            <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt="profile photo">
+                            <img class="profile-photo-sm" src="{{ asset('/img/dummy_profile.jpg') }}" alt="profile photo">
                         @else
                             <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.$user->profile_photos->profile_photo) }}" alt="profile photo">
                         @endif
