@@ -68,7 +68,11 @@
                             <div class="col">
                                 <div class="d-grid gap-2">
                                     <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
-                                    <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                    @if ($leave_application->status_id == 'sta-1001')
+                                        <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                    @else
+                                        <button class="btn btn-sm btn-danger text-center" disabled>Cancel</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -234,33 +238,31 @@
                             <div class="modal-footer">
                                 @if ($leave_application->status_id == 'sta-1001')
                                     <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
-                                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-                                @elseif ($leave_application->status_id == 'sta-1003')
-                                    <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
-                                    <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
+                                @else
+                                    <button class="btn btn-danger text-center" disabled>Cancel</button>
                                 @endif
+                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
             {{-- leave details Modal --}}
             <!-- update details Modal -->
-                <div class="modal fade" id="updatedetailsModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="updatedetailsModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $leave_application->reference_number }}" aria-label="Close"></button>
                             </div>
                             <form action="{{ route('update_employee_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
                                 @csrf
-                                @method('PATCH')
                                 <div class="modal-body">
                                     <div class="container-fluid text-start">
                                         <div class="row">
                                             <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
                                                 <h2></h2>
                                             </div>
-                                            <div class="col-lg-9 col-md-12 col-sm-12">
+                                            <div class="col-lg-9 col-md-12 col-sm-12" id="form_container_onUpdate{{ $leave_application->reference_number }}">
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="employee">
@@ -355,7 +357,7 @@
                                                             <label class="" for="attachment">
                                                                 <h6 class="">Attachment</h6>
                                                             </label>
-                                                            <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
+                                                            <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment" oninput="submitBtnEnable_onUpdate('{{ $leave_application->reference_number }}')">
                                                         @endif
                                                     </div>
                                                 </div>
@@ -381,7 +383,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="collapse mt-1" id="addNote">
-                                                        <textarea class="form-control" id="reason" name="reason" placeholder="add note"></textarea>
+                                                        <textarea class="form-control" id="reason" name="reason" placeholder="add note" oninput="submitBtnEnable_onUpdate('{{ $leave_application->reference_number }}')" ></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
@@ -413,8 +415,13 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success" onclick="onClickUpdateSubmit()">Update</button>
+                                    <button type="button" class="btn btn-transparent" id="btn_close_onUpdate{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-success disabled" id="btn_update{{ $leave_application->reference_number }}" onclick="onClickUpdateLeaveId('{{ $leave_application->reference_number }}')">
+                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_update{{ $leave_application->reference_number }}">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        Update
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -422,15 +429,15 @@
                 </div>
             {{-- update leave details Modal --}}
             <!-- cancel details Modal -->
-                <div class="modal fade" id="cancelleaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal fade" id="cancelleaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                            <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="PUT" >
                                 @csrf
                                 <div class="modal-header">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onCancel{{ $leave_application->reference_number }}"></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" id="form_container_onCancel{{ $leave_application->reference_number }}">
                                     <div class="container-fluid text-start">
                                         <div class="row">
                                             <div class="col text-center">
@@ -444,14 +451,19 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <textarea class="form-control" id="reason" name="reason" rows="6" cols=50 maxlength=250 placeholder="add note" required></textarea>
+                                                <textarea class="form-control" id="reason" name="reason" rows="6" cols=50 maxlength=250 placeholder="add note" oninput="submitBtnEnable_onCancel('{{ $leave_application->reference_number }}')" required></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
-                                    <button class="btn btn-danger" type="submit" >Confirm</button>
+                                    <button type="button" class="btn btn-transparent" id="btn_close_onCancel{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Close</button>
+                                    <button class="btn btn-danger disabled" type="submit" id="btn_cancel{{ $leave_application->reference_number }}" onclick="onClickCancelId('{{ $leave_application->reference_number }}')">
+                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_cancel{{ $leave_application->reference_number }}">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        Confirm
+                                    </button>
                                 </div>
                             </form>
                         </div>

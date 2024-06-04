@@ -2,9 +2,6 @@ new DataTable('#loginlogs_table');
 new DataTable('#data_table',{
     pagingType: 'first_last_numbers'
 });
-new DataTable('#leaves_data_table',{
-    order: [[0, 'desc']],
-});
 
 
 function submitButtonDisabled(){

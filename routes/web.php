@@ -84,8 +84,8 @@ Route::get('/leave_management/history/list_view', [EmployeePageController::class
 Route::post('/employee/create_leaveapplication', [EmployeeLeaveApplicationController::class, 'create_employee_leaveapplication'])->name('create_employee_leaveapplication');
 Route::post('/employee/update_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'update_employee_leaveapplication'])->name('update_employee_leaveapplication');
 Route::post('/employee/create_note_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'create_note_employee_leaveapplication'])->name('create_note_employee_leaveapplication');
-Route::get('/employee/approve_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_approval'])->name('employee_leave_approval');
-Route::get('/employee/reject_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_rejection'])->name('employee_leave_rejection');
+Route::post('/employee/approve_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_approval'])->name('employee_leave_approval');
+Route::post('/employee/reject_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_rejection'])->name('employee_leave_rejection');
 Route::get('/employee/cancel_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_cancellation'])->name('employee_leave_cancellation');
 
 

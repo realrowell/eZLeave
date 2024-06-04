@@ -40,15 +40,40 @@
         <div class="col">
             <form action="{{ route('hrstaff_leave_management_search') }}" class="input-group">
                 {{-- @csrf --}}
-                <input class="form-control " type="text" name="search_input" id="myInput" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here">
+                <select class="form-control js-basic-single " name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
+                    <option value="" selected disabled>Input here</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
+                    @endforeach
+                </select>
+                {{-- <input class="form-control d-none" type="text" name="search_input" id="text-input-search" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here"> --}}
                 <span>
                     <select class="form-select required" name="search_filter" id="search_filter" aria-label="Default select example" required>
-                        <option value="1">Reference #</option>
                         <option value="2">Employee Name</option>
+                        {{-- <option value="1">Reference #</option> --}}
                     </select>
                 </span>
                 <button type="submit" id="search_btn" class="btn btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
             </form>
+            {{-- <script>
+                $(document).ready(function (){
+                    $('#search_filter').on('change',function(){
+                    let id = $(this).val();
+
+                    if(id == '1'){
+                        console.log(id);
+                        $('#text-input-search').removeClass('d-none');
+                        $('#select-state').removeClass(' d-none');
+                        $('#select-state').addClass('js-basic-single');
+                    }
+                    else if(id == '2'){
+                        $('#select-state').addClass(' d-none');
+                        $('#select-state').removeClass('js-basic-single');
+                        $('#text-input-search').addClass(' d-none');
+                    }
+                });
+                });
+            </script> --}}
         </div>
     </div>
     <div class="row mt-2" id="form_submit">
@@ -71,7 +96,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($leave_applications as $leave_application)
+                    @forelse ($leave_applications as $leave_application)
                     <tr>
                         <td>{{ $leave_application->reference_number }}</td>
                         <td>
@@ -748,7 +773,7 @@
                                     @csrf
                                     <div class="modal-content" >
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
+                                            <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="container-fluid text-start" id="form_container{{ $leave_application->reference_number }}" >
@@ -807,14 +832,20 @@
                             });
                         </script> --}}
                     {{-- end approve leave Modal --}}
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td>
+                                <h3>No Data Found!</h3>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
             <div class="row">
                 <div class="col">
                     <div class="mt-5">
                         <ul class="pagination justify-content-center align-items-center">
-                            {!! $leave_applications->links('pagination::bootstrap-5') !!}
+                            {!! $leave_applications?->links('pagination::bootstrap-5') !!}
                         </ul>
                     </div>
                 </div>

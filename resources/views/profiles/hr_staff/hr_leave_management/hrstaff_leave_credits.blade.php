@@ -48,12 +48,23 @@
                                                 <label for="employee">
                                                     <h6 class="">Employee</h6>
                                                 </label>
-                                                <select class="form-select" id="employee" name="employee" required>
+                                                <select class=" js-select-employee js-states form-control form-control-lg" id="select-state" name="employee" placeholder="Search here" required style="width: 100%; margin: 200px">
                                                     <option selected disabled value=""></option>
                                                     @foreach ($employees as $employee)
                                                         <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        $('.js-select-employee').select2({
+                                                            placeholder: "select option",
+                                                            selectOnClose: true,
+                                                            width: 'resolve',
+                                                            dropdownParent: $('#AddLeaveCreditModal')
+
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -61,7 +72,7 @@
                                                 <label class="" for="leavetype">
                                                     <h6 class="">Leave Type</h6>
                                                 </label>
-                                                <select class="form-select" id="leavetype" name="leavetype" required>
+                                                <select class="form-select form-select-sm" id="leavetype" name="leavetype" required>
                                                     <option selected disabled value=""></option>
                                                     @foreach ($leavetypes as $leavetype)
                                                         <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
@@ -72,7 +83,7 @@
                                                 <label for="credits">
                                                     <h6>Credits (Days)</h6>
                                                 </label>
-                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
+                                                <input type="number" step="0.5" class="form-control form-control-sm" id="credits" name="credits" placeholder="" required>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -80,7 +91,7 @@
                                                 <label class="" for="leavetype">
                                                     <h6 class="">Fiscal Year</h6>
                                                 </label>
-                                                <select class="form-select" id="fiscal_year" name="fiscal_year" required>
+                                                <select class="form-select form-select-sm" id="fiscal_year" name="fiscal_year" required>
                                                     <option selected value="{{ $current_fiscal_year->id }}">{{ $current_fiscal_year->fiscal_year_title }}</option>
                                                     @foreach ($fiscal_years as $fiscal_year)
                                                         @if ($fiscal_year->id != $current_fiscal_year->id)
@@ -93,7 +104,7 @@
                                                 <label for="expiration">
                                                     <h6>Expiration (for Offset)</h6>
                                                 </label>
-                                                <input type="date" class="form-control" name="expiration" id="expiration">
+                                                <input type="date" class="form-control form-control-sm" name="expiration" id="expiration">
                                             </div>
                                         </div>
                                         <div class="row mt-2">
@@ -109,7 +120,7 @@
                                                 <label for="reason_note">
                                                     <h6>Note</h6>
                                                 </label>
-                                                <textarea class="form-control" name="reason_note" id="reason_note" cols="30" rows="2"></textarea>
+                                                <textarea class="form-control form-control-sm" name="reason_note" id="reason_note" cols="30" rows="2"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -173,7 +184,7 @@
         </div>
         <div class="row mt-3">
             <div class="table-wrapper">
-                <table id="data_table" class="table table-bordered table-hover bg-light table-sm compact">
+                <table id="data_table" class="table table-bordered table-hover bg-light table-sm compact ">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>

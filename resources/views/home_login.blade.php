@@ -22,7 +22,7 @@
                                 <h2 class="card-title">Welcome Back! </h2>
                             </div>
                             <div class="row mt-4 card-body">
-                                <form method="POST" action="{{ route('login') }}" onsubmit="changeClass();" id="login_form">
+                                <form method="POST" action="{{ route('login') }}" onsubmit="changeClass();onClickSubmit()" id="login_form">
                                     @csrf
                                     <div class="row">
                                         @if (session('error'))
@@ -54,7 +54,7 @@
                                     </div>
 
                                     <div class="row mb-2 mt-5">
-                                        <button id="login_submit" type="submit" class="btn btn-success" onclick="onClickSubmit()">
+                                        <button id="login_submit" type="submit" class="btn btn-success" >
                                             {{ __('Login') }}
                                         </button>
 

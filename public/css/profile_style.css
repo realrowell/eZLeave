@@ -18,6 +18,8 @@
     --info-color-hover: #5ae7fa;
 
     --msg-background-color: #0a8cc9;
+
+    --header-bg-color: #00653D;
 }
 
 
@@ -96,7 +98,7 @@
 #header_title{
     margin: auto;
     padding: auto;
-    font-size: 1rem;
+    font-size: clamp(1rem, 50%, 0.3rem);
 }
 #approval_numbers{
     font-size: 5em;
