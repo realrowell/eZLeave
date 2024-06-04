@@ -86,7 +86,7 @@ class EmployeePageController extends Controller
         }
         $leave_applications = LeaveApplication::where('status_id','sta-1001')->where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->get();
         $partial_leave_applications = LeaveApplication::where('status_id','sta-1003')->where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->get();
-        $leave_applications = collect($leave_applications->values()->merge($partial_leave_applications->values()))->sortByDesc('created_at')->paginate(8);
+        $leave_applications = collect($leave_applications->values()->merge($partial_leave_applications->values()))->sortBy('created_at')->paginate(8);
         return view('profiles.employee.leave_management.pending_approval_grid',compact('leave_applications'))->with($data);
     }
 
@@ -117,7 +117,7 @@ class EmployeePageController extends Controller
         }
         $leave_applications = LeaveApplication::where('status_id','sta-1001')->where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->get();
         $partial_leave_applications = LeaveApplication::where('status_id','sta-1003')->where('employee_id',auth()->user()->employees->id)->get();
-        $leave_applications = collect($leave_applications->values()->merge($partial_leave_applications->values()))->sortByDesc('created_at')->paginate(20);
+        $leave_applications = collect($leave_applications->values()->merge($partial_leave_applications->values()))->sortBy('created_at')->paginate(20);
         return view('profiles.employee.leave_management.pending_approval_list',compact('leave_applications'))->with($data);
     }
 
@@ -390,7 +390,7 @@ class EmployeePageController extends Controller
     public function profile_leave_management_history_grid(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'desc')->paginate(8);
+        $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','!=','sta-1001')->where('status_id','!=','sta-1003')->orderBy('created_at', 'desc')->paginate(8);
 
         $data=[
             'leave_application_notes' => LeaveApplicationNote::all(),
@@ -410,7 +410,7 @@ class EmployeePageController extends Controller
     public function profile_leave_management_history_list(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'desc')->get();
+        $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','!=','sta-1001')->where('status_id','!=','sta-1003')->orderBy('created_at', 'desc')->get();
 
         $data=[
             'leave_application_notes' => LeaveApplicationNote::all(),

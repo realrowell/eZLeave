@@ -27,6 +27,7 @@ function onClickApproveId(id){
     document.getElementById('btn_submit'+id).classList.add('disabled');
     document.getElementById('btn_close'+id).classList.add('disabled');
     document.getElementById('btn_modal_x'+id).classList.add('disabled');
+    document.getElementById('btn_reject'+id).classList.add('disabled');
 }
 
 function onClickCancelId(id){

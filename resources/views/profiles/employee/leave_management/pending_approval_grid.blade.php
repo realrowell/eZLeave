@@ -68,7 +68,11 @@
                             <div class="col">
                                 <div class="d-grid gap-2">
                                     <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
-                                    <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                    @if ($leave_application->status_id == 'sta-1001')
+                                        <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                    @else
+                                        <button class="btn btn-sm btn-danger text-center" disabled>Cancel</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -234,11 +238,10 @@
                             <div class="modal-footer">
                                 @if ($leave_application->status_id == 'sta-1001')
                                     <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
-                                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-                                @elseif ($leave_application->status_id == 'sta-1003')
-                                    <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
-                                    <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
+                                @else
+                                    <button class="btn btn-danger text-center" disabled>Cancel</button>
                                 @endif
+                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
