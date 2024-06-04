@@ -43,8 +43,8 @@
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 
     {{-- TinyMCE Editor --}}
-    <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>

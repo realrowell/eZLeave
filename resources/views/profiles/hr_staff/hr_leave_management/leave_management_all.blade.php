@@ -40,7 +40,7 @@
         <div class="col">
             <form action="{{ route('hrstaff_leave_management_search') }}" class="input-group">
                 {{-- @csrf --}}
-                <select class="form-control js-basic-single " name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
+                <select class="form-control js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
                     <option value="" selected disabled>Input here</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
@@ -48,12 +48,12 @@
                 </select>
                 {{-- <input class="form-control d-none" type="text" name="search_input" id="text-input-search" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here"> --}}
                 <span>
-                    <select class="form-select required" name="search_filter" id="search_filter" aria-label="Default select example" required>
+                    <select class="form-select form-select-sm" name="search_filter" id="search_filter" aria-label="Default select example" required>
                         <option value="2">Employee Name</option>
                         {{-- <option value="1">Reference #</option> --}}
                     </select>
                 </span>
-                <button type="submit" id="search_btn" class="btn btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
+                <button type="submit" id="search_btn" class="btn btn-sm btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
             </form>
             {{-- <script>
                 $(document).ready(function (){
