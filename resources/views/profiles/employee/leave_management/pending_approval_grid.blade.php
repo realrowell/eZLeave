@@ -432,7 +432,7 @@
                 <div class="modal fade" id="cancelleaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="PUT" >
+                            <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="POST" >
                                 @csrf
                                 <div class="modal-header">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onCancel{{ $leave_application->reference_number }}"></button>

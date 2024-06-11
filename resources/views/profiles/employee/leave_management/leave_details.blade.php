@@ -333,12 +333,12 @@
                                         @endif
                                         @if ($leave_application->approver_id == auth()->user()->employees->id)
                                             <a href="#" class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#rejectleaveModal{{ $leave_application->reference_number }}">Reject</a>
-                                            <a href="{{ route('employee_leave_approval',$leave_application->reference_number) }}" class="btn btn-success text-center ms-3" id="submit_button" onclick="onClickApprove()">Approve</a>
+                                            <a href="#" class="btn btn-success text-center ms-3" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">Approve</a>
                                         @endif
                                     @elseif ($leave_application->status_id == 'sta-1003')
                                         @if ($leave_application->second_approver_id == auth()->user()->employees->id)
                                             <a href="#" class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#rejectleaveModal{{ $leave_application->reference_number }}">Reject</a>
-                                            <a href="{{ route('employee_leave_approval',$leave_application->reference_number) }}" class="btn btn-success text-center ms-3" id="submit_button" onclick="onClickApprove()">Approve</a>
+                                            <a href="#" class="btn btn-success text-center ms-3" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">Approve</a>
                                         @endif
                                     @endif
 
@@ -348,11 +348,67 @@
                             </div>
                         </div>
                     </div>
+                    <!-- approve leave Modal -->
+                        <div class="modal fade" id="approveLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <form action="{{ route('employee_leave_approval',$leave_application->reference_number) }}" method="POST" id="form_submit_approve">
+                                        @csrf
+                                        <div class="modal-header">
+                                            <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid text-start" id="form_container{{ $leave_application->reference_number }}" >
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="employee">
+                                                            <h4 class="">CONFIRM LEAVE APPROVAL</h4>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label for="employee">
+                                                            <h6 class="">Reference Number</h6>
+                                                        </label>
+                                                        <h4>{{ $leave_application->reference_number }}</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6>Reason / Note:</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <textarea class="form-control" name="reason" id="reason" cols="10" rows="5" ></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <button type="button" class="btn btn-transparent " id="btn_close{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success " id="btn_submit{{ $leave_application->reference_number }}" onclick="onClickApproveId('{{ $leave_application->reference_number }}')">
+                                                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_approve{{ $leave_application->reference_number }}">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        Confirm Approval
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {{-- end approve leave Modal --}}
                     <!-- cancel details Modal -->
                     <div class="modal fade" id="cancelleaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                                <form action="{{ route('employee_leave_cancellation',$leave_application->reference_number) }}" method="POST" onsubmit="onClickApprove()">
                                     @csrf
                                     <div class="modal-header">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -389,7 +445,7 @@
                         <div class="modal fade" id="rejectleaveModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    <form action="{{ route('employee_leave_rejection',$leave_application->reference_number) }}" method="PUT" onsubmit="onClickApprove()">
+                                    <form action="{{ route('employee_leave_rejection',$leave_application->reference_number) }}" method="POST" onsubmit="onClickApprove()">
                                         @csrf
                                         <div class="modal-header">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
