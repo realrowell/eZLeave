@@ -11,11 +11,11 @@
 </div> --}}
 <div class="row">
     <div class="col mt-2">
-      <h3>Leave Management HR Staff / Leave Credits</h3>
+      {{-- <h3>Leave Management HR Staff / Leave Credits</h3> --}}
     </div>
 </div>
 <div class="row gap-3" id="table_container">
-    <div class="row">
+    {{-- <div class="row">
         <div class="col text-end align-items-end">
             <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
                 <i data-toggle="tooltip" title="list view" class="add-icon" >
@@ -24,7 +24,7 @@
                 Give Leave Credits
             </a>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Add Leave Credits Modal -->
         <div class="modal fade" id="AddLeaveCreditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -50,8 +50,8 @@
                                                 </label>
                                                 <select class=" js-select-employee js-states form-control form-control-lg" id="select-state" name="employee" placeholder="Search here" required style="width: 100%; margin: 200px">
                                                     <option selected disabled value=""></option>
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }}</option>
                                                     @endforeach
                                                 </select>
                                                 <script>
@@ -144,47 +144,39 @@
 
     {{-- Employee Management Table --}}
     <div class="row bg-light p-3 m-1 shadow">
-        <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-12">
-                <div class="row ">
-                    <div class="col-lg-4 col-md-5 col-sm-12 mb-2">
-                        <h5>Employee Leave Credits</h5>
+        <div class="d-flex gap-3">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="d-lg-inline-flex d-md-inline-flex d-sm-grid d-grid gap-3 ">
+                    <h5>Employee Leave Credits</h5>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Fiscal Year:
+                            @if (Request()->fiscal_year == null)
+                                {{ $current_fiscal_year->fiscal_year_title }}
+                            @else
+                                @foreach ($fiscal_years as $fiscal_year)
+                                    @if ( $fiscal_year->id == Request()->fiscal_year)
+                                        {{ $fiscal_year->fiscal_year_title }}
+                                    @endif
+                                @endforeach
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach ($fiscal_years as $fiscal_year)
+                                <li><a class="dropdown-item" href="{{ route('hrstaff_fy_leave_credits',['fiscal_year'=>$fiscal_year->id]) }}">{{ $fiscal_year->fiscal_year_title }}</a></li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <div class="col-lg-3 col-md-5 col-sm-8 mb-2">
-                        <div class="btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Fiscal Year:
-                                @if (Request()->fiscal_year == null)
-                                    {{ $current_fiscal_year->fiscal_year_title }}
-                                @else
-                                    @foreach ($fiscal_years as $fiscal_year)
-                                        @if ( $fiscal_year->id == Request()->fiscal_year)
-                                            {{ $fiscal_year->fiscal_year_title }}
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </button>
-                            <ul class="dropdown-menu">
-                              @foreach ($fiscal_years as $fiscal_year)
-                                  <li><a class="dropdown-item" href="{{ route('hrstaff_fy_leave_credits',['fiscal_year'=>$fiscal_year->id]) }}">{{ $fiscal_year->fiscal_year_title }}</a></li>
-                              @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-md-2 col-sm-4 mb-2">
-                        <div class="btn-group">
-                            <a class="btn btn-primary btn-sm" href="{{ route('export') }}">Export CSV</a>
-                        </div>
+                    <div class="btn-group">
+                        <a class="btn btn-secondary btn-sm" href="{{ route('export') }}">Export CSV</a>
                     </div>
                 </div>
             </div>
-            <div class="col text-end col-lg-4 col-md-6 col-sm-12">
-                {{-- <form action="{{ route('hrstaff_leave_credits_search') }}" class="input-group">
-                    @csrf
-                    <input class="form-control " type="text" name="search_input" id="myInput" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here">
-                    <input type="text" name="fiscal_year" id="fiscal_year" value="{{ $current_fiscal_year->id }}" hidden>
-                    <button type="submit" id="search_btn" class="btn btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
-                </form> --}}
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-end pe-5">
+                <a class="btn btn-primary btn-sm" href="#Add" data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
+                    <i class='bx bx-message-square-add' ></i>
+                    Give Leave Credits
+                </a>
             </div>
         </div>
         <div class="row mt-3">
@@ -216,9 +208,9 @@
                             <td>{{ $employee_leavecredit->employees->employee_positions->positions->subdepartments->departments->department_title }}</td>
                             <td>{{ optional($employee_leavecredit->leavetypes)->leave_type_title }}</td>
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
-                            <td class="d-flex gap-2">
+                            <td class="d-flex gap-2 ">
                                 <a href="#" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateLeaveCreditModal{{ $employee_leavecredit->id }}">Update</a>
-                                <a href="{{ route('user_profile_leave',['username' => $employee_leavecredit->employees?->users?->user_name]) }}" class="btn-sm btn-primary">Details</a>
+                                <a href="{{ route('user_profile_leave',['username' => $employee_leavecredit->employees?->users?->user_name]) }}" class="btn-sm btn-outline-primary">Details</a>
                             </td>
                         </tr>
 
@@ -235,10 +227,7 @@
                                             <div class="modal-body" id="form_container_onUpdate{{ $employee_leavecredit->id }}">
                                                 <div class="container-fluid text-start">
                                                     <div class="row">
-                                                        <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                            <h2></h2>
-                                                        </div>
-                                                        <div class="col-lg-8 col-md-12 col-sm-12">
+                                                        <div class="col ">
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <label for="employee">

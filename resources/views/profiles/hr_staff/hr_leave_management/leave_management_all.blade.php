@@ -7,16 +7,16 @@
 @section('sub_menu_all','bg-selected-primary text-light')
 @section('sub-sub-content')
 {{-- Leave application Table --}}
-<div class="row bg-light p-3 m-1 shadow" id="form_submit_1">
-    <div class="row">
-        <div class="col">
+<div class="row bg-light p-3 shadow">
+    <div class="d-lg-flex d-md-flex d-sm-block ">
+        <div class="container">
             <div class="row">
                 <div class="col">
                     <h5>Leave Management / All</h5>
                 </div>
                 <div class="col">
                     <div class="btn-group">
-                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Fiscal Year:
                             @if (Request()->fiscal_year == null)
                                 {{ $current_fiscal_year->fiscal_year_title }}
@@ -37,43 +37,34 @@
                 </div>
             </div>
         </div>
-        <div class="col">
-            <form action="{{ route('hrstaff_leave_management_search') }}" class="input-group">
+        <div class="container">
+            <form action="{{ route('hrstaff_leave_management_search') }}" >
                 {{-- @csrf --}}
-                <select class="form-control js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
-                    <option value="" selected disabled>Input here</option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
-                    @endforeach
-                </select>
+                <div class="container-fluid" style="width: clamp(40vw, 75%, 50vw)">
+                    <div class="d-flex gap-3">
+                        <select class="w-75 js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
+                            <option value="" selected disabled>Input here</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" id="search_btn" class="btn btn-sm btn-primary" onclick="onClickLinkSubmit()">Search</button>
+                    </div>
+                </div>
                 {{-- <input class="form-control d-none" type="text" name="search_input" id="text-input-search" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here"> --}}
-                <span>
+                {{-- <span>
                     <select class="form-select form-select-sm" name="search_filter" id="search_filter" aria-label="Default select example" required>
                         <option value="2">Employee Name</option>
-                        {{-- <option value="1">Reference #</option> --}}
+                        <option value="1">Reference #</option>
                     </select>
-                </span>
-                <button type="submit" id="search_btn" class="btn btn-sm btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
+                </span> --}}
             </form>
-            {{-- <script>
-                $(document).ready(function (){
-                    $('#search_filter').on('change',function(){
-                    let id = $(this).val();
-
-                    if(id == '1'){
-                        console.log(id);
-                        $('#text-input-search').removeClass('d-none');
-                        $('#select-state').removeClass(' d-none');
-                        $('#select-state').addClass('js-basic-single');
-                    }
-                    else if(id == '2'){
-                        $('#select-state').addClass(' d-none');
-                        $('#select-state').removeClass('js-basic-single');
-                        $('#text-input-search').addClass(' d-none');
-                    }
-                });
-                });
-            </script> --}}
+        </div>
+        <div class="container text-end">
+            <a href="#Add" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+                <i class='bx bx-calendar-plus' ></i>
+                Apply Leave
+            </a>
         </div>
     </div>
     <div class="row mt-2" id="form_submit">
@@ -151,7 +142,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a class="dropdown-item bg-primary text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     {{-- <li class="mt-1">
@@ -166,7 +157,7 @@
                                     </li>
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-x me-2 pt-1'></i>Approve
+                                            <i class='bx bx-check me-2 pt-1' ></i>Approve
                                         </a>
                                         {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
                                             <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
@@ -180,7 +171,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     <li class="mt-1">
@@ -198,7 +189,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     {{-- <li class="mt-1">
@@ -213,7 +204,7 @@
                                     </li>
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-x me-2 pt-1'></i>Approve
+                                            <i class='bx bx-check me-2 pt-1' ></i>Approve
                                         </a>
                                         {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
                                             <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
@@ -227,7 +218,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                 </ul>
@@ -238,7 +229,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                 </ul>
@@ -264,10 +255,7 @@
                                     <div class="modal-body">
                                         <div class="container-fluid text-start" style="">
                                             <div class="row">
-                                                <div class="col-lg-2 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                    <h2></h2>
-                                                </div>
-                                                <div class="col-lg-10 col-md-12 col-sm-12">
+                                                <div class="col ">
                                                     <div class="row">
                                                         <div class="col">
                                                             <label for="employee">
@@ -360,7 +348,7 @@
                                                     <div class="row mt-2">
                                                         <div class="col">
                                                             @if (!empty($leave_application->attachment))
-                                                                <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                                <a target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                             @else
                                                                 <label for="">No Attachment</label>
                                                             @endif
@@ -461,6 +449,13 @@
                                     <div class="modal-footer">
                                         <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-primary text-center">View more details</a>
                                         <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
+                                        <a class="btn btn-sm btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave_application->reference_number }}">
+                                            <i class='bx bx-x me-2 pt-1'></i>Reject
+                                        </a>
+                                        <a class="btn btn-sm btn-success" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
+                                            <i class='bx bx-check' ></i>
+                                            Approve
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -478,10 +473,7 @@
                                         <div class="modal-body">
                                             <div class="container-fluid text-start">
                                                 <div class="row">
-                                                    <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                        <h2></h2>
-                                                    </div>
-                                                    <div class="col-lg-9 col-md-12 col-sm-12">
+                                                    <div class="col ">
                                                         <div class="row">
                                                             <div class="col">
                                                                 <label for="employee">
@@ -579,7 +571,7 @@
                                                         <div class="row mt-2">
                                                             <div class="col">
                                                                 @if (!empty($leave_application->attachment))
-                                                                    <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                                    <a target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                                 @else
                                                                     <label class="" for="attachment">
                                                                         <h6 class="">Attachment</h6>

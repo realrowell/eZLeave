@@ -10,7 +10,8 @@
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> --}}
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css?version=1.0.0') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/select2_style.css?version=1.0.2') }}" />
     {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
 
@@ -85,9 +86,9 @@
         color: rgb(44, 44, 44);
         transition: 0.5s;
         background-color: #f1f1f1;
-        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        /* background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
-        background-attachment: fixed;
+        background-attachment: fixed; */
       }
 
       a {
@@ -419,9 +420,9 @@
             </div>
         </div>
 
-        <div class="mb-5">
+        <div class="mb-0">
             <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
-                <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+                <div class="row  p-4 card shadow-sm align-self-stretch">
                     <div class="col ">
                         <div class="row">
                             <div class="col-lg-2 col-md-2 col-sm-12 p-2">
@@ -472,7 +473,6 @@
                     </div>
                 </div>
             </div>
-
             <script type="text/javascript">
                 $(".alert").delay(4000).slideUp(200, function() {
                       $(this).alert('close');
@@ -480,13 +480,13 @@
 
                 $(document).ready(function () {
                     $('.js-basic-single').select2({
-                        placeholder: "select option",
-                        selectOnClose: true,
+                        placeholder: "select here",
+                        selectOnClose: false,
                         width: 'resolve',
                     });
                 });
             </script>
-
+        </div>
         @yield('content')
     </div>
 

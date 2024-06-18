@@ -10,7 +10,7 @@
 @section('sub-content')
 
 <div class="row">
-    <div class="col mt-2">
+    <div class="col ">
       <h5>Leave Menu</h5>
     </div>
 </div>
@@ -75,7 +75,7 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                    <h3>HR Staff / Leave Management</h3>
+                    {{-- <h3>HR Staff / Leave Management</h3> --}}
                 </div>
                 <div class="col">
                     {{-- <div class="btn-group">
@@ -101,12 +101,12 @@
             </div>
         </div>
         <div class="col text-end align-items-end">
-            <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+            {{-- <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
                 <i data-toggle="tooltip" title="list view" class="add-icon" >
                     <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
                 </i>
                 Apply Leave
-            </a>
+            </a> --}}
         </div>
     </div>
 
@@ -138,8 +138,8 @@
                                                 </label>
                                                 <select class="form-select" id="employee" name="employee" required>
                                                     <option selected disabled value=""></option>
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -262,25 +262,27 @@
                                 $('#leavetype').append(`<option value="" disabled>No Leave Credits Available</option>`);
                             }
                             response.forEach(element => {
-                                $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title} - ${element['leave_days_credit']}</option>`);
+                                $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title}: ${element['leave_days_credit']}</option>`);
                             });
                         }
                     });
                 });
             });
         </script>
+</div>
 
-    <div class="sub-content mb-5" id="form_submit" >
-        @yield('sub-sub-content')
+<div class="row">
+    <div class="col">
+        <div class="sub-content" id="" >
+            @yield('sub-sub-content')
+        </div>
     </div>
+</div>
 
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none; z-index: 1060">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    <div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none; z-index: 1060">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-
-
+<div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none; z-index: 1060">
+    <span class="visually-hidden" >Loading...</span>
+</div>
+<div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none; z-index: 1060">
+    <span class="visually-hidden" >Loading...</span>
 </div>
 @endsection
