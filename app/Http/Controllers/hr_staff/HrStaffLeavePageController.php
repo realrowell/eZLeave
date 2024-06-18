@@ -145,10 +145,11 @@ class HrStaffLeavePageController extends Controller
         // dd($current_fiscal_year->fiscal_year_title);
 
         $data=[
-            'employees' => Employee::all()->where('status_id','sta-2001')
-                                        ->sortBy(function($employees, $key) {return $employees->users->last_name;})
-                                        ->where(function($employees, $key) {return $employees->users->status_id=='sta-2001';})
-                                        ->where(function($employees, $key) {return $employees->users->role_id=='rol-0003';}),
+            'employees' => Employee::where('status_id','sta-2001')
+                                        ->with('employee_positions.positions.subdepartments.departments')
+                                        // ->where(function($employees, $key) {return $employees->users->status_id=='sta-2001';})
+                                        // ->where(function($employees, $key) {return $employees->users->role_id=='rol-0003';})
+                                        ->get(),
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,

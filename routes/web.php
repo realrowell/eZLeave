@@ -134,9 +134,9 @@ Route::get('/hr/leave_management/leavetypes', [HrStaffLeavePageController::class
 // Route::get('/hr/update_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'update_leavetypes'])->name('update_leavetypes');
 // Route::get('/hr/delete_leavetypes/{leavetype_id}', [LeaveTypesController::class, 'delete_leavetypes'])->name('delete_leavetypes');
 Route::post('/hr/create_leavecredits', [LeaveCreditController::class, 'create_leavecredits'])->name('create_leavecredits');
-Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
+// Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
 Route::post('/hr/create_leavecredits', [LeaveCreditController::class, 'create_leavecredits'])->name('create_leavecredits');
-Route::get('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
+Route::post('/hr/update_leavecredits/{leavecredit_id}', [LeaveCreditController::class, 'update_leavecredits'])->name('update_leavecredits');
 Route::post('/hr/create_leaveapplication', [LeaveApplicationController::class, 'create_leaveapplication'])->name('create_leaveapplication');
 Route::post('/hr/update_leaveapplication/{leave_application_rn}', [LeaveApplicationController::class, 'update_leaveapplication'])->name('update_leaveapplication');
 Route::post('/hr/leave_management/approval/{leave_application_rn}', [LeaveApplicationController::class, 'leave_application_approval'])->name('leave_application_approval');
@@ -182,7 +182,7 @@ Route::get('/admin/accounts/{username}', [AdminPageController::class, 'admin_vis
 Route::get('/admin/accounts/admin/{username}', [AdminPageController::class, 'admin_visit_account_view'])->name('admin_visit_account_view');
 Route::get('/admin/accounts/update_view/{username}', [AdminPageController::class, 'admin_visit_account_update_view'])->name('admin_visit_account_update_view');
 Route::get('/admin/accounts/update/{username}', [AdminPageController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
-Route::patch('/admin/accounts/update/{user_id}/{employee_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
+Route::post('/admin/accounts/update/{user_id}/{employee_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
 Route::patch('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
 Route::get('/admin/accounts/visit/reset_password/{username}', [AccountManagementController::class, 'account_reset_password'])->name('account_reset_password');
 Route::get('/admin/accounts/admin/reset_password/{username}', [AccountManagementController::class, 'admin_account_reset_password'])->name('admin_account_reset_password');

@@ -6,9 +6,9 @@
 @section('menu_leave_types','text-dark')
 @section('sub-content')
 
-<div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
+{{-- <div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
     <span class="visually-hidden" >Loading...</span>
-</div>
+</div> --}}
 <div class="row">
     <div class="col mt-2">
       <h3>Leave Management HR Staff / Leave Credits</h3>
@@ -27,22 +27,22 @@
     </div>
 
     <!-- Add Leave Credits Modal -->
-        <div class="modal fade" id="AddLeaveCreditModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="AddLeaveCreditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
-                    <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApprove()">
+                    <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApplyForm()">
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" id="btn_modal_x_onApply" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body " id="form_container_onApply">
                             <div class="container-fluid text-start">
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
+                                    {{-- <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
                                         <h2></h2>
-                                    </div>
-                                    <div class="col-lg-8 col-md-12 col-sm-12">
+                                    </div> --}}
+                                    <div class="col">
                                         <div class="row">
                                             <div class="col">
                                                 <label for="employee">
@@ -83,7 +83,7 @@
                                                 <label for="credits">
                                                     <h6>Credits (Days)</h6>
                                                 </label>
-                                                <input type="number" step="0.5" class="form-control form-control-sm" id="credits" name="credits" placeholder="" required>
+                                                <input type="number" step="0.5" class="form-control form-control-sm" id="credits" name="credits" placeholder="" onchange="" required>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -128,8 +128,13 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                            <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
+                            <button type="button" class="btn btn-danger" id="btn_close_onApply" data-bs-dismiss="modal">Cancel</button>
+                            <button id="btn_apply" type="submit" class="btn btn-success">
+                                <div class="spinner-border spinner-border-sm text-light d-none" id="loading_spinner_apply" role="status">
+                                    <span class="visually-hidden" >Loading...</span>
+                                </div>
+                                Add
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -188,11 +193,11 @@
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
-                            <th>Position</th>
-                            <th>Sub-department</th>
+                            {{-- <th>Position</th>
+                            <th>Sub-department</th> --}}
                             <th>Department</th>
                             <th>Leave Type</th>
-                            <th>Leave Credits</th>
+                            <th>Balance</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -205,28 +210,29 @@
                                 {{ optional($employee_leavecredit->employees->users)->middle_name }}
                                 {{ optional($employee_leavecredit->employees->users->suffixes)->suffix_title }}
                             </td>
-                            <td>{{ optional(optional($employee_leavecredit->employees->employee_positions)->positions)->position_description }}</td>
-                            <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td>
-                            <td>{{ optional(optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</td>
+                            {{-- <td>{{ optional(optional($employee_leavecredit->employees->employee_positions)->positions)->position_description }}</td> --}}
+                            {{-- <td>{{ optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td> --}}
+                            {{-- <td>{{ optional(optional(optional(optional($employee_leavecredit->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</td> --}}
+                            <td>{{ $employee_leavecredit->employees->employee_positions->positions->subdepartments->departments->department_title }}</td>
                             <td>{{ optional($employee_leavecredit->leavetypes)->leave_type_title }}</td>
                             <td>{{ $employee_leavecredit->leave_days_credit }}</td>
                             <td class="d-flex gap-2">
                                 <a href="#" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#UpdateLeaveCreditModal{{ $employee_leavecredit->id }}">Update</a>
-                                <a href="{{ route('user_profile_leave',['username' => $employee_leavecredit->employees?->users?->user_name]) }}" class="btn-sm btn-primary">Leave-MS</a>
+                                <a href="{{ route('user_profile_leave',['username' => $employee_leavecredit->employees?->users?->user_name]) }}" class="btn-sm btn-primary">Details</a>
                             </td>
                         </tr>
 
                         {{-- Update Leave Credits Modal --}}
-                            <div class="modal fade" id="UpdateLeaveCreditModal{{ $employee_leavecredit->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal fade" id="UpdateLeaveCreditModal{{ $employee_leavecredit->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                     <div class="modal-content">
-                                        <form action="{{ route('update_leavecredits',['leavecredit_id'=>$employee_leavecredit->id]) }}" method="PATCH" onsubmit="onClickApprove()">
+                                        <form action="{{ route('update_leavecredits',['leavecredit_id'=>$employee_leavecredit->id]) }}" method="POST" onsubmit="onClickUpdateFormId('{{ $employee_leavecredit->id }}')">
                                             @csrf
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $employee_leavecredit->id }}" aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body">
+                                            <div class="modal-body" id="form_container_onUpdate{{ $employee_leavecredit->id }}">
                                                 <div class="container-fluid text-start">
                                                     <div class="row">
                                                         <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
@@ -263,6 +269,14 @@
                                                                     <input type="text" step="0.5" class="form-control" id="credits" name="credits" value="{{ $employee_leavecredit->fiscal_years->fiscal_year_title }}" disabled>
                                                                 </div>
                                                                 <div class="col">
+                                                                    <label for="expiration">
+                                                                        <h6>Expiration (for Offset)</h6>
+                                                                    </label>
+                                                                    <input type="date" class="form-control form-control-sm" name="expiration" id="expiration" value="{{ $employee_leavecredit->expiration }}" disabled>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-3">
+                                                                <div class="col">
                                                                     @if ($employee_leavecredit->show_on_employee == false)
                                                                         <div class="form-check form-switch mt-3">
                                                                             <input class="form-check-input" type="checkbox" id="show_on_employee2{{ $employee_leavecredit->id }}" name="show_on_employee" value="1">
@@ -281,8 +295,13 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                                                <button id="submit_button1" type="submit" class="btn btn-success" onclick="onClickApprove()" data-bs-dismiss="modal">Update</button>
+                                                <button type="button" class="btn btn-transparent" id="btn_close_onUpdate{{ $employee_leavecredit->id }}" data-bs-dismiss="modal">Cancel</button>
+                                                <button id="btn_update{{ $employee_leavecredit->id }}" type="submit" class="btn btn-success">
+                                                    <div class="spinner-border spinner-border-sm text-light d-none" id="loading_spinner_update{{ $employee_leavecredit->id }}" role="status">
+                                                        <span class="visually-hidden" >Loading...</span>
+                                                    </div>
+                                                    Update
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
