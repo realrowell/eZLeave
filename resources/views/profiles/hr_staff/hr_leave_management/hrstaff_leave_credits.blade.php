@@ -29,20 +29,25 @@
     <!-- Add Leave Credits Modal -->
         <div class="modal fade" id="AddLeaveCreditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
+                <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                     <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApplyForm()">
                         @csrf
-                        <div class="modal-header">
+                        {{-- <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
                             <button type="button" id="btn_modal_x_onApply" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                        </div> --}}
                         <div class="modal-body " id="form_container_onApply">
                             <div class="container-fluid text-start">
                                 <div class="row">
-                                    {{-- <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                        <h2></h2>
-                                    </div> --}}
                                     <div class="col">
+                                        <div class="row pt-3 pb-2">
+                                            <div class="col-9">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
+                                            </div>
+                                            <div class="col-3 text-end">
+                                                <button type="button" id="btn_modal_x_onApply" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <label for="employee">
@@ -83,7 +88,7 @@
                                                 <label for="credits">
                                                     <h6>Credits (Days)</h6>
                                                 </label>
-                                                <input type="number" step="0.5" class="form-control form-control-sm" id="credits" name="credits" placeholder="" onchange="" required>
+                                                <input type="number" step="0.1" class="form-control form-control-sm" id="credits" name="credits" placeholder="" onchange="" required>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -182,7 +187,7 @@
         <div class="row mt-3">
             <div class="table-wrapper">
                 <table id="data_table" class="table table-bordered table-hover bg-light table-sm compact ">
-                    <thead class="bg-success text-light border-light">
+                    <thead class="bg-success text-light border-light dataTables_wrapper">
                         <tr>
                             <th>Full Name</th>
                             {{-- <th>Position</th>
@@ -217,17 +222,21 @@
                         {{-- Update Leave Credits Modal --}}
                             <div class="modal fade" id="UpdateLeaveCreditModal{{ $employee_leavecredit->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content">
+                                    <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                                         <form action="{{ route('update_leavecredits',['leavecredit_id'=>$employee_leavecredit->id]) }}" method="POST" onsubmit="onClickUpdateFormId('{{ $employee_leavecredit->id }}')">
                                             @csrf
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $employee_leavecredit->id }}" aria-label="Close"></button>
-                                            </div>
                                             <div class="modal-body" id="form_container_onUpdate{{ $employee_leavecredit->id }}">
                                                 <div class="container-fluid text-start">
                                                     <div class="row">
                                                         <div class="col ">
+                                                            <div class="row pt-3 pb-2">
+                                                                <div class="col-9">
+                                                                    <h5 class="modal-title" id="staticBackdropLabel">Update Leave Credit</h5>
+                                                                </div>
+                                                                <div class="col-3 text-end">
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $employee_leavecredit->id }}" aria-label="Close"></button>
+                                                                </div>
+                                                            </div>
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <label for="employee">

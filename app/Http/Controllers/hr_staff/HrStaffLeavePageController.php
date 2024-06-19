@@ -78,7 +78,7 @@ class HrStaffLeavePageController extends Controller
                         ->orderBy('last_name', 'asc')
                         ->with(['employees'])
                         ->get();
-        $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)
+        $leave_applications = LeaveApplication::where('fiscal_year_id',$fiscal_year)
                                                 ->orderBy('created_at', 'desc')
                                                 ->with(['employees.users','statuses','approvers.users','second_approvers.users','leavetypes'])
                                                 ->paginate(20);

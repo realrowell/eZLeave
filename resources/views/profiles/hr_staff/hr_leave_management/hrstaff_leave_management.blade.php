@@ -113,28 +113,33 @@
     <!-- Apply leave Modal -->
         <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
+                <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
                         <span class="visually-hidden" >Loading...</span>
                     </div>
                     <form action="{{ route('create_leaveapplication') }}" method="POST" onsubmit="return submitButtonDisabled()" enctype="multipart/form-data" id="form_submit">
                         @csrf
                         @method('POST')
-                        <div class="modal-header">
+                        {{-- <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                        </div> --}}
                         <div class="modal-body" id="form_submit">
                             <div class="container-fluid text-start">
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                        <h2></h2>
-                                    </div>
-                                    <div class="col-lg-9 col-md-12 col-sm-12">
+                                    <div class="col ">
+                                        <div class="row pt-3 pb-2">
+                                            <div class="col-9">
+                                                <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
+                                            </div>
+                                            <div class="col-3 text-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <label for="employee">
-                                                    <h6 class="">For Employee</h6>
+                                                    <h6 class="">Employee</h6>
                                                 </label>
                                                 <select class="form-select" id="employee" name="employee" required>
                                                     <option selected disabled value=""></option>
