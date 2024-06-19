@@ -72,7 +72,6 @@
                 {{-- PROFILE Fields --}}
                 <form action="{{ route('admin_update_employee',['user_id'=>$user->id,'employee_id'=>$user->employees->id]) }}" method="POST" onsubmit="submitButtonDisabled()">
                     @csrf
-                    @method('PATCH')
                     <div class="row">
                         <div class="row mt-5">
                             <div class="col-lg-4 col-md-3 col-sm-12">

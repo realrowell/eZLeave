@@ -7,16 +7,16 @@
 @section('sub_menu_all','bg-selected-primary text-light')
 @section('sub-sub-content')
 {{-- Leave application Table --}}
-<div class="row bg-light p-3 m-1 shadow" id="form_submit_1">
-    <div class="row">
-        <div class="col">
+<div class="row bg-light p-3 shadow">
+    <div class="d-lg-flex d-md-flex d-sm-block ">
+        <div class="container">
             <div class="row">
                 <div class="col">
                     <h5>Leave Management / All</h5>
                 </div>
                 <div class="col">
                     <div class="btn-group">
-                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Fiscal Year:
                             @if (Request()->fiscal_year == null)
                                 {{ $current_fiscal_year->fiscal_year_title }}
@@ -37,43 +37,34 @@
                 </div>
             </div>
         </div>
-        <div class="col">
-            <form action="{{ route('hrstaff_leave_management_search') }}" class="input-group">
+        <div class="container">
+            <form action="{{ route('hrstaff_leave_management_search') }}" >
                 {{-- @csrf --}}
-                <select class="form-control js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
-                    <option value="" selected disabled>Input here</option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
-                    @endforeach
-                </select>
+                <div class="container-fluid" style="width: clamp(40vw, 75%, 50vw)">
+                    <div class="d-flex gap-3">
+                        <select class="w-75 js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
+                            <option value="" selected disabled>Input here</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" id="search_btn" class="btn btn-sm btn-primary" onclick="onClickLinkSubmit()"><i class='bx bx-search me-1'></i>Search</button>
+                    </div>
+                </div>
                 {{-- <input class="form-control d-none" type="text" name="search_input" id="text-input-search" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here"> --}}
-                <span>
+                {{-- <span>
                     <select class="form-select form-select-sm" name="search_filter" id="search_filter" aria-label="Default select example" required>
                         <option value="2">Employee Name</option>
-                        {{-- <option value="1">Reference #</option> --}}
+                        <option value="1">Reference #</option>
                     </select>
-                </span>
-                <button type="submit" id="search_btn" class="btn btn-sm btn-primary disabled" onclick="onClickLinkSubmit()">Search</button>
+                </span> --}}
             </form>
-            {{-- <script>
-                $(document).ready(function (){
-                    $('#search_filter').on('change',function(){
-                    let id = $(this).val();
-
-                    if(id == '1'){
-                        console.log(id);
-                        $('#text-input-search').removeClass('d-none');
-                        $('#select-state').removeClass(' d-none');
-                        $('#select-state').addClass('js-basic-single');
-                    }
-                    else if(id == '2'){
-                        $('#select-state').addClass(' d-none');
-                        $('#select-state').removeClass('js-basic-single');
-                        $('#text-input-search').addClass(' d-none');
-                    }
-                });
-                });
-            </script> --}}
+        </div>
+        <div class="container text-end">
+            <a href="#Add" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+                <i class='bx bx-calendar-plus' ></i>
+                Apply Leave
+            </a>
         </div>
     </div>
     <div class="row mt-2" id="form_submit">
@@ -82,17 +73,17 @@
                 {{-- <h5>Pending Approval</h5> --}}
                 <thead class="bg-success text-light border-light">
                     <tr>
-                        <th>Reference Number</th>
-                        <th>Employee</th>
-                        <th>Leave Type</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Duration (days)</th>
-                        <th>Filed at</th>
+                        <th class="fw-normal">Reference Number</th>
+                        <th class="fw-normal">Employee</th>
+                        <th class="fw-normal">Leave Type</th>
+                        <th class="fw-normal">Start date</th>
+                        <th class="fw-normal">End date</th>
+                        <th class="fw-normal">Duration (days)</th>
+                        <th class="fw-normal">Filed at</th>
                         {{-- <th>Approver</th>
                         <th>Second Approver</th> --}}
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th class="fw-normal">Status</th>
+                        <th class="fw-normal">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,15 +123,15 @@
                         </td> --}}
                         <td>
                             @if ($leave_application->status_id == 'sta-1001')
-                                <span class="badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1002')
-                                <span class="badge bg-success rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-success rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1003')
-                                <span class="badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1004')
-                                <span class="badge bg-danger rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-danger rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1005')
-                                <span class="badge text-dark bg-warning rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge text-dark bg-warning rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @endif
                         </td>
                         <td class="d-flex gap-2 pb-3">
@@ -151,7 +142,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a class="dropdown-item bg-primary text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     {{-- <li class="mt-1">
@@ -166,7 +157,7 @@
                                     </li>
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-x me-2 pt-1'></i>Approve
+                                            <i class='bx bx-check me-2 pt-1' ></i>Approve
                                         </a>
                                         {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
                                             <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
@@ -180,7 +171,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     <li class="mt-1">
@@ -198,7 +189,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                     {{-- <li class="mt-1">
@@ -213,7 +204,7 @@
                                     </li>
                                     <li class="mt-1">
                                         <a class="dropdown-item bg-success text-light pb-2" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-x me-2 pt-1'></i>Approve
+                                            <i class='bx bx-check me-2 pt-1' ></i>Approve
                                         </a>
                                         {{-- <a class="dropdown-item bg-success text-light pb-2" href="{{ route('leave_application_approval', $leave_application->reference_number) }}" onclick="onClickUpdateSubmit()">
                                             <i class='bx bxs-check-circle me-2 pt-1' ></i>Approve
@@ -227,7 +218,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                 </ul>
@@ -238,7 +229,7 @@
                                 <ul class="dropdown-menu shadow-lg">
                                     <li>
                                         <a href="#" class="dropdown-item bg-primary text-light pb-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">
-                                            <i class='bx bx-align-middle me-2 pt-1' ></i>View Details
+                                            <i class='bx bx-detail me-2 pt-1'></i>View Details
                                         </a>
                                     </li>
                                 </ul>
@@ -248,26 +239,21 @@
                     <!-- leave details Modal -->
                         <div class="modal fade" id="detailsModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <h5 class="modal-title">Leave Details</h5>
-                                                </div>
-                                                <div class="col text-end">
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                                     <div class="modal-body">
-                                        <div class="container-fluid text-start" style="">
+                                        <div class="container-fluid text-start">
                                             <div class="row">
-                                                <div class="col-lg-2 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                    <h2></h2>
-                                                </div>
-                                                <div class="col-lg-10 col-md-12 col-sm-12">
+                                                <div class="col ">
+                                                    <div class="row pt-3">
+                                                        <div class="col-9">
+                                                            <label for="employee">
+                                                                <h2 class="">Leave Details</h2>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-3 text-end">
+                                                            <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
+                                                        </div>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col">
                                                             <label for="employee">
@@ -360,7 +346,7 @@
                                                     <div class="row mt-2">
                                                         <div class="col">
                                                             @if (!empty($leave_application->attachment))
-                                                                <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                                <a target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                             @else
                                                                 <label for="">No Attachment</label>
                                                             @endif
@@ -459,8 +445,64 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-primary text-center">View more details</a>
-                                        <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button>
+                                        {{-- <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-primary text-center">View more details</a>
+                                        <button type="button" class="btn btn-light border-primary" data-bs-dismiss="modal">Close</button> --}}
+
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                @if ($leave_application->status_id == 'sta-1001')
+                                                    <div class="col text-start">
+                                                        <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-outline-primary ">View details</a>
+                                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave_application->reference_number }}">
+                                                            Reject
+                                                        </a>
+                                                        <a class="btn btn-success" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
+                                                            Approve
+                                                        </a>
+                                                    </div>
+                                                @elseif($leave_application->status_id == 'sta-1002')
+                                                    <div class="col text-start">
+                                                        <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-outline-primary ">View details</a>
+                                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#cancelLeaveModal{{ $leave_application->reference_number }}">
+                                                            Cancel
+                                                        </a>
+                                                    </div>
+                                                @elseif($leave_application->status_id == 'sta-1003')
+                                                    <div class="col text-start">
+                                                        <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-outline-primary ">View details</a>
+                                                        <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#rejectLeaveModal{{ $leave_application->reference_number }}">
+                                                            Reject
+                                                        </a>
+                                                        <a class="btn btn-success" href="#" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_application->reference_number }}">
+                                                            Approve
+                                                        </a>
+                                                    </div>
+                                                @elseif($leave_application->status_id == 'sta-1004')
+                                                    <div class="col text-start">
+                                                        <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-outline-primary ">View details</a>
+                                                    </div>
+                                                @elseif($leave_application->status_id == 'sta-1005')
+                                                    <div class="col text-start">
+                                                        <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-outline-primary ">View details</a>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -469,24 +511,24 @@
                     <!-- update details Modal -->
                         <div class="modal fade" id="updatedetailsModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
+                                <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
+                                    {{-- <div class="modal-header">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="{{ route('update_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
+                                    </div> --}}
+                                    <form action="{{ route('update_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="onClickUpdateLeaveId({{ $leave_application->reference_number }})" enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
-                                            <div class="container-fluid text-start">
+                                            <div class="container-fluid text-start" id="form_container_onUpdate{{ $leave_application->reference_number }}">
                                                 <div class="row">
-                                                    <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                        <h2></h2>
-                                                    </div>
-                                                    <div class="col-lg-9 col-md-12 col-sm-12">
-                                                        <div class="row">
-                                                            <div class="col">
+                                                    <div class="col ">
+                                                        <div class="row pt-3">
+                                                            <div class="col-9">
                                                                 <label for="employee">
                                                                     <h2 class="">Update Leave Details</h2>
                                                                 </label>
+                                                            </div>
+                                                            <div class="col-3 text-end">
+                                                                <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onUpdate{{ $leave_application->reference_number }}"></button>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -539,11 +581,11 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="row mt-2 text-end">
+                                                        {{-- <div class="row mt-2 text-end">
                                                             <div class="col">
                                                                 <a href="{{ route('hr_leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" target="_blank" class="btn btn-sm btn-primary">Update Date</a>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="row">
                                                             <div class="col">
                                                                 <label for="">Duration (days)</label>
@@ -579,7 +621,7 @@
                                                         <div class="row mt-2">
                                                             <div class="col">
                                                                 @if (!empty($leave_application->attachment))
-                                                                    <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                                    <a target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                                 @else
                                                                     <label class="" for="attachment">
                                                                         <h6 class="">Attachment</h6>
@@ -642,8 +684,13 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" onclick="onClickUpdateSubmit()">Update</button>
+                                            <button type="button" class="btn btn-transparent" id="btn_close_onUpdate{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-success" id="btn_update{{ $leave_application->reference_number }}">
+                                                <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_update{{ $leave_application->reference_number }}">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                Update
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -653,19 +700,19 @@
                     <!-- reject leave Modal -->
                         <div class="modal fade" id="rejectLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('leave_application_rejection', $leave_application->reference_number) }}" method="POST" onsubmit="onClickApprove()">
+                                <form action="{{ route('leave_application_rejection', $leave_application->reference_number) }}" method="POST" onsubmit="onClickRejectId('{{ $leave_application->reference_number }}')">
                                     @csrf
-                                    <div class="modal-content" >
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onReject{{ $leave_application->reference_number }}"></button>
-                                        </div>
+                                    <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0" >
                                         <div class="modal-body">
                                             <div class="container-fluid text-start" id="form_container_onReject{{ $leave_application->reference_number }}" >
-                                                <div class="row">
-                                                    <div class="col">
+                                                <div class="row pt-3">
+                                                    <div class="col-9">
                                                         <label for="employee">
                                                             <h4 class="">CONFIRM LEAVE REJECTION</h4>
                                                         </label>
+                                                    </div>
+                                                    <div class="col-3 text-end">
+                                                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -692,7 +739,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <button type="button" class="btn btn-transparent " id="btn_close_onReject{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger disabled" id="btn_reject{{ $leave_application->reference_number }}" onclick="onClickRejectId('{{ $leave_application->reference_number }}')">
+                                                    <button type="submit" class="btn btn-danger disabled" id="btn_reject{{ $leave_application->reference_number }}" >
                                                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_reject{{ $leave_application->reference_number }}">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div>
@@ -709,19 +756,19 @@
                     <!-- cancel leave Modal -->
                         <div class="modal fade" id="cancelLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <form action="{{ route('leave_application_cancellation', $leave_application->reference_number) }}" method="POST" >
+                                <form action="{{ route('leave_application_cancellation', $leave_application->reference_number) }}" method="POST" onsubmit="onClickCancelId('{{ $leave_application->reference_number }}')">
                                     @csrf
-                                    <div class="modal-content" >
-                                        <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onCancel{{ $leave_application->reference_number }}"></button>
-                                        </div>
+                                    <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0" >
                                         <div class="modal-body">
                                             <div class="container-fluid text-start" id="form_container_onCancel{{ $leave_application->reference_number }}" >
-                                                <div class="row">
-                                                    <div class="col">
+                                                <div class="row pt-3">
+                                                    <div class="col-9">
                                                         <label for="employee">
                                                             <h4 class="">CONFIRM LEAVE CANCELLATION</h4>
                                                         </label>
+                                                    </div>
+                                                    <div class="col-3 text-end">
+                                                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -748,7 +795,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <button type="button" class="btn btn-transparent " id="btn_close_onCancel{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger disabled" id="btn_cancel{{ $leave_application->reference_number }}" onclick="onClickCancelId('{{ $leave_application->reference_number }}')">
+                                                    <button type="submit" class="btn btn-danger disabled" id="btn_cancel{{ $leave_application->reference_number }}" >
                                                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_cancel{{ $leave_application->reference_number }}">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div>
@@ -764,24 +811,27 @@
                     {{-- end cancel leave Modal --}}
                     <!-- approve leave Modal -->
                         <div class="modal fade" id="approveLeaveModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog  modal-dialog-centered positions-relative" id="form_container" style="opacity: 1">
+                            <div class="modal-dialog modal-dialog-centered positions-relative" id="form_container" style="opacity: 1">
                                 {{-- <div class="spinner-border text-primary position-absolute d-none" id="loading_spinner_approve{{ $leave_application->reference_number }}" role="status" >
                                     <span class="visually-hidden" >Loading...</span>
                                 </div> --}}
 
-                                <form action="{{ route('leave_application_approval', $leave_application->reference_number) }}" method="POST" id="form_submit_approve">
+                                <form action="{{ route('leave_application_approval', $leave_application->reference_number) }}" method="POST" id="form_submit_approve" onsubmit="onClickApproveId('{{ $leave_application->reference_number }}')">
                                     @csrf
-                                    <div class="modal-content" >
-                                        <div class="modal-header">
+                                    <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0" >
+                                        {{-- <div class="modal-header">
                                             <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
-                                        </div>
+                                        </div> --}}
                                         <div class="modal-body">
                                             <div class="container-fluid text-start" id="form_container{{ $leave_application->reference_number }}" >
-                                                <div class="row">
-                                                    <div class="col">
+                                                <div class="row pt-3">
+                                                    <div class="col-9">
                                                         <label for="employee">
                                                             <h4 class="">CONFIRM LEAVE APPROVAL</h4>
                                                         </label>
+                                                    </div>
+                                                    <div class="col-3 text-end">
+                                                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x{{ $leave_application->reference_number }}"></button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -808,7 +858,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <button type="button" class="btn btn-transparent " id="btn_close{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-success disabled" id="btn_submit{{ $leave_application->reference_number }}" onclick="onClickApproveId('{{ $leave_application->reference_number }}')">
+                                                    <button type="submit" class="btn btn-success disabled" id="btn_submit{{ $leave_application->reference_number }}" >
                                                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_approve{{ $leave_application->reference_number }}">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div>
@@ -821,17 +871,6 @@
                                 </form>
                             </div>
                         </div>
-                        {{-- <script>
-                            $(document).ready(function(){
-                                $('#form_submit_approve').submit(function(){
-                                    $('#loading_spinner_approve').removeClass('d-none');
-                                    $('#btn_submit').addClass(' disabled');
-                                    // $('#form_container').css({"opacity": "0.8"});
-                                    $('#approveLeaveModal')+id.modal('toggle');
-                                });
-                            });
-                        </script> --}}
-                    {{-- end approve leave Modal --}}
                     @empty
                         <tr>
                             <td>
@@ -840,6 +879,21 @@
                         </tr>
                     @endforelse
                 </tbody>
+                <tfoot class="bg-success text-light border-light">
+                    <tr>
+                        <th class="fw-normal">Reference Number</th>
+                        <th class="fw-normal">Employee</th>
+                        <th class="fw-normal">Leave Type</th>
+                        <th class="fw-normal">Start date</th>
+                        <th class="fw-normal">End date</th>
+                        <th class="fw-normal">Duration (days)</th>
+                        <th class="fw-normal">Filed at</th>
+                        {{-- <th>Approver</th>
+                        <th>Second Approver</th> --}}
+                        <th class="fw-normal">Status</th>
+                        <th class="fw-normal">Actions</th>
+                    </tr>
+                </tfoot>
             </table>
             <div class="row">
                 <div class="col">

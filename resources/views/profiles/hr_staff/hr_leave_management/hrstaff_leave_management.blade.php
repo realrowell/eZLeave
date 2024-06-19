@@ -10,7 +10,7 @@
 @section('sub-content')
 
 <div class="row">
-    <div class="col mt-2">
+    <div class="col ">
       <h5>Leave Menu</h5>
     </div>
 </div>
@@ -75,7 +75,7 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                    <h3>HR Staff / Leave Management</h3>
+                    {{-- <h3>HR Staff / Leave Management</h3> --}}
                 </div>
                 <div class="col">
                     {{-- <div class="btn-group">
@@ -101,45 +101,50 @@
             </div>
         </div>
         <div class="col text-end align-items-end">
-            <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+            {{-- <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
                 <i data-toggle="tooltip" title="list view" class="add-icon" >
                     <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
                 </i>
                 Apply Leave
-            </a>
+            </a> --}}
         </div>
     </div>
 
     <!-- Apply leave Modal -->
         <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
+                <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
                         <span class="visually-hidden" >Loading...</span>
                     </div>
                     <form action="{{ route('create_leaveapplication') }}" method="POST" onsubmit="return submitButtonDisabled()" enctype="multipart/form-data" id="form_submit">
                         @csrf
                         @method('POST')
-                        <div class="modal-header">
+                        {{-- <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                        </div> --}}
                         <div class="modal-body" id="form_submit">
                             <div class="container-fluid text-start">
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                        <h2></h2>
-                                    </div>
-                                    <div class="col-lg-9 col-md-12 col-sm-12">
+                                    <div class="col ">
+                                        <div class="row pt-3 pb-2">
+                                            <div class="col-9">
+                                                <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
+                                            </div>
+                                            <div class="col-3 text-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col">
                                                 <label for="employee">
-                                                    <h6 class="">For Employee</h6>
+                                                    <h6 class="">Employee</h6>
                                                 </label>
                                                 <select class="form-select" id="employee" name="employee" required>
                                                     <option selected disabled value=""></option>
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -262,25 +267,27 @@
                                 $('#leavetype').append(`<option value="" disabled>No Leave Credits Available</option>`);
                             }
                             response.forEach(element => {
-                                $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title} - ${element['leave_days_credit']}</option>`);
+                                $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title}: ${element['leave_days_credit']}</option>`);
                             });
                         }
                     });
                 });
             });
         </script>
+</div>
 
-    <div class="sub-content mb-5" id="form_submit" >
-        @yield('sub-sub-content')
+<div class="row">
+    <div class="col">
+        <div class="sub-content" id="" >
+            @yield('sub-sub-content')
+        </div>
     </div>
+</div>
 
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none; z-index: 1060">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    <div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none; z-index: 1060">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-
-
+<div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none; z-index: 1060">
+    <span class="visually-hidden" >Loading...</span>
+</div>
+<div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none; z-index: 1060">
+    <span class="visually-hidden" >Loading...</span>
 </div>
 @endsection

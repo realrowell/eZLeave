@@ -473,11 +473,11 @@ h3{
 }
 
 .h6-label{
-    font-weight: 600;
-    color: rgb(105, 105, 105);
+    /* font-weight: 600; */
+    color: rgb(43, 43, 43);
 }
 
 .h4-value{
     font-weight: 500 !important;
-    color: rgb(201, 201, 201) !important;
+    color: rgb(43, 43, 43) !important;
 }

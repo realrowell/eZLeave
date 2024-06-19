@@ -112,10 +112,10 @@ class LeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            // $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
-            $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $fileNameToStore = 'leave.attachment.'.time().'.'.$fileExt;
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leaveapplication = LeaveApplication::create([
                 'leave_type_id' => $data['leavetype'],

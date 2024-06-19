@@ -1,7 +1,7 @@
-new DataTable('#loginlogs_table');
-new DataTable('#data_table',{
-    pagingType: 'first_last_numbers'
-});
+// new DataTable('#loginlogs_table');
+// new DataTable('#data_table',{
+//     pagingType: 'first_last_numbers'
+// });
 
 
 function submitButtonDisabled(){

@@ -10,7 +10,10 @@
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> --}}
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css?version=1.0.0') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/select2_style.css?version=1.0.2') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatable_style.css?version=1.0.1') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.css?version=1.0.1') }}" />
     {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
 
@@ -39,8 +42,8 @@
       rel="stylesheet"
     />
 
-    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    {{-- <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script> --}}
 
     {{-- TinyMCE Editor --}}
     {{-- <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
@@ -48,8 +51,9 @@
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.js?version=1.0.1') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js?version=1.0.2') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/spinners.js?version=1.0.0') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
     <link   href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -85,9 +89,9 @@
         color: rgb(44, 44, 44);
         transition: 0.5s;
         background-color: #f1f1f1;
-        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        /* background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
-        background-attachment: fixed;
+        background-attachment: fixed; */
       }
 
       a {
@@ -419,9 +423,9 @@
             </div>
         </div>
 
-        <div class="mb-5">
+        <div class="mb-0">
             <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
-                <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+                <div class="row  p-4 card shadow-sm align-self-stretch">
                     <div class="col ">
                         <div class="row">
                             <div class="col-lg-2 col-md-2 col-sm-12 p-2">
@@ -472,7 +476,6 @@
                     </div>
                 </div>
             </div>
-
             <script type="text/javascript">
                 $(".alert").delay(4000).slideUp(200, function() {
                       $(this).alert('close');
@@ -480,13 +483,46 @@
 
                 $(document).ready(function () {
                     $('.js-basic-single').select2({
-                        placeholder: "select option",
-                        selectOnClose: true,
+                        placeholder: "select here",
+                        selectOnClose: false,
                         width: 'resolve',
                     });
-                });
-            </script>
 
+                    $('#data_table').dataTable({
+                        order: [[0, 'asc']],
+                        pagingType: 'simple',
+                        renderer: {
+                            pagingButton: 'bootstrap',
+                            pagingContainer: 'bootstrap5'
+                        },
+                        autoFill: {
+                            columns: ':not(:first-child)'
+                        },
+                        language: {
+                            lengthMenu: 'Change the number of records to show _MENU_ ',
+                            paginate: {
+                                // next: 'Next >',
+                                // previous: '< Previous',
+                            }
+                        },
+                        // layout: {
+                        //     topStart: 'buttons'
+                        // },
+                        layout: {
+                            topEnd: {
+                                search: {
+                                    placeholder: 'Type here to filter the table',
+                                    text: 'Search'
+                                }
+                            }
+                        }
+                    }).css({ 'margin-top': '0em' });
+                });
+                // new DataTable('#data_table',{
+                //     pagingType: 'first_last_numbers'
+                // });
+            </script>
+        </div>
         @yield('content')
     </div>
 
@@ -509,9 +545,10 @@
 
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></scrip> --}}
         <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous">
+        </script>
     </footer>
 
 </body>

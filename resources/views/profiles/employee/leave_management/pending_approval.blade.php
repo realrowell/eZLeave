@@ -130,7 +130,7 @@
 <div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit">
+            <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit" onsubmit="onClickApplyLeave()">
                 @csrf
                 @method('POST')
                 <div class="modal-header">
@@ -243,7 +243,7 @@
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
                     <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
-                    <button id="btn_apply" type="submit" class="btn btn-success" onclick="onClickApplyLeave()">
+                    <button id="btn_apply" type="submit" class="btn btn-success" >
                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
                             <span class="visually-hidden">Loading...</span>
                         </div>

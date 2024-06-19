@@ -5,7 +5,7 @@
     <div class="row">
         <h5>Menu</h5>
     </div>
-    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+    <div class="row mb-2 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch @yield('menu_hr_dashboard')" style="min-height: 1rem" >
             <a href="{{ route('hrstaff_dashboard') }}" class="@yield('menu_hr_dashboard')">
                 <div class="col text-light-hover">
