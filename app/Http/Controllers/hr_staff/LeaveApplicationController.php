@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\hr_staff;
 
 use App\Http\Controllers\Controller;
+use App\Mail\hrstaff\LeaveAppForApproverMail;
+use App\Mail\hrstaff\LeaveAppForEmployeeMail;
+use App\Mail\hrstaff\LeaveApprovedForApproverMail;
+use App\Mail\hrstaff\LeaveApprovedForEmployeeMail;
+use App\Mail\hrstaff\LeaveApprovedForSecondApproverMail;
 use App\Mail\LeaveApprovalNotificationMail;
 use App\Models\Employee;
 use App\Models\EmployeeLeaveCredit;
@@ -205,7 +210,8 @@ class LeaveApplicationController extends Controller
             'employee_id' => $leaveapplication->employees->users->id,
         ]);
 
-        Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveApprovalNotificationMail($leaveapplication));
+        Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveAppForApproverMail($leaveapplication));
+        Mail::to($employee->users->email)->send(new LeaveAppForEmployeeMail($leaveapplication));
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
 
@@ -323,6 +329,8 @@ class LeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id,
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
+            Mail::to($leave_applications->employees->users->email)->send(new LeaveApprovedForEmployeeMail($leave_applications, $leave_approvals));
+
             if($leave_applications->status_id == 'sta-1001'){
                 $notification = Notification::create([
                     'title' => 'Leave Application has been Approved!',
@@ -332,6 +340,7 @@ class LeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id,
                     'employee_id' => $leave_applications->approvers->users->id,
                 ]);
+                Mail::to($leave_applications->approvers->users->email)->send(new LeaveApprovedForApproverMail($leave_applications, $leave_approvals));
                 if( $leave_applications->second_approver_id != null ){
                     $notification = Notification::create([
                         'title' => 'Leave Application has been Approved!',
@@ -341,6 +350,7 @@ class LeaveApplicationController extends Controller
                         'author_id' => auth()->user()->id,
                         'employee_id' => $leave_applications->second_approvers->users->id,
                     ]);
+                    Mail::to($leave_applications->second_approvers->users->email)->send(new LeaveApprovedForSecondApproverMail($leave_applications, $leave_approvals));
                 }
             }
             elseif($leave_applications->status_id == 'sta-1003'){
@@ -353,6 +363,7 @@ class LeaveApplicationController extends Controller
                         'author_id' => auth()->user()->id,
                         'employee_id' => $leave_applications->second_approvers->users->id,
                     ]);
+                    Mail::to($leave_applications->second_approvers->users->email)->send(new LeaveApprovedForSecondApproverMail($leave_applications, $leave_approvals));
                 }
             }
             // abort(419);

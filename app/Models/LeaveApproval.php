@@ -41,4 +41,7 @@ class LeaveApproval extends Model
     public function approvers(){
         return $this -> hasOne(User::class,'id','approver_id');
     }
+    public function users(){
+        return $this -> hasOne(User::class,'id','approver_id');
+    }
 }

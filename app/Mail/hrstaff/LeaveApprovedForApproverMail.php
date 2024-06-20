@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\hrstaff;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,22 +9,25 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LeaveApprovalNotificationMail extends Mailable implements ShouldQueue
+class LeaveApprovedForApproverMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public $leaveapplication;
     public $employee_name;
     public $leave_type;
-
+    public $approved_by_name;
+    public $reason;
     /**
      * Create a new message instance.
      */
-    public function __construct($leaveapplication)
+    public function __construct($leaveapplication, $leave_approvals)
     {
         $this->leave_type = $leaveapplication->leavetypes->leave_type_title;
         $this->employee_name = $leaveapplication->employees->users->last_name.", ".$leaveapplication->employees->users->first_name;
         $this->leaveapplication = $leaveapplication;
+        $this->approved_by_name = "Hr Staff (".$leave_approvals->users->email.")";
+        $this->reason = $leave_approvals->reason_note;
     }
 
     /**
@@ -33,7 +36,7 @@ class LeaveApprovalNotificationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Leave Application for your Approval',
+            subject: 'Leave Application has been Approved!',
         );
     }
 
@@ -43,7 +46,7 @@ class LeaveApprovalNotificationMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'email.leave_approver_forApproval',
+            view: 'email.hrstaff.leave_approved_forApprover',
         );
     }
 
