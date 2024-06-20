@@ -15,7 +15,7 @@
             </div>
             <div class="col">
                 <div class="btn-group">
-                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Fiscal Year:
                         @if (Request()->fiscal_year == null)
                             {{ $current_fiscal_year->fiscal_year_title }}
@@ -39,211 +39,6 @@
     <div class="col"></div>
 </div>
 <div class="row gap-3">
-    {{-- <div class="row">
-        <div class="col text-end align-items-end">
-            <div class="col text-end align-items-end">
-                <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
-                    <i data-toggle="tooltip" title="list view" class="add-icon" >
-                        <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
-                    </i>
-                    Give Leave Credits
-                </a>
-                <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
-                    <i data-toggle="tooltip" title="list view" class="add-icon" >
-                        <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
-                    </i>
-                    Apply Leave
-                </a>
-            </div>
-        </div>
-    </div> --}}
-
-    <!-- Add Leave Credits Modal -->
-        {{-- <div class="modal fade" id="AddLeaveCreditModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <form action="{{ route('create_leavecredits') }}" method="POST" onsubmit="onClickApprove()">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Give Leave Credit</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid text-start">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                        <h2></h2>
-                                    </div>
-                                    <div class="col-lg-8 col-md-12 col-sm-12">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="employee">
-                                                    <h6 class="">Employee</h6>
-                                                </label>
-                                                <select class="form-select" id="employee" name="employee" required>
-                                                    <option selected disabled value=""></option>
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}">{{ optional($employee->users)->last_name }}, {{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col">
-                                                <label class="" for="leavetype">
-                                                    <h6 class="">Leave Type</h6>
-                                                </label>
-                                                <select class="form-select" id="leavetype" name="leavetype" required>
-                                                    <option selected disabled value=""></option>
-                                                    @foreach ($leavetypes as $leavetype)
-                                                        <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <label for="credits">
-                                                    <h6>Credits (Days)</h6>
-                                                </label>
-                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col">
-                                                <label class="" for="leavetype">
-                                                    <h6 class="">Fiscal Year</h6>
-                                                </label>
-                                                <select class="form-select" id="fiscal_year" name="fiscal_year" required>
-                                                    <option selected value="{{ $current_fiscal_year->id }}">{{ $current_fiscal_year->fiscal_year_title }}</option>
-                                                    @foreach ($fiscal_years as $fiscal_year)
-                                                        @if ($fiscal_year->id != $current_fiscal_year->id)
-                                                            <option value="{{ $fiscal_year->id }}">{{ $fiscal_year->fiscal_year_title }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <label for="credits">
-                                                    <h6>Credits (Days)</h6>
-                                                </label>
-                                                <input type="number" step="0.5" class="form-control" id="credits" name="credits" placeholder="" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                            <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> --}}
-    {{-- End Add Leave Credits Modal --}}
-    <!-- Apply leave Modal -->
-    {{-- <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <form action="{{ route('create_leaveapplication') }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
-                    @csrf
-                    @method('POST')
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Apply Leave</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid text-start">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                    <h2></h2>
-                                </div>
-                                <div class="col-lg-8 col-md-12 col-sm-12">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label for="employee">
-                                                <h6 class="">For Employee</h6>
-                                            </label>
-                                            <select class="form-select" id="employee" name="employee" required>
-                                                <option selected disabled value=""></option>
-                                                @foreach ($employees as $employee)
-                                                    <option value="{{ $employee->id }}">{{ optional($employee->users)->first_name }} {{ optional($employee->users)->middle_name }} {{ optional($employee->users)->last_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <label class="" for="leavetype">
-                                                <h6 class="">Leave Type</h6>
-                                            </label>
-                                            <select class="form-select" id="leavetype" name="leavetype" required>
-                                                <option selected disabled value=""></option>
-                                                @foreach ($leavetypes as $leavetype)
-                                                    <option value="{{ $leavetype->id }}">{{ $leavetype->leave_type_title }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-6">
-                                            <label for="startdate">
-                                                <h6>Start date</h6>
-                                            </label>
-                                            <input type="datetime-local" class="form-control" id="startdate" name="startdate" placeholder="" required>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="enddate">
-                                                <h6>End date</h6>
-                                            </label>
-                                            <input type="datetime-local" class="form-control" id="enddate" name="enddate" placeholder="" required onchange="showPartDay()">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col " id="datelabel" style="display: none;">
-                                            <div class="form-check">
-                                                <label for="partOfDay_check" class="form-check-label" >Half Day?</label>
-                                                <input type="checkbox" class="form-check-input" id="partOfDay_check" name="partOfDay_check" value="0.5" onchange="showPartDay()">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <label for="">Duration (days)</label>
-                                            <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <label class="" for="attachment">
-                                                <h6 class="">Attachment</h6>
-                                            </label>
-                                            <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
-                                        </div>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col">
-                                            <label class="" for="reason">
-                                                <h6 class="">Reason / Note</h6>
-                                            </label>
-                                            <textarea class="form-control" id="reason" name="reason" rows="5" cols="50"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">Discard</button>
-                        <button id="submit_button2" type="submit" class="btn btn-success">Apply Leave</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-    {{-- End Apply leave Modal --}}
-
-
     <div class="container-fluid">
         <div class="row gap-3">
             <div class="col-md p-3 bg-light shadow">
@@ -251,7 +46,7 @@
                     <div class="row ">
                         <div class="col"><h5>Overview</h5></div>
                         <div class="col d-flex justify-content-end ">
-                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a>
+                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-outline-primary">see all</a>
                         </div>
                     </div>
                     <div class="container-fluid mb-4">
@@ -331,7 +126,7 @@
                 <h5>Employee Leave Credits Overview</h5>
             </div>
             <div class="col text-end">
-                <a href="{{ route('hrstaff_leave_credits') }}" class="btn-sm btn-primary">See All</a>
+                <a href="{{ route('hrstaff_leave_credits') }}" class="btn-sm btn-outline-primary">See All</a>
             </div>
         </div>
         <div class="row">
@@ -384,7 +179,7 @@
                 <h5>Leave Management Overview</h5>
             </div>
             <div class="col text-end">
-                <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">See All</a>
+                <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-outline-primary">See All</a>
             </div>
         </div>
         <div class="row">

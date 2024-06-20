@@ -61,7 +61,7 @@
             </form>
         </div>
         <div class="container text-end">
-            <a href="#Add" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+            <a href="#Add" class="btn btn-sm btn-primary pt-1 pb-2" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
                 <i class='bx bx-calendar-plus' ></i>
                 Apply Leave
             </a>
