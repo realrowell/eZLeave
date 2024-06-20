@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\hr_staff;
 
 use App\Http\Controllers\Controller;
+use App\Mail\LeaveApprovalNotificationMail;
 use App\Models\Employee;
 use App\Models\EmployeeLeaveCredit;
 use App\Models\EmployeePosition;
@@ -15,6 +16,7 @@ use App\Models\LeaveType;
 use App\Models\Notification;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class LeaveApplicationController extends Controller
@@ -203,6 +205,7 @@ class LeaveApplicationController extends Controller
             'employee_id' => $leaveapplication->employees->users->id,
         ]);
 
+        Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveApprovalNotificationMail($leaveapplication));
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
 
