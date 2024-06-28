@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'route_path' => 'admin/log-viewer',
+    'route_path' => env('LOG_VIEWER_ROUTE'),
 
     /*
     |--------------------------------------------------------------------------

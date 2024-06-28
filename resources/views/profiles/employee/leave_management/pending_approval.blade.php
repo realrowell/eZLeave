@@ -180,7 +180,9 @@
                                         <label for="startdate">
                                             <h6>Start date</h6>
                                         </label>
-                                        <input type="date" class="form-control" id="datetime_startdate" name="startdate" placeholder="" required onchange="showLeaveDuration()">
+                                        <input type="date" class="form-control" id="datetime_startdate" name="startdate" placeholder="" required onchange="showLeaveDuration()" novalidate>
+                                        <span class="invalid-feedback" id="error_startdate"></span>
+                                        <span class="valid-feedback" >looks good!</span>
                                     </div>
                                     <div class="col-6">
                                         <label for="enddate">
@@ -224,7 +226,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="attachment">
-                                            <h6 class="">Attachment</h6>
+                                            <h6 class="">Attachment (optional)</h6>
                                         </label>
                                         <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
                                     </div>
@@ -232,7 +234,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="reason">
-                                            <h6 class="">Reason / Note</h6>
+                                            <h6 class="">Reason / Note (optional)</h6>
                                         </label>
                                         <textarea class="form-control" id="reason" name="reason" rows="5" cols="50"></textarea>
                                     </div>

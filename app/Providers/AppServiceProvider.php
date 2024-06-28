@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
                     return false;
                 }
             }
-            elseif(!auth()->check()){
+            else{
                 return redirect(route('index'))->with('info','please login first');
             }
         });

@@ -53,6 +53,7 @@ function showLeaveDuration(){
     let enddate = new Date(document.getElementById("datetime_enddate").value);
     // window.alert( Math.floor((startdate - enddate)/(1000*60*60*24)));
     const currentDate = new Date();
+
     if(startdate.getTime() == enddate.getTime()){
         // document.getElementById('datelabel').style.display="block";
         document.getElementById('datelabel_start_am').style.display="block";
@@ -105,7 +106,21 @@ function showLeaveDuration(){
         document.getElementById('datelabel_end_pm').style.display="none";
         document.getElementById('partOfDay_check').checked = false;
         document.getElementById('datelabel').style.display="none";
-        document.getElementById('duration_input').value = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+        const duration = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
+
+        document.getElementById('duration_input').value = duration;
+    }
+
+    if(startdate.getDay() == 6 || startdate.getDay() == 0){
+        // document.getElementById("error_startdate").innerHTML = "Start date cannot be a weekend";
+        alert('Start date cannot be a weekend!');
+        document.getElementById('datetime_startdate').value="";
+    }
+    if(enddate.getDay() == 6 || enddate.getDay() == 0){
+        // document.getElementById("error_startdate").innerHTML = "Start date cannot be a weekend";
+        alert('End date cannot be a weekend!');
+        document.getElementById('datetime_enddate').value="";
+        document.getElementById('duration_input').value = 0;
     }
 
 }

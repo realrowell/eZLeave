@@ -363,8 +363,12 @@
                     <span class="nav_name">Leave Management</span>
                 </a>
                 <a href="{{ route('admin_org_menu') }}" class="nav_link @yield('sidebar_organization_active')">
-                    <i class="bx x-polaris-major-organization nav_icon">{{ svg('css-organisation') }}</i>
+                    <i class='bx nav_icon bx-buildings' ></i>
                     <span class="nav_name">Organization</span>
+                </a>
+                <a href="{{ env('LOG_VIEWER_ROUTE') }}" class="nav_link @yield('sidebar_policy_active')">
+                    <i class='bx nav_icon bx-file-find' ></i>
+                    <span class="nav_name">Log Viewer</span>
                 </a>
                 <a href="{{ route('admin_policy_menu') }}" class="nav_link @yield('sidebar_policy_active')">
                     <i class="ms-0" style="width: 25px">

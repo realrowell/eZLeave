@@ -515,7 +515,7 @@
                                     {{-- <div class="modal-header">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div> --}}
-                                    <form action="{{ route('update_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="onClickUpdateLeaveId({{ $leave_application->reference_number }})" enctype="multipart/form-data">
+                                    <form action="{{ route('update_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" enctype="multipart/form-data" onsubmit="onClickUpdateLeaveId({{ $leave_application->reference_number }})">
                                         @csrf
                                         <div class="modal-body">
                                             <div class="container-fluid text-start" id="form_container_onUpdate{{ $leave_application->reference_number }}">
