@@ -82,68 +82,66 @@
             <!-- leave details Modal -->
                 <div class="modal fade" id="detailsModal{{ $leave_application->reference_number }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col">
+                        <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
+                            <div class="modal-body">
+                                <div class="container-fluid text-start">
+                                    <div class="row pt-3">
+                                        <div class="col-9">
                                             <h5 class="modal-title">Leave Details</h5>
                                         </div>
-                                        <div class="col text-end">
+                                        <div class="col-3 text-end">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container-fluid text-start">
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                            <h2></h2>
-                                        </div>
-                                        <div class="col-lg-9 col-md-12 col-sm-12">
-                                            <div class="row">
+                                        <div class="col">
+                                            <div class="row pt-3">
                                                 <div class="col">
                                                     <label for="employee">
                                                         <h6 class="">Reference Number</h6>
                                                     </label>
-                                                    <h4>{{ $leave_application->reference_number }}</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ $leave_application->reference_number }}">
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row pt-2">
                                                 <div class="col">
                                                     <label class="" for="leavetype">
                                                         <h6 class="">Leave Type</h6>
                                                     </label>
-                                                    <h4>{{ optional($leave_application->leavetypes)->leave_type_title }}</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ optional($leave_application->leavetypes)->leave_type_title }}">
+                                                    {{-- <h4>{{ optional($leave_application->leavetypes)->leave_type_title }}</h4> --}}
                                                 </div>
                                                 <div class="col">
                                                     <label for="duration">
                                                         <h6>Duration</h6>
                                                     </label>
-                                                    <h4>{{ $leave_application->duration }}</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ $leave_application->duration }}">
+                                                    {{-- <h4>{{ $leave_application->duration }}</h4> --}}
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row pt-2">
                                                 <div class="col-6">
                                                     <label for="startdate">
                                                         <h6>Start date</h6>
                                                     </label>
-                                                    <h4>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} ({{ $leave_application->start_of_date_parts->day_part_title }})</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} ({{ $leave_application->start_of_date_parts->day_part_title }})">
+                                                    {{-- <h4>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} ({{ $leave_application->start_of_date_parts->day_part_title }})</h4> --}}
                                                 </div>
                                                 <div class="col-6">
                                                     <label for="enddate">
                                                         <h6>End date</h6>
                                                     </label>
-                                                    <h4>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} ({{ $leave_application->end_of_date_parts->day_part_title }})</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} ({{ $leave_application->end_of_date_parts->day_part_title }})">
+                                                    {{-- <h4>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} ({{ $leave_application->end_of_date_parts->day_part_title }})</h4> --}}
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row pt-2">
                                                 <div class="col">
                                                     <label for="enddate">
                                                         <h6>Date filed</h6>
                                                     </label>
-                                                    <h4>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('M d, Y h:i:s A') }}</h4>
+                                                    <input type="text" class="form-control" disabled value="{{ \Carbon\Carbon::parse($leave_application->created_at)->format('M d, Y - h:i:s A') }}">
+                                                    {{-- <h4>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('M d, Y h:i:s A') }}</h4> --}}
                                                 </div>
                                             </div>
                                             <div class="row mt-4">
@@ -151,17 +149,17 @@
                                                     <label for="employee">
                                                         <h6 class="">Approver</h6>
                                                     </label>
-                                                    <h4>
+                                                    <h5>
                                                         {{ optional($leave_application->approvers->users)->first_name }}
                                                         {{ optional($leave_application->approvers->users)->last_name }}
                                                         {{ optional($leave_application->approvers->users->suffixes)->suffix_title }}
-                                                    </h4>
+                                                    </h5>
                                                 </div>
                                                 <div class="col">
                                                     <label for="employee">
                                                         <h6 class="">Second Approver</h6>
                                                     </label>
-                                                    <h4>
+                                                    <h5>
                                                         @if ($leave_application->second_approver_id == null)
                                                             N/A
                                                         @else
@@ -169,15 +167,15 @@
                                                             {{ optional($leave_application->second_approvers->users)->last_name }}
                                                             {{ optional($leave_application->second_approvers->users->suffixes)->suffix_title }}
                                                         @endif
-                                                    </h4>
+                                                    </h5>
                                                 </div>
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col">
                                                     @if (!empty($leave_application->attachment))
-                                                        <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                        <a class="btn btn-sm btn-primary rounded-0" target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                     @else
-                                                        <label for="">No Attachment</label>
+                                                        <a class="btn btn-sm btn-primary disabled rounded-0" >No Attachment</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -224,7 +222,7 @@
                                                 <div class="col">
                                                     <label class="" for="update">
                                                         @if ($leave_application->status_id == 'sta-1001')
-                                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updatedetailsModal{{ $leave_application->reference_number }}">
+                                                            <button type="button" class="btn btn-sm btn-primary rounded-0" data-bs-toggle="modal" data-bs-target="#updatedetailsModal{{ $leave_application->reference_number }}">
                                                                 Update Application
                                                             </button>
                                                         @endif
@@ -237,11 +235,11 @@
                             </div>
                             <div class="modal-footer">
                                 @if ($leave_application->status_id == 'sta-1001')
-                                    <button class="btn btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                    <button class="btn btn-danger text-center rounded-0" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel Application</button>
                                 @else
-                                    <button class="btn btn-danger text-center" disabled>Cancel</button>
+                                    <button class="btn btn-danger text-center rounded-0" disabled>Cancel</button>
                                 @endif
-                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -250,24 +248,21 @@
             <!-- update details Modal -->
                 <div class="modal fade" id="updatedetailsModal{{ $leave_application->reference_number }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $leave_application->reference_number }}" aria-label="Close"></button>
-                            </div>
+                        <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
                             <form action="{{ route('update_employee_leaveapplication',['leave_application_rn'=>$leave_application->reference_number]) }}" method="POST" onsubmit="submitButtonDisabled()" enctype="multipart/form-data">
                                 @csrf
                                 <div class="modal-body">
                                     <div class="container-fluid text-start">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-12 col-sm-12 bg-pattern-1 text-light text-center justify-content-center align-items-center">
-                                                <h2></h2>
-                                            </div>
-                                            <div class="col-lg-9 col-md-12 col-sm-12" id="form_container_onUpdate{{ $leave_application->reference_number }}">
+                                        <div class="row pt-3">
+                                            <div class="col " id="form_container_onUpdate{{ $leave_application->reference_number }}">
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col-9">
                                                         <label for="employee">
                                                             <h2 class="">Update Leave Details</h2>
                                                         </label>
+                                                    </div>
+                                                    <div class="col-3 text-end">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $leave_application->reference_number }}" aria-label="Close"></button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -275,7 +270,7 @@
                                                         <label for="employee">
                                                             <h6 class="">Reference Number</h6>
                                                         </label>
-                                                        <h4>{{ $leave_application->reference_number }}</h4>
+                                                        <input type="text" class="form-control" disabled value="{{ $leave_application->reference_number }}">
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
@@ -291,13 +286,13 @@
                                                         <label for="startdate">
                                                             <h6>Start date</h6>
                                                         </label>
-                                                        <input type="date" class="form-control" id="datetime_startdate_update" name="startdate" placeholder="" value="{{ \Carbon\Carbon::parse($leave_application->start_date)->format('Y-m-d') }}" disabled>
+                                                        <input type="date" class="form-control" id="startdate_onUpdate{{ $leave_application->reference_number }}" name="startdate" value="{{ \Carbon\Carbon::parse($leave_application->start_date)->format('Y-m-d') }}" disabled>
                                                     </div>
                                                     <div class="col-6">
                                                         <label for="enddate">
                                                             <h6>End date</h6>
                                                         </label>
-                                                        <input type="date" class="form-control" id="datetime_enddate_update" name="enddate" placeholder="" value="{{ \Carbon\Carbon::parse($leave_application->end_date)->format('Y-m-d') }}" disabled>
+                                                        <input type="date" class="form-control" id="enddate_onUpdate{{ $leave_application->reference_number }}" name="enddate" value="{{ \Carbon\Carbon::parse($leave_application->end_date)->format('Y-m-d') }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -312,15 +307,15 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="row mt-2 text-end">
+                                                {{-- <div class="row mt-2 text-end">
                                                     <div class="col">
                                                         <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_application->reference_number]) }}" class="btn btn-sm btn-primary">Update Date</a>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="">Duration (days)</label>
-                                                        <input type="text" name="duration" placeholder="" id="duration_input_up" class="form-control" value="{{ $leave_application->duration }}" disabled/>
+                                                        <input type="text" name="duration" placeholder="" id="duration_onUpdate{{ $leave_application->reference_number }}" class="form-control" value="{{ $leave_application->duration }}" disabled/>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-4">
@@ -352,7 +347,7 @@
                                                 <div class="row mt-2">
                                                     <div class="col">
                                                         @if (!empty($leave_application->attachment))
-                                                            <a target="_blank" href="{{ asset('storage/images/'.$leave_application->attachment) }}">View Attachment</a>
+                                                            <a class="btn btn-sm btn-primary rounded-0" target="_blank" href="{{ asset('storage/images/leave_attachment/'.$leave_application->attachment) }}">View Attachment</a>
                                                         @else
                                                             <label class="" for="attachment">
                                                                 <h6 class="">Attachment</h6>
@@ -378,7 +373,7 @@
                                                 </div>
                                                 <div class="row mt-1">
                                                     <div class="col">
-                                                        <button class="btn btn-sm btn-primary" id="addNoteButton" type="button" data-bs-toggle="collapse" data-bs-target="#addNote" aria-expanded="false" aria-controls="addNote">
+                                                        <button class="btn btn-sm btn-primary rounded-0" id="addNoteButton" type="button" data-bs-toggle="collapse" data-bs-target="#addNote" aria-expanded="false" aria-controls="addNote">
                                                             Add Note
                                                         </button>
                                                     </div>
@@ -415,12 +410,12 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-transparent" id="btn_close_onUpdate{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success disabled" id="btn_update{{ $leave_application->reference_number }}" onclick="onClickUpdateLeaveId('{{ $leave_application->reference_number }}')">
+                                    <button type="button" class="btn btn-transparent rounded-0" id="btn_close_onUpdate{{ $leave_application->reference_number }}" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-success rounded-0 disabled" id="btn_update{{ $leave_application->reference_number }}" onclick="onClickUpdateLeaveId('{{ $leave_application->reference_number }}')">
                                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_update{{ $leave_application->reference_number }}">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>
-                                        Update
+                                        Update Application
                                     </button>
                                 </div>
                             </form>

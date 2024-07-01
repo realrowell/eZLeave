@@ -129,20 +129,28 @@
 <!-- Apply leave Modal -->
 <div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
             <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit" onsubmit="onClickApplyLeave()">
                 @csrf
                 @method('POST')
-                <div class="modal-header">
+                {{-- <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
-                </div>
+                </div> --}}
                 <div class="modal-body" id="form_container_onApply">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col text-center">
                             <svg width="80px" height="80px" viewBox="-2.4 -2.4 28.80 28.80">
                                 {{ svg('tabler-calendar-time') }}
                             </svg>
+                        </div>
+                    </div> --}}
+                    <div class="row pt-3">
+                        <div class="col-9">
+                            <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
+                        </div>
+                        <div class="col-3 text-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
                         </div>
                     </div>
                     <div class="container-fluid text-start">
@@ -151,7 +159,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="leavetype">
-                                            <h6 class="">Leave Type</h6>
+                                            <h6 class="">*Leave Type</h6>
                                         </label>
                                         <select class="form-select" id="leavetype" name="leavetype" required>
                                             <option selected disabled value=""></option>
@@ -178,7 +186,7 @@
                                 <div class="row mt-2">
                                     <div class="col-6">
                                         <label for="startdate">
-                                            <h6>Start date</h6>
+                                            <h6>*Start date</h6>
                                         </label>
                                         <input type="date" class="form-control" id="datetime_startdate" name="startdate" placeholder="" required onchange="showLeaveDuration()" novalidate>
                                         <span class="invalid-feedback" id="error_startdate"></span>
@@ -186,7 +194,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="enddate">
-                                            <h6>End date</h6>
+                                            <h6>*End date</h6>
                                         </label>
                                         <input type="date" class="form-control" id="datetime_enddate" name="enddate" placeholder="" required onchange="showLeaveDuration()">
                                     </div>
@@ -219,7 +227,10 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col">
-                                        <label for="">Duration (days)</label>
+                                        <label for="duration">Duration (days)</label>
+                                        <a class="m-2 fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="*If the date range includes a weekend, it will not be count in the application.">
+                                            <i class='bx bx-info-circle text-primary'></i>
+                                        </a>
                                         <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/>
                                     </div>
                                 </div>
@@ -245,18 +256,18 @@
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
                     <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
-                    <button id="btn_apply" type="submit" class="btn btn-success" >
+                    <button id="btn_apply" type="submit" class="btn btn-success rounded-0" >
                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        Apply Leave
+                        Create Application
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script>
+{{-- <script>
     $(document).ready(function(){
         $('#department').on('change',function(){
             let id = $(this).val();
@@ -308,7 +319,7 @@
             });
         });
     });
-</script>
+</script> --}}
 {{-- End Apply leave Modal --}}
 <div class="container-fluid mb-4 pb-5" id="profile_body">
     <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">

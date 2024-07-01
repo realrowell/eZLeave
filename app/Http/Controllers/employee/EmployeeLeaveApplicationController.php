@@ -176,7 +176,7 @@ class EmployeeLeaveApplicationController extends Controller
             $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leaveapplication = LeaveApplication::create([
                 'leave_type_id' => $data['leavetype'],
@@ -369,7 +369,7 @@ class EmployeeLeaveApplicationController extends Controller
             $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
             ->update([
