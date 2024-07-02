@@ -140,26 +140,16 @@
         </div>
     </div>
 </div>
-
+<x-employee.leave-app-modal>
+</x-employee.leave-app-modal>
 <!-- Apply leave Modal -->
-<div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+{{-- <div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
             <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit" onsubmit="onClickApplyLeave()">
                 @csrf
                 @method('POST')
-                {{-- <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
-                </div> --}}
                 <div class="modal-body" id="form_container_onApply">
-                    {{-- <div class="row">
-                        <div class="col text-center">
-                            <svg width="80px" height="80px" viewBox="-2.4 -2.4 28.80 28.80">
-                                {{ svg('tabler-calendar-time') }}
-                            </svg>
-                        </div>
-                    </div> --}}
                     <div class="row pt-3">
                         <div class="col-9">
                             <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
@@ -281,7 +271,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 {{-- <script>
     $(document).ready(function(){
         $('#department').on('change',function(){
