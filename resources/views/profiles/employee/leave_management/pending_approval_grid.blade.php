@@ -9,9 +9,13 @@
     @if ($leave_applications->isNotEmpty())
         @foreach ($leave_applications as $leave_application)
             <div class="col-lg-3 col-md-6 col-sm-10">
-                <div class="card w-100 p-2 shadow">
+                <div class="card w-100 p-2 shadow shadow-sm border border-end-0 border-start-0 border-bottom-0 border-warning border-5 rounded-0">
                     <div class="card-body">
-                        <h4 class="card-title text-center">{{ $leave_application->leavetypes->leave_type_title }}</h4>
+                        <div class="row ">
+                            <div class="col">
+                                <h4 class="card-title text-center">{{ $leave_application->leavetypes->leave_type_title }}</h4>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col">
                                 <p class="card-text" id="approval_p">Reference #:</p>
@@ -67,11 +71,11 @@
                         <div class="row">
                             <div class="col">
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
+                                    <button class="btn btn-sm btn-primary text-center rounded-0" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
                                     @if ($leave_application->status_id == 'sta-1001')
-                                        <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                        <button class="btn btn-sm btn-danger text-center rounded-0" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
                                     @else
-                                        <button class="btn btn-sm btn-danger text-center" disabled>Cancel</button>
+                                        <button class="btn btn-sm btn-danger text-center rounded-0" disabled>Cancel</button>
                                     @endif
                                 </div>
                             </div>
@@ -474,7 +478,7 @@
         </div>
     @endif
 
-    <div class="col-lg-3 col-md-6 col-sm-10">
+    {{-- <div class="col-lg-3 col-md-6 col-sm-10">
         <a href="#ApplyLeaveModal" class="text-dark" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
             <div class="card w-100 h-100 p-2 card-menu align-self-center shadow" style="">
                 <div class="card-body" style="padding-top: 25%; padding-bottom: 25%" >
@@ -488,7 +492,7 @@
                 </div>
             </div>
         </a>
-    </div>
+    </div> --}}
 </div>
 
 <div class="row">

@@ -42,8 +42,8 @@
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 
     {{-- TinyMCE Editor --}}
-    <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
@@ -51,6 +51,7 @@
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -81,9 +82,9 @@
         color: rgb(44, 44, 44);
         transition: 0.5s;
         background-color: #f1f1f1;
-        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        /* background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
-        background-attachment: fixed;
+        background-attachment: fixed; */
       }
 
       a {
@@ -498,7 +499,7 @@
 
 
     <div class="container-fluid" id="profile_body" style="display: @yield('profile_bar_display')">
-        <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+        <div class="row  p-4 card shadow-sm align-self-stretch">
             <div class="col ">
                 <div class="row">
                     <div class="col-lg-2 col-md-2 col-sm-12 p-2">
@@ -552,6 +553,7 @@
         </div>
     </div>
 
+    @include('sweetalert::alert')
     <div class="">
         @yield('content')
     </div>

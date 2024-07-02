@@ -2,7 +2,7 @@
 // new DataTable('#data_table',{
 //     pagingType: 'first_last_numbers'
 // });
-
+// import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 function submitButtonDisabled(){
     document.getElementById('form_submit').disabled = true;
@@ -74,7 +74,12 @@ function showLeaveDuration(){
         }
     }
     else if(startdate.getTime() > enddate.getTime()) {
-        alert("Start date is later than the End date");
+        // alert("Start date is later than the End date");
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "The end date must be later than the start date. Please double-check your selection and ensure that the end date falls after the start date."
+        });
         document.getElementById('datetime_enddate').value="";
         document.getElementById('duration_input').value = 0;
     }
@@ -104,7 +109,7 @@ function showLeaveDuration(){
         document.getElementById('datelabel_start_pm').style.display="none";
         document.getElementById('datelabel_end_am').style.display="none";
         document.getElementById('datelabel_end_pm').style.display="none";
-        document.getElementById('partOfDay_check').checked = false;
+        // document.getElementById('partOfDay_check').checked = false;
         document.getElementById('datelabel').style.display="none";
         const duration = Math.floor((enddate - startdate)/(1000*60*60*24)+1);
 
@@ -113,7 +118,12 @@ function showLeaveDuration(){
 
     if(startdate.getDay() == 6 || startdate.getDay() == 0){
         // document.getElementById("error_startdate").innerHTML = "Start date cannot be a weekend";
-        alert('Start date cannot be a weekend!');
+        // alert('Start date cannot be a weekend!');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Start date cannot be a weekend!"
+        });
         document.getElementById('datetime_startdate').value="";
         // document.getElementById('datelabel_start_am').style.display="none";
         // document.getElementById('datelabel_start_pm').style.display="none";
@@ -122,7 +132,12 @@ function showLeaveDuration(){
     }
     if(enddate.getDay() == 6 || enddate.getDay() == 0){
         // document.getElementById("error_startdate").innerHTML = "Start date cannot be a weekend";
-        alert('End date cannot be a weekend!');
+        // alert('End date cannot be a weekend!');
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "End date cannot be a weekend!"
+        });
         document.getElementById('datetime_enddate').value="";
         document.getElementById('duration_input').value = 0;
         // document.getElementById('datelabel_start_am').style.display="none";
@@ -244,6 +259,11 @@ function showLeaveDurationHR(){
     }
     else if(startdate.getTime() > enddate.getTime()) {
         alert("Start date is later than the End date");
+        Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success"
+          });
         document.getElementById('datetime_enddate').value="";
         document.getElementById('duration_input').value = 0;
     }
