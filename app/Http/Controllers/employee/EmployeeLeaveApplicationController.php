@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\employee;
 
 use App\Http\Controllers\Controller;
+use App\Mail\hrstaff\LeaveAppForApproverMail;
 use App\Models\EmployeeLeaveCredit;
 use App\Models\FiscalYear;
 use App\Models\LeaveApplication;
@@ -12,8 +13,12 @@ use App\Models\LeaveCreditLog;
 use App\Models\LeaveType;
 use App\Models\Notification;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class EmployeeLeaveApplicationController extends Controller
 {
@@ -34,6 +39,26 @@ class EmployeeLeaveApplicationController extends Controller
             'start_pm_check' => 'nullable',
             'end_pm_check' => 'nullable',
         ]);
+
+        //
+        //
+        // OVERLAPPING DATE LEAVE APPLICATION CONDITION
+        //
+        //
+        //
+        // $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)
+        //                                         ->where('leave_type_id',$data['leavetype'])
+        //                                         ->where('start_date',$data['startdate'])
+        //                                         ->where('status_id','<=','sta-1003')
+        //                                         ->orWhere('employee_id',auth()->user()->employees->id)
+        //                                         ->where('leave_type_id',$data['leavetype'])
+        //                                         ->where('end_date',$data['enddate'])
+        //                                         ->where('status_id','<=','sta-1003')
+        //                                         ->first();
+        // dd($leave_applications);
+        // if($leave_applications != null){
+        //     return redirect()->back()->with('warning','You have the same or overlapping date leave application');
+        // }
 
         $current_leave_type = LeaveType::where('id',$data['leavetype'])->first();
         $employee = auth()->user()->employees;
@@ -59,6 +84,10 @@ class EmployeeLeaveApplicationController extends Controller
             if($current_leave_type->predate == false){
                 return redirect()->back()->with('error','Unsuccessful leave application! Please select date from tomorrow onwoards');
             }
+        }
+        // check if the request date is SAT or SUN
+        if($startDate->format('D') == 'Sat' || $endDate->format('D') == 'Sun'){
+            return redirect()->back()->with('error','Unsuccessful leave application! Please select a valid date (Mon - Fri only)');
         }
         // check if the request date is a half day
         if( $startDate == $endDate){
@@ -107,7 +136,39 @@ class EmployeeLeaveApplicationController extends Controller
 
                 // dd($durationDays);
             }
+            // create an iterateable period of date (P1D equates to 1 day)
+            $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+            foreach($period as $dt){
+                $curr = $dt->format('D');
+
+                // substract if Saturday or Sunday
+                if ($curr == 'Sat' || $curr == 'Sun') {
+                    $durationDays--;
+                }
+            }
+            // dd($durationDays);
         }
+
+        //
+        //
+        // OVERLAPPING DATE LEAVE APPLICATION CONDITION
+        //
+        //
+        //
+        // $interval = DateInterval::createFromDateString('1 day');
+        // $period = new DatePeriod($startDate, $interval, $endDate);
+        // foreach ($period as $dt) {
+        //     $leave_applications = LeaveApplication::where('employee_id',auth()->user()->employees->id)
+        //                                         ->where('leave_type_id',$data['leavetype'])
+        //                                         ->where('start_date',$data['startdate'])
+        //                                         ->where('status_id','<=','sta-1003')
+        //                                         ->orWhere('employee_id',auth()->user()->employees->id)
+        //                                         ->where('leave_type_id',$data['leavetype'])
+        //                                         ->where('end_date',$data['enddate'])
+        //                                         ->where('status_id','<=','sta-1003')
+        //                                         ->first();
+        // }
+        // dd($period);
 
 
         if($request->hasFile('attachment')){
@@ -115,7 +176,7 @@ class EmployeeLeaveApplicationController extends Controller
             $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leaveapplication = LeaveApplication::create([
                 'leave_type_id' => $data['leavetype'],
@@ -201,6 +262,8 @@ class EmployeeLeaveApplicationController extends Controller
                 'employee_id' => $leaveapplication->approvers->users->id,
             ]);
         }
+        Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveAppForApproverMail($leaveapplication));
+        Log::notice('Leave Application '.$leaveapplication->reference_number.' is successfully created by '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
 
@@ -306,7 +369,7 @@ class EmployeeLeaveApplicationController extends Controller
             $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
             ->update([
@@ -361,7 +424,7 @@ class EmployeeLeaveApplicationController extends Controller
                 ]);
             }
         }
-
+        Log::notice('Leave Application '.$leave_application_rn.' is successfully updated by '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been updated!');
     }
 
@@ -489,9 +552,11 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id,
                     'employee_id' => $leave_applications->employees->users->id,
                 ]);
+                Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully approved by '.auth()->user()->email);
                 return redirect()->back()->with('success','Leave Application has been approved!');
             }
             else{
+                Log::warning('Leave Application '.$leave_applications->reference_number.' is attempted to approve by '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -566,6 +631,7 @@ class EmployeeLeaveApplicationController extends Controller
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
         }
+        Log::notice(auth()->user()->email.'successfully added a note on Leave Application '.$leave_applications->reference_number);
         return redirect()->back()->with('success','You successfully add a note!');
     }
 
@@ -601,9 +667,11 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id,
                     'employee_id' => $leave_applications->employees->users->id,
                 ]);
+                Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
                 return redirect()->back()->with('warning','Leave Application has been rejected!');
             }
             else{
+                Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to reject by '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -626,9 +694,11 @@ class EmployeeLeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id,
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
+            Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
             return redirect()->back()->with('warning','Leave Application has been rejected!');
         }
         else{
+            Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to reject by '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }
@@ -658,9 +728,11 @@ class EmployeeLeaveApplicationController extends Controller
                     ->update([
                         'status_id' => 'sta-1005'
                     ]);
+                    Log::notice('Leave Application '.$leave_application_rn.' is successfully cancelled by '.auth()->user()->email);
                     return redirect()->back()->with('warning','Leave Application has been cancelled!');
             }
             else{
+                Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to cancel by '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -675,9 +747,11 @@ class EmployeeLeaveApplicationController extends Controller
                 ->update([
                     'status_id' => 'sta-1005'
                 ]);
+                Log::notice('Leave Application '.$leave_application_rn.' is successfully cancelled by '.auth()->user()->email);
                 return redirect()->back()->with('warning','Leave Application has been cancelled!');
         }
         else{
+            Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to cancel by '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }

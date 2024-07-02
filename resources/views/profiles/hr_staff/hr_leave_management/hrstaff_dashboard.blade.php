@@ -46,7 +46,7 @@
                     <div class="row ">
                         <div class="col"><h5>Overview</h5></div>
                         <div class="col d-flex justify-content-end ">
-                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-outline-primary">see all</a>
+                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-secondary">see all</a>
                         </div>
                     </div>
                     <div class="container-fluid mb-4">
@@ -126,7 +126,7 @@
                 <h5>Employee Leave Credits Overview</h5>
             </div>
             <div class="col text-end">
-                <a href="{{ route('hrstaff_leave_credits') }}" class="btn-sm btn-outline-primary">See All</a>
+                <a href="{{ route('hrstaff_leave_credits') }}" class="btn-sm btn-secondary">See All</a>
             </div>
         </div>
         <div class="row">
@@ -179,7 +179,7 @@
                 <h5>Leave Management Overview</h5>
             </div>
             <div class="col text-end">
-                <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-outline-primary">See All</a>
+                <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-secondary">See All</a>
             </div>
         </div>
         <div class="row">

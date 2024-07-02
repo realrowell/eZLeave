@@ -42,15 +42,16 @@
     <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
 
     {{-- TinyMCE Editor --}}
-    <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js?version=1.0.2') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -81,9 +82,9 @@
         color: rgb(44, 44, 44);
         transition: 0.5s;
         background-color: #f1f1f1;
-        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        /* background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
-        background-attachment: fixed;
+        background-attachment: fixed; */
       }
 
       a {
@@ -498,7 +499,7 @@
 
 
     <div class="container-fluid" id="profile_body" style="display: @yield('profile_bar_display')">
-        <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
+        <div class="row  p-4 card shadow-sm align-self-stretch">
             <div class="col ">
                 <div class="row">
                     <div class="col-lg-2 col-md-2 col-sm-12 p-2">
@@ -552,6 +553,7 @@
         </div>
     </div>
 
+    @include('sweetalert::alert')
     <div class="">
         @yield('content')
     </div>
@@ -578,9 +580,14 @@
         <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"
-      ></script>
+        crossorigin="anonymous"></script>
       <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+      <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+      </script>
     </footer>
 
   </body>

@@ -10,118 +10,133 @@
     <div class="row">
         <h5>Menu</h5>
     </div>
-    <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " style="min-height: 1rem" >
-            <a href="{{ route('employee_dashboard') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Dashboard</h6>
+    <div class="container-fluid">
+        <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " >
+                <a href="{{ route('employee_dashboard') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Dashboard</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('employee_profile') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Profile</h6>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" >
+                <a href="{{ route('employee_profile') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Profile</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Leave Management</h6>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning"  >
+                <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Leave Management</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
 <div class="container-fluid d-print-none " id="profile_body" >
     <div class="row">
         <h5>Leave Menu</h5>
     </div>
-    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch bg-selected-primary" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Pending Approval</h6>
+    <div class="container-fluid">
+        <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch bg-selected-primary" >
+                <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="text-light">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Pending Approval</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Pending Availment</h6>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" >
+                <a href="{{ route('profile_leave_management_pending_availment_grid') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Pending Availment</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_history_grid') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>History</h6>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" >
+                <a href="{{ route('profile_leave_management_history_grid') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>History</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch ms-5" style="min-height: 1rem" >
-            <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>For Approval</h6>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch ms-5" >
+                <a href="{{ route('profile_leave_management_for_approval_grid') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>For Approval</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('profile.leave_management.approval_history.list') }}" class="text-dark">
-                <div class="col text-light-hover">
-                    <div class="card-body">
-                        <h6>Approval History</h6>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch">
+                <a href="{{ route('profile.leave_management.approval_history.list') }}" class="text-dark">
+                    <div class="col text-light-hover">
+                        <div class="card-body">
+                            <h6>Approval History</h6>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="container-fluid d-print-none" id="profile_body">
+<div class="container-fluid d-print-none " id="profile_body" >
     <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-6 mt-2">
-            <div class="row">
-                <div class="col">
-                    <h3>Leave Management</h3>
+        <div class="col">
+            <div class="container-fluid bg-light shadow mb-5">
+                <div class="row pt-4 pb-3">
+                    <div class="col-12 col-lg-6 text-start mt-2">
+                        <form action="{{ route('leave_details.search') }}" method="GET" onsubmit="onFormSubmit()" id="form_to_submit">
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm rounded-0" placeholder="*Input Reference Number here" name="reference_number" id="reference_number" size="100" oninput="searchBtnEnable()">
+                                <button type="submit" class="btn btn-sm btn-secondary rounded-0 disabled" id="search_btn">
+                                    <i class='bx bx-search'></i>
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12 col-lg-6 text-end mt-2">
+                        <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 @yield('grid_view_active')">
+                            <i class='fs-6 bx bxs-grid-alt' ></i>
+                            Grid View
+                        </a>
+                        <a href="{{ route('profile_leave_management_pending_approval_list') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 @yield('list_view_active')">
+                            <i class='fs-6 bx bx-list-ul' ></i>
+                            List View
+                        </a>
+                        <a href="#AddAccount" class="ms-1 me-1 custom-primary-button rounded-0 p-2"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+                            <i class='bx bx-calendar-plus' ></i>
+                            Apply New
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @yield('sub-content')
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-8 col-lg-6 justify-content-end align-items-end text-end mt-2">
-            <a href="{{ route('profile_leave_management_pending_approval_grid') }}" class="col p-2 custom-primary-button custom-rounded-top @yield('grid_view_active')">
-                <i data-toggle="tooltip" title="grid view" class="grid-view-icon">
-                    <svg stroke="white" class="mb-2" width="25px" height="25px" viewBox="-2.4 -2.4 28.80 28.80" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3.5 3.5H10.5V10.5H3.5V3.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3.5 13.5H10.5V20.5H3.5V13.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.5 3.5H20.5V10.5H13.5V3.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M13.5 13.5H20.5V20.5H13.5V13.5Z"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                </i>
-                Grid View
-            </a>
-            <a href="{{ route('profile_leave_management_pending_approval_list') }}" class="col p-2 ms-2 custom-primary-button custom-rounded-top @yield('list_view_active')">
-                <i data-toggle="tooltip" title="list view" class="list-view-icon">
-                    <svg fill="white" class="" width="25px" height="25px" viewBox="-2.1 -2.1 25.20 25.20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>list [#1497]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1"  fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-179.000000, -322.000000)" > <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M124.575,174 C123.7056,174 123,174.672 123,175.5 C123,176.328 123.7056,177 124.575,177 C125.4444,177 126.15,176.328 126.15,175.5 C126.15,174.672 125.4444,174 124.575,174 L124.575,174 Z M128.25,177 L144,177 L144,175 L128.25,175 L128.25,177 Z M124.575,168 C123.7056,168 123,168.672 123,169.5 C123,170.328 123.7056,171 124.575,171 C125.4444,171 126.15,170.328 126.15,169.5 C126.15,168.672 125.4444,168 124.575,168 L124.575,168 Z M128.25,171 L144,171 L144,169 L128.25,169 L128.25,171 Z M124.575,162 C123.7056,162 123,162.672 123,163.5 C123,164.328 123.7056,165 124.575,165 C125.4444,165 126.15,164.328 126.15,163.5 C126.15,162.672 125.4444,162 124.575,162 L124.575,162 Z M128.25,165 L144,165 L144,163 L128.25,163 L128.25,165 Z" id="list-[#1497]"> </path> </g> </g> </g> </g></svg>
-                </i>
-                List View
-            </a>
-            <a href="#AddAccount" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
-                <i data-toggle="tooltip" title="list view" class="add-icon" >
-                    <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
-                </i>
-                Apply New
-            </a>
         </div>
     </div>
 </div>
@@ -129,20 +144,28 @@
 <!-- Apply leave Modal -->
 <div class="modal fade bg-static" id="ApplyLeaveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
             <form action="{{ route('create_employee_leaveapplication') }}" method="POST" enctype="multipart/form-data" id="form_submit" onsubmit="onClickApplyLeave()">
                 @csrf
                 @method('POST')
-                <div class="modal-header">
+                {{-- <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
-                </div>
+                </div> --}}
                 <div class="modal-body" id="form_container_onApply">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col text-center">
                             <svg width="80px" height="80px" viewBox="-2.4 -2.4 28.80 28.80">
                                 {{ svg('tabler-calendar-time') }}
                             </svg>
+                        </div>
+                    </div> --}}
+                    <div class="row pt-3">
+                        <div class="col-9">
+                            <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
+                        </div>
+                        <div class="col-3 text-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
                         </div>
                     </div>
                     <div class="container-fluid text-start">
@@ -151,7 +174,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="leavetype">
-                                            <h6 class="">Leave Type</h6>
+                                            <h6 class="">*Leave Type</h6>
                                         </label>
                                         <select class="form-select" id="leavetype" name="leavetype" required>
                                             <option selected disabled value=""></option>
@@ -178,13 +201,15 @@
                                 <div class="row mt-2">
                                     <div class="col-6">
                                         <label for="startdate">
-                                            <h6>Start date</h6>
+                                            <h6>*Start date</h6>
                                         </label>
-                                        <input type="date" class="form-control" id="datetime_startdate" name="startdate" placeholder="" required onchange="showLeaveDuration()">
+                                        <input type="date" class="form-control" id="datetime_startdate" name="startdate" placeholder="" required onchange="showLeaveDuration()" novalidate>
+                                        <span class="invalid-feedback" id="error_startdate"></span>
+                                        <span class="valid-feedback" >looks good!</span>
                                     </div>
                                     <div class="col-6">
                                         <label for="enddate">
-                                            <h6>End date</h6>
+                                            <h6>*End date</h6>
                                         </label>
                                         <input type="date" class="form-control" id="datetime_enddate" name="enddate" placeholder="" required onchange="showLeaveDuration()">
                                     </div>
@@ -217,14 +242,17 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col">
-                                        <label for="">Duration (days)</label>
+                                        <label for="duration">Duration (days)</label>
+                                        <a class="m-2 fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="*If the date range includes a weekend, it will not be count after creating the application.">
+                                            <i class='bx bx-info-circle text-primary'></i>
+                                        </a>
                                         <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="attachment">
-                                            <h6 class="">Attachment</h6>
+                                            <h6 class="">Attachment (optional)</h6>
                                         </label>
                                         <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
                                     </div>
@@ -232,7 +260,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="reason">
-                                            <h6 class="">Reason / Note</h6>
+                                            <h6 class="">Reason / Note (optional)</h6>
                                         </label>
                                         <textarea class="form-control" id="reason" name="reason" rows="5" cols="50"></textarea>
                                     </div>
@@ -243,18 +271,18 @@
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
                     <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
-                    <button id="btn_apply" type="submit" class="btn btn-success" >
+                    <button id="btn_apply" type="submit" class="btn btn-success rounded-0" >
                         <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
                             <span class="visually-hidden">Loading...</span>
                         </div>
-                        Apply Leave
+                        Create Application
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script>
+{{-- <script>
     $(document).ready(function(){
         $('#department').on('change',function(){
             let id = $(this).val();
@@ -306,19 +334,7 @@
             });
         });
     });
-</script>
+</script> --}}
 {{-- End Apply leave Modal --}}
-<div class="container-fluid mb-4 pb-5" id="profile_body">
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    <div class="sub-content" id="form_submit_1" style="opacity: 1">
-        <div class="container-fluid">
-            <div class="row">
-                @yield('sub-content')
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
