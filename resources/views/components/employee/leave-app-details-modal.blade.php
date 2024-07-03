@@ -114,7 +114,17 @@
                                                 <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
                                             @endif
                                         @endforeach
-                                    @elseif ($status->status_id == 'sta-1003')
+                                    @elseif ($status == 'sta-1003')
+                                        @foreach ($leave_approvals as $leave_approval)
+                                            @if ($leave_approval->leave_application_reference == $leave_reference_number)
+                                                @if ($leave_approval->status_id == 'sta-1001')
+                                                    <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1002')
+                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    @elseif ($status == 'sta-1002')
                                         @foreach ($leave_approvals as $leave_approval)
                                             @if ($leave_approval->leave_application_reference == $leave_reference_number)
                                                 @if ($leave_approval->status_id == 'sta-1001')
@@ -145,8 +155,10 @@
             <div class="modal-footer">
                 @if ($status == 'sta-1001')
                     <button class="btn btn-danger text-center rounded-0" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_reference_number }}">Cancel Application</button>
+                @elseif($status == 'sta-1002')
+                    <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
                 @else
-                    <button class="btn btn-danger text-center rounded-0" disabled>Cancel</button>
+                    {{-- <button class="btn btn-danger text-center rounded-0" disabled>Cancel</button> --}}
                 @endif
                 <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
             </div>

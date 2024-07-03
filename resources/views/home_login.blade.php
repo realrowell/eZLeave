@@ -57,7 +57,12 @@
                                         <button id="login_submit" type="submit" class="btn btn-success" >
                                             {{ __('Login') }}
                                         </button>
-
+                                        {{-- @production --}}
+                                            <a href="{{ route('google.redirect') }}" class="btn btn-primary mt-2">
+                                                <img class="bg-light rounded-pill me-2" src="{{ asset('img/google_g_logo.svg') }}" alt="">
+                                                Continue with Google Workspace
+                                            </a>
+                                        {{-- @endproduction --}}
                                         <div class="row mt-3">
                                             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
                                                 Forgot Your Password?
