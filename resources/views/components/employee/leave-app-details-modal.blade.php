@@ -134,6 +134,32 @@
                                                 @endif
                                             @endif
                                         @endforeach
+                                    @elseif($status == 'sta-1004')
+                                        @foreach ($leave_approvals as $leave_approval)
+                                            @if ($leave_approval->leave_application_reference == $leave_reference_number)
+                                                @if ($leave_approval->status_id == 'sta-1001')
+                                                    <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1002')
+                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1004')
+                                                    <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    @elseif($status == 'sta-1005')
+                                        @foreach ($leave_approvals as $leave_approval)
+                                            @if ($leave_approval->leave_application_reference == $leave_reference_number)
+                                                @if ($leave_approval->status_id == 'sta-1001')
+                                                    <p class="bg-secondary text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1002')
+                                                    <p class="bg-success text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1004')
+                                                    <p class="bg-danger text-light ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @elseif ($leave_approval->status_id == 'sta-1005')
+                                                    <p class="bg-warning text-dark ps-3">{{ $leave_approval->statuses->status_title }} - {{ $leave_approval->approvers->first_name." ". $leave_approval->approvers->last_name}} • {{ timestamp_leadtime($leave_approval->created_at)}}</p>
+                                                @endif
+                                            @endif
+                                        @endforeach
                                     @endif
                                 </div>
                             </div>
@@ -141,9 +167,21 @@
                                 <div class="col">
                                     <label class="" for="update">
                                         @if ($status == 'sta-1001')
-                                            <button type="button" class="btn btn-sm btn-primary rounded-0" data-bs-toggle="modal" data-bs-target="#updatedetailsModal{{ $leave_reference_number }}">
-                                                Update Application
-                                            </button>
+                                            @if ($leave_app_employee == auth()->user()->employees->id)
+                                                <button type="button" class="btn btn-sm btn-primary rounded-0" data-bs-toggle="modal" data-bs-target="#updatedetailsModal{{ $leave_reference_number }}">
+                                                    Update Application
+                                                </button>
+                                            @elseif ($leave_app_employee != auth()->user()->employees->id)
+
+                                            @endif
+                                        @elseif ($status == 'sta-1003')
+                                            @if ($leave_app_employee == auth()->user()->employees->id)
+                                                <button type="button" class="btn btn-sm btn-primary rounded-0 disabled">
+                                                    Update Application
+                                                </button>
+                                            @elseif ($leave_app_employee != auth()->user()->employees->id)
+
+                                            @endif
                                         @endif
                                     </label>
                                 </div>
@@ -153,14 +191,39 @@
                 </div>
             </div>
             <div class="modal-footer">
-                @if ($status == 'sta-1001')
-                    <button class="btn btn-danger text-center rounded-0" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_reference_number }}">Cancel Application</button>
-                @elseif($status == 'sta-1002')
-                    <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
-                @else
-                    {{-- <button class="btn btn-danger text-center rounded-0" disabled>Cancel</button> --}}
-                @endif
-                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col text-start">
+                            <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col text-end">
+                            @if ($status == 'sta-1001')
+                                @if ($leave_app_employee == auth()->user()->employees->id)
+                                    <button class="btn btn-danger text-center rounded-0" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_reference_number }}">Cancel Application</button>
+                                @elseif ($leave_app_employee != auth()->user()->employees->id)
+                                    <a href="#" class="btn btn-danger rounded-0 text-center" data-bs-toggle="modal" data-bs-target="#rejectleaveModal{{ $leave_reference_number }}">Reject</a>
+                                    <a href="#" class="btn btn-success rounded-0 text-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_reference_number }}">Approve</a>
+                                @endif
+                            @elseif ($status == 'sta-1003')
+                                @if ($leave_app_employee == auth()->user()->employees->id)
+                                    <button class="btn btn-danger text-center rounded-0 disabled">Cancel Application</button>
+                                    <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
+                                @elseif ($leave_app_employee != auth()->user()->employees->id)
+                                    <a href="#" class="btn btn-danger rounded-0 text-center" data-bs-toggle="modal" data-bs-target="#rejectleaveModal{{ $leave_reference_number }}">Reject</a>
+                                    <a href="#" class="btn btn-success rounded-0 text-center" data-bs-toggle="modal" data-bs-target="#approveLeaveModal{{ $leave_reference_number }}">Approve</a>
+                                @endif
+                            @elseif($status == 'sta-1002')
+                                <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
+                            @elseif($status == 'sta-1004')
+                                <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
+                            @elseif($status == 'sta-1005')
+                                <a href="{{ route('leave_details_page',['leave_application_rn'=>$leave_reference_number]) }}" class="btn rounded-0 btn-primary text-center">View details</a>
+                            @else
+                                {{-- <button class="btn btn-danger text-center rounded-0" disabled>Cancel</button> --}}
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -38,9 +38,6 @@
       rel="stylesheet"
     />
 
-    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
-
     {{-- TinyMCE Editor --}}
     {{-- <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
@@ -49,6 +46,7 @@
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js?version=1.0.2') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -578,16 +576,57 @@
 
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> --}}
         <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-      <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
-      <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-      </script>
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous">
+        </script>
+        <script type="text/javascript">
+            $(".alert").delay(4000).slideUp(200, function() {
+                  $(this).alert('close');
+              });
+
+            $(document).ready(function () {
+                $('#datatable_approval_history').dataTable({
+                    order: [[0, 'asc']],
+                    pagingType: 'simple',
+                    renderer: {
+                        pagingButton: 'bootstrap',
+                        pagingContainer: 'bootstrap5'
+                    },
+                    autoFill: {
+                        columns: ':not(:first-child)'
+                    },
+                    language: {
+                        lengthMenu: 'Change the number of records to show _MENU_ ',
+                        paginate: {
+                            // next: 'Next >',
+                            // previous: '< Previous',
+                        }
+                    },
+                    // layout: {
+                    //     topStart: 'buttons'
+                    // },
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type here to filter the table',
+                                text: 'Search'
+                            }
+                        }
+                    }
+                }).css({ 'margin-top': '0em' });
+            });
+            // new DataTable('#data_table',{
+            //     pagingType: 'first_last_numbers'
+            // });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
     </footer>
 
   </body>

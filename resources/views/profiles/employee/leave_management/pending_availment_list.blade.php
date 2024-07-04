@@ -5,13 +5,12 @@
 <div class="row">
     <div class="table-responsive" id="table_container">
         <div class="table-wrapper">
-            <table class="table table-bordered table-hover bg-light">
-                <h5>Pending Approval</h5>
+            <table class="table table-sm table-bordered table-hover bg-light">
                 <thead class="bg-success text-light border-light">
                     <tr>
                         <th>Reference Number</th>
-                        <th>Approver</th>
-                        <th>Second Approver</th>
+                        {{-- <th>Approver</th>
+                        <th>Second Approver</th> --}}
                         <th>Leave Type</th>
                         <th>Start date</th>
                         <th>End date</th>
@@ -26,7 +25,7 @@
                         @foreach ($leave_applications as $leave_application)
                             <tr>
                                 <td>{{ $leave_application->reference_number }}</td>
-                                <td id="table_reports_to">
+                                {{-- <td id="table_reports_/to">
                                     @if (!empty($leave_application->approvers))
                                         {{ optional($leave_application->approvers->users)->first_name }}
                                         {{ optional($leave_application->approvers->users)->middle_name }}
@@ -43,14 +42,14 @@
                                     @else
                                         N/A
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>{{ optional($leave_application->leavetypes)->leave_type_title }}</td>
                                 <td>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} - {{ $leave_application->start_of_date_parts->day_part_title }}</td>
                                 <td>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} - {{ $leave_application->end_of_date_parts->day_part_title }}</td>
                                 <td>{{ $leave_application->duration }}</td>
                                 <td>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('M d, Y; h:i a') }}</td>
                                 <td>
-                                    <p class="bg-success text-light ps-3">{{ $leave_application->statuses->status_title }}</p>
+                                    <p class="bg-success badge rounded-pill">{{ $leave_application->statuses->status_title }}</p>
                                 </td>
                                 <td class="d-flex gap-2 pb-3">
                                     <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
@@ -69,6 +68,7 @@
                                     :approverName="$leave_application->approvers?->users?->first_name.' '.$leave_application->approvers?->users?->last_name"
                                     :secondApproverId="$leave_application->second_approver_id"
                                     :secondApproverName="$leave_application->second_approvers?->users?->first_name.' '.$leave_application->second_approvers?->users?->last_name"
+                                    :leaveAppEmployee="$leave_application->employee_id"
                                     :attachment="$leave_application->attachment"
                                     :status="$leave_application->status_id"
                                     >
@@ -80,7 +80,8 @@
                             <td>
                                 <div class="row align-items-center justify-content-center mt-3">
                                     <div class="col text-center">
-                                        <h2>No leave application available!</h2>
+                                        <x-errors.no-leave-app-found>
+                                        </x-errors.no-leave-app-found>
                                     </div>
                                 </div>
                             </td>

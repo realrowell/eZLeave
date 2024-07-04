@@ -13,8 +13,8 @@
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Reference Number</th>
-                            <th>Approver</th>
-                            <th>Second Approver</th>
+                            {{-- <th>Approver</th>
+                            <th>Second Approver</th> --}}
                             <th>Leave Type</th>
                             <th>Start date</th>
                             <th>End date</th>
@@ -31,7 +31,7 @@
                                     <td>
                                         {{ $leave_application->reference_number }}
                                     </td>
-                                    <td id="table_reports_to">
+                                    {{-- <td id="table_reports_to">
                                         @if (!empty($leave_application->approvers))
                                             {{ optional($leave_application->approvers->users)->first_name }}
                                             {{ optional($leave_application->approvers->users)->middle_name }}
@@ -48,7 +48,7 @@
                                         @else
                                             N/A
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td>{{ optional($leave_application->leavetypes)->leave_type_title }}</td>
                                     <td>{{ \Carbon\Carbon::parse($leave_application->start_date)->format('M d, Y') }} - {{ $leave_application->start_of_date_parts->day_part_title }}</td>
                                     <td>{{ \Carbon\Carbon::parse($leave_application->end_date)->format('M d, Y') }} - {{ $leave_application->end_of_date_parts->day_part_title }}</td>
@@ -63,7 +63,11 @@
                                     </td>
                                     <td class="d-flex gap-2 pb-3">
                                         <button class="btn btn-sm btn-primary text-center" data-bs-toggle="modal" data-bs-target="#detailsModal{{ $leave_application->reference_number }}">View Details</button>
-                                        <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                        @if ($leave_application->status_id == 'sta-1001')
+                                            <button class="btn btn-sm btn-danger text-center" data-bs-toggle="modal" data-bs-target="#cancelleaveModal{{ $leave_application->reference_number }}">Cancel</button>
+                                        @else
+                                            <button class="btn btn-sm btn-danger text-center disabled">Cancel</button>
+                                        @endif
                                     </td>
                                 </tr>
                                 <!-- leave details Modal -->
@@ -79,6 +83,7 @@
                                         :approverName="$leave_application->approvers?->users?->first_name.' '.$leave_application->approvers?->users?->last_name"
                                         :secondApproverId="$leave_application->second_approver_id"
                                         :secondApproverName="$leave_application->second_approvers?->users?->first_name.' '.$leave_application->second_approvers?->users?->last_name"
+                                        :leaveAppEmployee="$leave_application->employee_id"
                                         :attachment="$leave_application->attachment"
                                         :status="$leave_application->status_id"
                                         >
@@ -114,7 +119,8 @@
                                 <td>
                                     <div class="row align-items-center justify-content-center mt-3">
                                         <div class="col text-center">
-                                            <h2>No leave application available!</h2>
+                                            <x-errors.no-leave-app-found>
+                                            </x-errors.no-leave-app-found>
                                         </div>
                                     </div>
                                 </td>
