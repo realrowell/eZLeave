@@ -57,6 +57,7 @@
       :root {
         --header-height: 2rem;
         --nav-width: 70px;
+        --header-bg: #0a7e48;
         --first-color: #262626;
         --first-color-light: #00AF46;
         --accent-color:  #f3b200;
@@ -99,7 +100,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        background-color: var(--first-color-light);
+        background-color: var(--header-bg);
         z-index: var(--z-fixed);
         transition: 0.5s;
       }
@@ -276,7 +277,7 @@
   <body id="body-pd">
     <header class="header" id="header">
         <div class="container-fluid">
-            <div class="row  justify-content-start align-items-start">
+            <div class="row justify-content-start align-items-start">
                 <div class="col-1 align-self-center">
                     <div class="header_toggle">
                         <i class="bx bx-menu pt-2" id="header-toggle"></i>
@@ -496,7 +497,7 @@
     </script>
 
 
-    <div class="container-fluid" id="profile_body" style="display: @yield('profile_bar_display')">
+    <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
         <div class="row  p-4 card shadow-sm align-self-stretch">
             <div class="col ">
                 <div class="row">
@@ -558,14 +559,14 @@
 
     <footer class="position-static pt-5">
       <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
-        <div class="footer-custom">
-          <div class="text-light text-center pt-2 pb-2" style="">
+        <div class="">
+          <div class="text-secondary text-center pt-2 pb-2" style="">
             <div class="">
               <a >
                 <p>© {{ now()->year }}
-                  <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
+                  <a href="https://www.bioseed.com.ph/" target="#blank" class="text-secondary">
                     Bioseed Research Philippines, Inc.
-                  </a> | All Rights Reserved. | Beta v0.2.0
+                  </a> | All Rights Reserved. | {{ env('APP_VERSION') }}
                 </p>
               </a>
             </div>

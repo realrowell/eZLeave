@@ -31,8 +31,8 @@
         <nav class="navbar" id="header_main">
             <div class="container ">
                 <div class="d-flex bd-highlight">
-                    <a class="navbar-brand text-white">Bioseed Leave Management System |</a>
-                    <a class="navbar-brand  text-white" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
+                    <a class="navbar-brand text-white" style="font-size: clamp(1rem, 2.5vw, 1.2rem)">Bioseed Leave Management System |</a>
+                    <a class="navbar-brand text-white" target="#blank" href="https://www.bioseed.com.ph" style="font-size: clamp(1rem, 2.5vw, 1.2rem)">bioseed.com.ph</a>
                 </div>
             </div>
         </nav>
