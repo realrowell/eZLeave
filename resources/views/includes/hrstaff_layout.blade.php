@@ -66,6 +66,7 @@
         --header-height: 2rem;
         --nav-width: 70px;
         --first-color: #262626;
+        --header-bg: #0a7e48;
         --first-color-light: #00AF46;
         --accent-color:  #f3b200;
         --accent-color-2:  #f3b200;
@@ -108,7 +109,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        background-color: var(--first-color-light);
+        background-color: var(--header-bg);
         z-index: var(--z-fixed);
         transition: 0.5s;
         font-size: clamp(0.5rem, 80%, 1rem);
@@ -535,7 +536,7 @@
                         <p>© {{ now()->year }}
                         <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
                             Bioseed Research Philippines, Inc.
-                        </a> | Powered by Bioseed Information Management Systems | Beta v0.2
+                        </a> | Powered by Bioseed Information Management Systems | {{ env('APP_VERSION') }}
                         </p>
                     </a>
                     </div>

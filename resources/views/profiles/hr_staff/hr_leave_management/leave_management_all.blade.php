@@ -42,13 +42,16 @@
                 {{-- @csrf --}}
                 <div class="container-fluid" style="width: clamp(40vw, 75%, 50vw)">
                     <div class="d-flex gap-3">
-                        <select class="w-75 js-basic-single" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
+                        <select class="w-75 js-basic-single rounded-0" name="search_input" id="select-state" onchange="searchBtnEnable()" placeholder="Search here">
                             <option value="" selected disabled>Input here</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->employees->id }}">{{ $user->last_name }}, {{ $user->first_name }}</option>
                             @endforeach
                         </select>
-                        <button type="submit" id="search_btn" class="btn btn-sm btn-primary" onclick="onClickLinkSubmit()"><i class='bx bx-search me-1'></i>Search</button>
+                        <button type="submit" id="search_btn" class="btn btn-sm btn-primary rounded-0" onclick="onClickLinkSubmit()">
+                            <i class='bx bx-search me-1'></i>
+                            Search
+                        </button>
                     </div>
                 </div>
                 {{-- <input class="form-control d-none" type="text" name="search_input" id="text-input-search" onkeyup="searchBtnEnable()" onsubmit="submitButtonDisabled()" placeholder="Search here"> --}}
@@ -61,7 +64,7 @@
             </form>
         </div>
         <div class="container text-end">
-            <a href="#Add" class="btn btn-sm btn-primary pt-1 pb-2" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+            <a href="#Add" class="btn btn-sm btn-primary rounded-0 p-1 pb-2 ps-2 pe-2" data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
                 <i class='bx bx-calendar-plus' ></i>
                 Apply Leave
             </a>

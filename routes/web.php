@@ -45,6 +45,8 @@ use Illuminate\Support\Facades\Auth;
 // });
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::get('/', [indexPageController::class, 'index'])->name('index');
 
@@ -69,10 +71,10 @@ Route::get('/notifications/mark_unread/{id}', [NotificationController::class, 'n
 Route::patch('/profile/update', [EmployeeProfileController::class, 'employee_update_profile'])->name('employee_update_profile');
 Route::get('/leave_management/menu', [EmployeePageController::class, 'profile_leave_management_menu'])->name('profile_leave_management_menu');
 Route::get('/leave_management/for_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_for_approval_grid'])->name('profile_leave_management_for_approval_grid');
+Route::get('/leave_management/for_approval/list_view', [EmployeePageController::class, 'profile_leave_management_for_approval_list'])->name('profile_leave_management_for_approval_list');
 Route::get('/leave_management/approval_history/list_view', [EmployeePageController::class, 'profile_leave_management_approval_history_list'])->name('profile.leave_management.approval_history.list');
 Route::get('/leave_management/leave_details/{leave_application_rn}', [EmployeePageController::class, 'leaveDetailsPage'])->name('leave_details_page');
 Route::get('/leave_management/leave_details-search_leave/', [EmployeePageController::class, 'leaveDetailsSearchPage'])->name('leave_details.search');
-Route::get('/leave_management/for_approval/list_view', [EmployeePageController::class, 'profile_leave_management_for_approval_list'])->name('profile_leave_management_for_approval_list');
 Route::get('/leave_management/pending_approval/grid_view', [EmployeePageController::class, 'profile_leave_management_pending_approval_grid'])->name('profile_leave_management_pending_approval_grid');
 Route::get('/leave_management/pending_approval/list_view', [EmployeePageController::class, 'profile_leave_management_pending_approval_list'])->name('profile_leave_management_pending_approval_list');
 Route::get('/leave_management/cancelled/grid_view', [EmployeePageController::class, 'profile_leave_management_cancelled_grid'])->name('profile_leave_management_cancelled_grid');

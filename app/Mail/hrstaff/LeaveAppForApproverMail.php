@@ -22,7 +22,7 @@ class LeaveAppForApproverMail extends Mailable implements ShouldQueue
     public function __construct($leaveapplication)
     {
         $this->leave_type = $leaveapplication->leavetypes->leave_type_title;
-        $this->employee_name = $leaveapplication->employees->users->last_name.", ".$leaveapplication->employees->users->first_name;
+        $this->employee_name = $leaveapplication->employees->users->first_name." ".$leaveapplication->employees->users->last_name;
         $this->leaveapplication = $leaveapplication;
     }
 

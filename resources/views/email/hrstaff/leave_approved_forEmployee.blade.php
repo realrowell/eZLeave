@@ -358,7 +358,7 @@
                                                                                             <td class="t22" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <p class="t20" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    Start date: {{ $leaveapplication['start_date'] }}
+                                                                                                    Start date: {{ \Carbon\Carbon::parse($leaveapplication['start_date'])->format('m-d-Y') }}
                                                                                                 </p>
                                                                                             </td>
                                                                                         </tr>
@@ -386,7 +386,7 @@
                                                                                             <td class="t26" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <p class="t24" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    End date: {{ $leaveapplication['end_date'] }}
+                                                                                                    End date: {{ \Carbon\Carbon::parse($leaveapplication['end_date'])->format('m-d-Y') }}
                                                                                                 </p>
                                                                                             </td>
                                                                                         </tr>

@@ -104,6 +104,7 @@ class EmployeeProfileController extends Controller
         $username = auth()->user()->user_name;
         $user=User::where('user_name',$username)->get()->first();
         $employees=Employee::all();
+        $profile_photo = ProfilePhoto::where('user_id',auth()->user()->id)->where('status_id','sta-1007')->first();
 
         // compute the total length of service
         $current_date = Carbon::now();
@@ -152,6 +153,7 @@ class EmployeeProfileController extends Controller
             'reports_to' => $reports_to,
             'employee_address' => $employee_address,
             'second_reports_to' => $second_reports_to,
+            'profile_photo' => $profile_photo,
         ]);
         // return view('profiles.employee.profile.user_profile_edit');
     }

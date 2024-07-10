@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\employee;
 
 use App\Http\Controllers\Controller;
+use App\Mail\employee\LeaveAppForSecondApprover;
+use App\Mail\employee\LeaveAppFullyApproved;
+use App\Mail\employee\LeaveAppPartialApproved;
+use App\Mail\employee\LeaveRejectForEmployeeMail;
 use App\Mail\hrstaff\LeaveAppForApproverMail;
 use App\Models\EmployeeLeaveCredit;
 use App\Models\FiscalYear;
@@ -19,6 +23,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class EmployeeLeaveApplicationController extends Controller
 {
@@ -173,7 +178,7 @@ class EmployeeLeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
             $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
@@ -366,7 +371,7 @@ class EmployeeLeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
             $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
@@ -424,7 +429,7 @@ class EmployeeLeaveApplicationController extends Controller
                 ]);
             }
         }
-        Log::notice('Leave Application '.$leave_application_rn.' is successfully updated by '.auth()->user()->email);
+        Log::info('Leave Application '.$leave_application_rn.' is successfully updated by '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been updated!');
     }
 
@@ -434,7 +439,11 @@ class EmployeeLeaveApplicationController extends Controller
      *
      * LEAVE APPLICATION APPROVAL
      */
-    public function employee_leave_application_approval($leave_application_rn){
+    public function employee_leave_application_approval(Request $request, $leave_application_rn){
+        $data = $request->validate([
+            'reason' => 'nullable|max:255',
+        ]);
+
         $leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)->first();
         // $employee_leave_credits = $leave_applications->employee_leave_credits->leave_days_credit; //get the number of leaves left for this employee
         // $current_leave_credits = EmployeeLeaveCredit::where('id',$leave_applications->employee_leave_credit_id)->first();  //get current employee leave credits ID
@@ -458,6 +467,7 @@ class EmployeeLeaveApplicationController extends Controller
                     $leave_approvals = LeaveApproval::create([
                         'leave_application_reference' => $leave_application_rn,
                         'approver_id' => auth()->user()->employees->users->id,
+                        'reason_note' => $data['reason'],
                         'status_id' => 'sta-1002'
                     ]);
                     $update_leave_applications = LeaveApplication::where('reference_number', $leave_application_rn)
@@ -473,6 +483,8 @@ class EmployeeLeaveApplicationController extends Controller
                             'author_id' => auth()->user()->id,
                             'employee_id' => $leave_applications->second_approvers->users->id,
                         ]);
+                        Mail::to($leave_applications->employees->users->email)->send(new LeaveAppPartialApproved($leave_applications, $leave_approvals ));
+                        Mail::to($leave_applications->second_approvers->users->email)->send(new LeaveAppForSecondApprover($leave_applications));
                     }
                 }
                 if(optional($leave_applications)->second_approver_id != null && $leave_applications->second_approver_id == auth()->user()->employees->id){
@@ -483,6 +495,7 @@ class EmployeeLeaveApplicationController extends Controller
                         $leave_approvals = LeaveApproval::create([
                             'leave_application_reference' => $leave_application_rn,
                             'approver_id' => auth()->user()->employees->users->id,
+                            'reason_note' => $data['reason'],
                             'status_id' => 'sta-1002'
                         ]);
                         $new_employee_leave_credits = EmployeeLeaveCredit::create([
@@ -512,6 +525,7 @@ class EmployeeLeaveApplicationController extends Controller
                             'employee_id' => $employee_id,
                             'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
                         ]);
+                        Mail::to($leave_applications->employees->users->email)->send(new LeaveAppFullyApproved($leave_applications, $leave_approvals ));
                     }
                 }
                 if( $leave_applications?->second_approver_id == null){
@@ -543,6 +557,7 @@ class EmployeeLeaveApplicationController extends Controller
                         'employee_id' => $employee_id,
                         'fiscal_year_id' => $current_leave_credits->fiscal_year_id,
                     ]);
+                    Mail::to($leave_applications->employees->users->email)->send(new LeaveAppFullyApproved($leave_applications, $leave_approvals ));
                 }
                 $notification = Notification::create([
                     'title' => 'Leave Application Approved!',
@@ -667,6 +682,7 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id,
                     'employee_id' => $leave_applications->employees->users->id,
                 ]);
+                Mail::to($leave_applications->employees->users->email)->send(new LeaveRejectForEmployeeMail($leave_applications, $leave_approvals ));
                 Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
                 return redirect()->back()->with('warning','Leave Application has been rejected!');
             }
@@ -694,6 +710,7 @@ class EmployeeLeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id,
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
+            Mail::to($leave_applications->employees->users->email)->send(new LeaveRejectForEmployeeMail($leave_applications, $leave_approvals ));
             Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
             return redirect()->back()->with('warning','Leave Application has been rejected!');
         }

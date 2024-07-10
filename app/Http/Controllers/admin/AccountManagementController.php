@@ -471,8 +471,9 @@ class AccountManagementController extends Controller
      */
     public function update_profile_photo(Request $request, $user_name){
         $data = $request->validate([
-            'profile_photo' => 'required',
+            'profile_photo' => 'max:2048|required|image',
         ]);
+
         $user = User::where('user_name',$user_name)->first();
         $user_profile_photo = ProfilePhoto::where('user_id',$user->id)->where('status_id','sta-1007')->get()->first();
 

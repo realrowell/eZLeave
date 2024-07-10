@@ -3,12 +3,9 @@
 @section('sub-content')
 
 <div class="row">
-    <div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    <div class="ps-5 pe-5 pb-5 pt-3 bg-light shadow" id="table_container">
+    <div id="table_container">
         <div class="table-wrapper">
-            <table id="data_table" class="table table-sm compact table-bordered table-hover bg-light">
+            <table class="table table-sm table-bordered table-hover bg-light" id="datatable_approval_history">
                 <thead class="bg-success text-light border-light">
                     <tr>
                         <th>Reference Number</th>

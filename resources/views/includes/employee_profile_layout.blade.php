@@ -38,9 +38,6 @@
       rel="stylesheet"
     />
 
-    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
-
     {{-- TinyMCE Editor --}}
     {{-- <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
@@ -49,6 +46,7 @@
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js?version=1.0.2') }}"></script>
     <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -59,6 +57,7 @@
       :root {
         --header-height: 2rem;
         --nav-width: 70px;
+        --header-bg: #0a7e48;
         --first-color: #262626;
         --first-color-light: #00AF46;
         --accent-color:  #f3b200;
@@ -101,7 +100,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        background-color: var(--first-color-light);
+        background-color: var(--header-bg);
         z-index: var(--z-fixed);
         transition: 0.5s;
       }
@@ -278,120 +277,128 @@
   <body id="body-pd">
     <header class="header" id="header">
         <div class="container-fluid">
-            <div class="row  justify-content-start align-items-start">
-                <div class="col-1 align-self-center">
-                    <div class="header_toggle">
-                        <i class="bx bx-menu pt-2" id="header-toggle"></i>
+            <div class="row " style="font-size: clamp(0.5rem, 2.5vw, 1rem)">
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-1 text-end align-self-center">
+                            <div class="header_toggle">
+                                <i class="bx bx-menu pt-2" id="header-toggle"></i>
+                            </div>
+                        </div>
+                        <div class="col-11 align-self-center">
+                            <div class="text-start">
+                                <a class="text-white" id="header_title">eZLeave | </a>
+                                <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-8 align-self-center">
-                    <div class="text-start">
-                        <a class="text-white" id="header_title">eZLeave | </a>
-                        <a class="text-white" id="header_title" target="#blank" href="https://www.bioseed.com.ph">bioseed.com.ph</a>
-                    </div>
-                </div>
-                <div class="col-1 text-end align-items-center align-self-center">
-                    <a href="#" class="text-light position-relative" style="font-size: 1.5rem"data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class='bx bxs-bell'></i>
-                        @if (user_notifications()->where('is_open',false)->count() != 0)
-                            <span class="position-absolute top-0 start-100 translate-middle ">
-                                <span class="badge rounded-pill bg-danger" style="font-size: 10px">{{ user_notifications()->where('is_open',false)->count() }}</span>
-                            </span>
-                        @endif
-                    </a>
-                    <ul class="dropdown-menu shadow" style="border-radius: 10px;">
-                        <li><h6 class="dropdown-header">Notifications</h6></li>
-                        @forelse ( user_notifications()->where('is_open',false)->take(5) as $notification )
-                            <li>
-                                @if ($notification->notification_type_id == 'nt-1001')
-                                    <a class="dropdown-item" href="{{ route('user.notification.page') }}">
-                                        <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
-                                        <h6 class="text-secondary" style="margin-bottom: 0px;">{{ $notification->subject }}</h6>
-                                        <p class="text-secondary" style="margin-bottom: 3px">
-                                            <i class='bx bx-time' style="translate: 0px 2px;"></i>
-                                            @php
-                                                $current_time = \Carbon\Carbon::now();
-                                            @endphp
-                                            @if ($notification->created_at->diffInMinutes($current_time) <= 59)
-                                                @if ($notification->created_at->diffInMinutes($current_time) == 0)
-                                                    just now
-                                                @else
-                                                    {{ $notification->created_at->diffInMinutes($current_time) }}m ago
-                                                @endif
-                                            @elseif ($notification->created_at->diffInHours($current_time) <= 5)
-                                                {{ $notification->created_at->diffInHours($current_time) }}h ago
-                                            @elseif ($notification->created_at->diffInHours($current_time) <= 48)
-                                                @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
-                                                    Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
-                                                @elseif ($notification->created_at->diffInHours($current_time) <= 48)
-                                                    Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
-                                                @endif
-                                            @else
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
-                                            @endif
-                                        </p>
-                                    </a>
-                                @elseif ($notification->notification_type_id == 'nt-1002')
-                                    <a class="dropdown-item" href="{{ route('leave_details_page',['leave_application_rn'=>$notification->body]) }}">
-                                        <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
-                                        <h6 class="text-secondary" style="margin-bottom: 0px">{{ $notification->subject }}</h6>
-                                        <p class="text-secondary" style="margin-bottom: 3px">
-                                            <i class='bx bx-time' style="translate: 0px 2px;"></i>
-                                            @php
-                                                $current_time = \Carbon\Carbon::now();
-                                            @endphp
-                                            @if ($notification->created_at->diffInMinutes($current_time) <= 59)
-                                                @if ($notification->created_at->diffInMinutes($current_time) == 0)
-                                                    just now
-                                                @else
-                                                    {{ $notification->created_at->diffInMinutes($current_time) }}m ago
-                                                @endif
-                                            @elseif ($notification->created_at->diffInHours($current_time) <= 5)
-                                                {{ $notification->created_at->diffInHours($current_time) }}h ago
-                                            @elseif ($notification->created_at->diffInHours($current_time) <= 48)
-                                                @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
-                                                    Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
-                                                @elseif ($notification->created_at->diffInHours($current_time) <= 48)
-                                                    Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
-                                                @endif
-                                            @else
-                                                {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
-                                            @endif
-                                        </p>
-                                    </a>
+                <div class="col-3 text-end">
+                    <div class="row">
+                        <div class="col-8 text-end">
+                            <a href="#" class="text-light position-relative" style="font-size: 1.5rem"data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class='bx bxs-bell'></i>
+                                @if (user_notifications()->where('is_open',false)->count() != 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle ">
+                                        <span class="badge rounded-pill bg-danger" style="font-size: 10px">{{ user_notifications()->where('is_open',false)->count() }}</span>
+                                    </span>
                                 @endif
-                            </li>
-                        @empty
-                            <li class="dropdown-item text-center">No Recent Notification</li>
-                        @endforelse
-                        <li><hr class="dropdown-divider"></li>
-                        <li class="text-center">
-                            <a class="dropdown-item position-relative" href="{{ route('user.notification.page') }}">
-                                view all
-                            @if (user_notifications()->where('is_open',false)->count() >= 6)
-                                <span class="position-absolute translate-middle " style="translate: 75% 0px;">
-                                    <span class="badge rounded-pill bg-danger text-danger" style="font-size: 5px">.</span>
-                                </span>
-                            @endif
                             </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-2 align-self-center text-start align-items-center">
-                    <a class="nav_logo-name dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ auth()->user()->first_name }}
-                    </a>
-                    <ul class="dropdown-menu shadow" >
-                        <li><span class="dropdown-item-text">{{ auth()->user()->first_name." ".auth()->user()->last_name." ".optional(auth()->user()->suffixes)->suffix_title }}</span></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ route('employee_profile') }}">Profile</a></li>
-                        <li>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="dropdown-item">Sign out</button>
-                            </form>
-                        </li>
-                    </ul>
+                            <ul class="dropdown-menu shadow" style="border-radius: 10px;">
+                                <li><h6 class="dropdown-header">Notifications</h6></li>
+                                @forelse ( user_notifications()->where('is_open',false)->take(5) as $notification )
+                                    <li>
+                                        @if ($notification->notification_type_id == 'nt-1001')
+                                            <a class="dropdown-item" href="{{ route('user.notification.page') }}">
+                                                <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
+                                                <h6 class="text-secondary" style="margin-bottom: 0px;">{{ $notification->subject }}</h6>
+                                                <p class="text-secondary" style="margin-bottom: 3px">
+                                                    <i class='bx bx-time' style="translate: 0px 2px;"></i>
+                                                    @php
+                                                        $current_time = \Carbon\Carbon::now();
+                                                    @endphp
+                                                    @if ($notification->created_at->diffInMinutes($current_time) <= 59)
+                                                        @if ($notification->created_at->diffInMinutes($current_time) == 0)
+                                                            just now
+                                                        @else
+                                                            {{ $notification->created_at->diffInMinutes($current_time) }}m ago
+                                                        @endif
+                                                    @elseif ($notification->created_at->diffInHours($current_time) <= 5)
+                                                        {{ $notification->created_at->diffInHours($current_time) }}h ago
+                                                    @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                        @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
+                                                            Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                        @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                            Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                        @endif
+                                                    @else
+                                                        {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
+                                                    @endif
+                                                </p>
+                                            </a>
+                                        @elseif ($notification->notification_type_id == 'nt-1002')
+                                            <a class="dropdown-item" href="{{ route('leave_details_page',['leave_application_rn'=>$notification->body]) }}">
+                                                <h5 style="margin-bottom: 3px;"><b>{{ $notification->title }}</b></h5>
+                                                <h6 class="text-secondary" style="margin-bottom: 0px">{{ $notification->subject }}</h6>
+                                                <p class="text-secondary" style="margin-bottom: 3px">
+                                                    <i class='bx bx-time' style="translate: 0px 2px;"></i>
+                                                    @php
+                                                        $current_time = \Carbon\Carbon::now();
+                                                    @endphp
+                                                    @if ($notification->created_at->diffInMinutes($current_time) <= 59)
+                                                        @if ($notification->created_at->diffInMinutes($current_time) == 0)
+                                                            just now
+                                                        @else
+                                                            {{ $notification->created_at->diffInMinutes($current_time) }}m ago
+                                                        @endif
+                                                    @elseif ($notification->created_at->diffInHours($current_time) <= 5)
+                                                        {{ $notification->created_at->diffInHours($current_time) }}h ago
+                                                    @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                        @if (\Carbon\Carbon::parse($notification->created_at)->format('m/d/Y') == \Carbon\Carbon::parse($current_time)->format('m/d/Y'))
+                                                            Today at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                        @elseif ($notification->created_at->diffInHours($current_time) <= 48)
+                                                            Yesterday at {{ \Carbon\Carbon::parse($notification->created_at)->format('h:ia') }}
+                                                        @endif
+                                                    @else
+                                                        {{ \Carbon\Carbon::parse($notification->created_at)->format('m/d/Y \\a\\t\ h:ia') }}
+                                                    @endif
+                                                </p>
+                                            </a>
+                                        @endif
+                                    </li>
+                                @empty
+                                    <li class="dropdown-item text-center">No Recent Notification</li>
+                                @endforelse
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="text-center">
+                                    <a class="dropdown-item position-relative" href="{{ route('user.notification.page') }}">
+                                        view all
+                                    @if (user_notifications()->where('is_open',false)->count() >= 6)
+                                        <span class="position-absolute translate-middle " style="translate: 75% 0px;">
+                                            <span class="badge rounded-pill bg-danger text-danger" style="font-size: 5px">.</span>
+                                        </span>
+                                    @endif
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-4 align-self-center text-start align-items-center">
+                            <a class="nav_logo-name dropdown-toggle" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ auth()->user()->first_name }}
+                            </a>
+                            <ul class="dropdown-menu shadow" >
+                                <li><span class="dropdown-item-text">{{ auth()->user()->first_name." ".auth()->user()->last_name." ".optional(auth()->user()->suffixes)->suffix_title }}</span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ route('employee_profile') }}">Profile</a></li>
+                                <li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">Sign out</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -498,7 +505,7 @@
     </script>
 
 
-    <div class="container-fluid" id="profile_body" style="display: @yield('profile_bar_display')">
+    <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
         <div class="row  p-4 card shadow-sm align-self-stretch">
             <div class="col ">
                 <div class="row">
@@ -560,14 +567,14 @@
 
     <footer class="position-static pt-5">
       <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
-        <div class="footer-custom">
-          <div class="text-light text-center pt-2 pb-2" style="">
+        <div class="">
+          <div class="text-secondary text-center pt-2 pb-2" style="">
             <div class="">
               <a >
                 <p>© {{ now()->year }}
-                  <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
+                  <a href="https://www.bioseed.com.ph/" target="#blank" class="text-secondary">
                     Bioseed Research Philippines, Inc.
-                  </a> | All Rights Reserved. | Beta v0.2.0
+                  </a> | All Rights Reserved. | {{ env('APP_VERSION') }}
                 </p>
               </a>
             </div>
@@ -578,16 +585,57 @@
 
         {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> --}}
         <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
-      <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
-      <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-      </script>
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous">
+        </script>
+        <script type="text/javascript">
+            $(".alert").delay(4000).slideUp(200, function() {
+                  $(this).alert('close');
+              });
+
+            $(document).ready(function () {
+                $('#datatable_approval_history').dataTable({
+                    order: [[0, 'asc']],
+                    pagingType: 'simple',
+                    renderer: {
+                        pagingButton: 'bootstrap',
+                        pagingContainer: 'bootstrap5'
+                    },
+                    autoFill: {
+                        columns: ':not(:first-child)'
+                    },
+                    language: {
+                        lengthMenu: 'Change the number of records to show _MENU_ ',
+                        paginate: {
+                            // next: 'Next >',
+                            // previous: '< Previous',
+                        }
+                    },
+                    // layout: {
+                    //     topStart: 'buttons'
+                    // },
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type here to filter the table',
+                                text: 'Search'
+                            }
+                        }
+                    }
+                }).css({ 'margin-top': '0em' });
+            });
+            // new DataTable('#data_table',{
+            //     pagingType: 'first_last_numbers'
+            // });
+        </script>
+        <script type="text/javascript" src="{{ asset('js/submit_buttons.js') }}"></script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
     </footer>
 
   </body>
