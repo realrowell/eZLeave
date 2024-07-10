@@ -240,36 +240,8 @@
                                                                                             <td class="t9" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <h1 class="t7" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:35px;font-weight:900;font-style:normal;font-size:30px;text-decoration:none;text-transform:none;direction:ltr;color:#121212;text-align:center;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    {{ $leaveapplication['reference_number'] }} has been approved
+                                                                                                    Your Leave Application has been Rejected
                                                                                                 </h1>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="t17" style="mso-line-height-rule:exactly;mso-line-height-alt:6px;line-height:10px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <!--[if mso]>
-                                                                                    <table class="t19" role="presentation" cellpadding="0" cellspacing="0" align="center">
-                                                                                    <![endif]-->
-                                                                                    <!--[if !mso]>-->
-                                                                                    <table class="t19" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
-                                                                                        <!--<![endif]-->
-                                                                                        <tr>
-                                                                                            <!--[if mso]>
-                                                                                            <td width="480" class="t18">
-                                                                                            <![endif]-->
-                                                                                            <!--[if !mso]>-->
-                                                                                            <td class="t18" style="width:360px;">
-                                                                                                <!--<![endif]-->
-                                                                                                <p class="t16" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:18px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:center;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    Your approval is no longer needed.
-                                                                                                </p>
                                                                                             </td>
                                                                                         </tr>
                                                                                     </table>
@@ -313,6 +285,7 @@
                                                                                     <div class="t17" style="mso-line-height-rule:exactly;mso-line-height-alt:6px;line-height:20px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
                                                                                 </td>
                                                                             </tr>
+
                                                                             <tr>
                                                                                 <td>
                                                                                     <!--[if mso]>
@@ -334,6 +307,11 @@
                                                                                             </td>
                                                                                         </tr>
                                                                                     </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <div class="t21" style="mso-line-height-rule:exactly;mso-line-height-alt:6px;line-height:6px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -464,7 +442,7 @@
                                                                                             <td class="t30" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <p class="t28" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    Application by: {{ $employee_name }}
+                                                                                                    Status: {{ $status }}
                                                                                                 </p>
                                                                                             </td>
                                                                                         </tr>
@@ -492,7 +470,7 @@
                                                                                             <td class="t30" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <p class="t28" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    Approved by: {{ $approved_by_name }}
+                                                                                                    Rejected by: {{ $approved_by_name }}
                                                                                                 </p>
                                                                                             </td>
                                                                                         </tr>
@@ -515,35 +493,7 @@
                                                                                             <td class="t30" style="width:360px;">
                                                                                                 <!--<![endif]-->
                                                                                                 <p class="t28" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:16px;text-decoration:none;text-transform:none;direction:ltr;color:#111111;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    Reason for approval: {{ $reason }}
-                                                                                                </p>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </table>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="t41" style="mso-line-height-rule:exactly;mso-line-height-alt:6px;line-height:20px;font-size:1px;display:block;">&nbsp;&nbsp;</div>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <!--[if mso]>
-                                                                                    <table class="t43" role="presentation" cellpadding="0" cellspacing="0" align="center">
-                                                                                    <![endif]-->
-                                                                                    <!--[if !mso]>-->
-                                                                                    <table class="t43" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;">
-                                                                                        <!--<![endif]-->
-                                                                                        <tr>
-                                                                                            <!--[if mso]>
-                                                                                            <td width="460" class="t42">
-                                                                                            <![endif]-->
-                                                                                            <!--[if !mso]>-->
-                                                                                            <td class="t42" style="width:360px;">
-                                                                                                <!--<![endif]-->
-                                                                                                <p class="t40" style="margin:0;Margin:0;font-family:Inter Tight,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:21px;font-weight:500;font-style:normal;font-size:13px;text-decoration:none;text-transform:none;direction:ltr;color:#121212;text-align:center;mso-line-height-rule:exactly;mso-text-raise:2px;">
-                                                                                                    If you believed this was a mistake, please contact Hr Staff at <a href="mailto:hr.brpi@bioseed.com.ph&subject=eZLeave%20Leave%20Application%20Concern" target="_top" style="text-decoration: underline;">hr.brpi@bioseed.com</a>
+                                                                                                    Reason for rejection: {{ $reason }}
                                                                                                 </p>
                                                                                             </td>
                                                                                         </tr>

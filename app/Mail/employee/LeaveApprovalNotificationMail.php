@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\hrstaff;
+namespace App\Mail\employee;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,20 +9,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LeaveAppForApproverMail extends Mailable implements ShouldQueue
+class LeaveApprovalNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $leaveapplication;
     public $employee_name;
     public $leave_type;
+
     /**
      * Create a new message instance.
      */
     public function __construct($leaveapplication)
     {
         $this->leave_type = $leaveapplication->leavetypes->leave_type_title;
-        $this->employee_name = $leaveapplication->employees->users->first_name." ".$leaveapplication->employees->users->last_name;
+        $this->employee_name = $leaveapplication->employees->users->last_name.", ".$leaveapplication->employees->users->first_name;
         $this->leaveapplication = $leaveapplication;
     }
 
@@ -42,7 +43,7 @@ class LeaveAppForApproverMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'email.hrstaff.leave_app_forApprover',
+            view: 'email.employee.leave_app_forApprover',
         );
     }
 

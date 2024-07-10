@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Mail\hrstaff;
+namespace App\Mail\employee;
 
+use App\Models\LeaveApplication;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,21 +10,24 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LeaveAppForApproverMail extends Mailable implements ShouldQueue
+class LeaveAppForSecondApprover extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $leaveapplication;
     public $employee_name;
     public $leave_type;
+    public $status;
     /**
      * Create a new message instance.
      */
-    public function __construct($leaveapplication)
+    public function __construct($leave_applications)
     {
-        $this->leave_type = $leaveapplication->leavetypes->leave_type_title;
-        $this->employee_name = $leaveapplication->employees->users->first_name." ".$leaveapplication->employees->users->last_name;
-        $this->leaveapplication = $leaveapplication;
+        $leave_application = LeaveApplication::where('reference_number',$leave_applications['reference_number'])->first();
+        $this->leave_type = $leave_applications->leavetypes->leave_type_title;
+        $this->employee_name = $leave_applications->employees->users->first_name." ".$leave_applications->employees->users->last_name;
+        $this->leaveapplication = $leave_applications;
+        $this->status = $leave_application->statuses->status_title;
     }
 
     /**
@@ -32,7 +36,7 @@ class LeaveAppForApproverMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Leave Application for your Approval',
+            subject: 'Leave App For Second Approver',
         );
     }
 
@@ -42,7 +46,7 @@ class LeaveAppForApproverMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'email.hrstaff.leave_app_forApprover',
+            view: 'email.employee.leave_app_forSecondApprover',
         );
     }
 

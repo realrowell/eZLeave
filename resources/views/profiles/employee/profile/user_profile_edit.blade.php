@@ -45,7 +45,25 @@
                 <div class="col text-center p-5">
                     <div class="row justify-content-center align-items-start">
                         <div class="profile-photo-box align-items-start pt-3 pb-4">
-                            <img class="profile-photo" src="/img/dummy_profile.jpg" alt="profile photo">
+                            @if ($profile_photo == null)
+                                <img class="profile-photo" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
+                            @else
+                                <img class="profile-photo" src="{{ asset('storage/images/profile_photos/'.$profile_photo->profile_photo) }}" alt="profile photo">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-12 mx-auto mb-3">
+                        {{-- <button class="btn btn-sm btn-primary" type="button">Upload Profile Photo</button> --}}
+                        <div class="form-control form">
+                            <form action="{{ route('admin_update_profile_photo',['username'=>$user->user_name]) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <label for="profile_photo" class="form-label mt-3 mb-0">Upload Profile Photo</label>
+                                <p class=" mt-0">
+                                    *file size must not exceed 2mb.
+                                </p>
+                                <input class="form-control rounded-0" type="file" id="profile_photo" accept="image/png, image/jpeg, image/jpg" name="profile_photo" required>
+                                <button class="form-control rounded-0 btn btn-sm btn-primary mt-4 mb-3" type="submit">Upload</button>
+                            </form>
                         </div>
                     </div>
                     <h4 class="text-dark">{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }} {{ optional($user->suffixes)->suffix_title }}</h4>

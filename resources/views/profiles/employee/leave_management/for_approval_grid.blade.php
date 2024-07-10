@@ -69,4 +69,13 @@
         </div>
     @endif
 </div>
+<div class="row">
+    <div class="col">
+        <div class="mt-5 mb-5">
+            <ul class="pagination justify-content-center align-items-center">
+                {!! $leave_applications->links('pagination::bootstrap-5') !!}
+            </ul>
+        </div>
+    </div>
+</div>
 @endsection
