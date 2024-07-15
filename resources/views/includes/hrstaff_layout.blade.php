@@ -70,7 +70,7 @@
         --first-color-light: #00AF46;
         --accent-color:  #f3b200;
         --accent-color-2:  #f3b200;
-        --body-font: 'Tahoma', sans-serif;
+        --body-font: "Open Sans", sans-serif;
         --normal-font-size: 1rem;
         --z-fixed: 100;
       }
@@ -425,12 +425,11 @@
         </div>
 
         <div class="mb-0">
-            <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
+            {{-- <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
                 <div class="row  p-4 card shadow-sm align-self-stretch">
                     <div class="col ">
                         <div class="row">
                             <div class="col-lg-2 col-md-2 col-sm-12 p-2">
-                                {{-- <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt=""> --}}
                                 @if (auth()->user()->profile_photos == null)
                                     <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
                                 @else
@@ -476,7 +475,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <script type="text/javascript">
                 $(".alert").delay(4000).slideUp(200, function() {
                       $(this).alert('close');
@@ -529,18 +528,13 @@
 
     <footer class="position-static pt-5">
         <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
-            <div class="footer-custom">
-                <div class="text-light text-center pt-2 pb-2" style="">
-                    <div class="">
-                    <a >
-                        <p>© {{ now()->year }}
-                        <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
-                            Bioseed Research Philippines, Inc.
-                        </a> | Powered by Bioseed Information Management Systems | {{ env('APP_VERSION') }}
-                        </p>
-                    </a>
-                    </div>
-                </div>
+            <div class="text-secondary text-center pt-2 pb-2" style="">
+                <p class="mb-0">© {{ now()->year }}
+                    <a href="https://www.bioseed.com.ph/" target="#blank" class="text-secondary">
+                        Bioseed Research Philippines, Inc.
+                    </a> | All Rights Reserved | {{ env('APP_VERSION') }}
+                </p>
+                <p>Powered by Bioseed Information Management Systems</p>
             </div>
         </div>
 

@@ -10,7 +10,7 @@
             <a href="{{ route('hrstaff_dashboard') }}" class="@yield('menu_hr_dashboard')">
                 <div class="col text-light-hover">
                     <div class="card-body">
-                        <h6>HR Staff Dashboard</h6>
+                        <h6>Dashboard</h6>
                     </div>
                 </div>
             </a>

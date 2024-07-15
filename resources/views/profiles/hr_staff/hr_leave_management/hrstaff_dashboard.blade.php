@@ -7,7 +7,7 @@
 @section('sidebar_dashboard_active','active')
 @section('sub-content')
 
-<div class="row">
+{{-- <div class="row">
     <div class="col mt-2">
         <div class="row">
             <div class="col">
@@ -37,16 +37,16 @@
         </div>
     </div>
     <div class="col"></div>
-</div>
-<div class="row gap-3">
+</div> --}}
+<div class="row mt-3 gap-3">
     <div class="container-fluid">
         <div class="row gap-3">
-            <div class="col-md p-3 bg-light shadow">
+            <div class="col-md p-3 bg-light shadow border border-5 border-warning border-top-0 border-bottom-0 border-end-0">
                 <div class="container-fluid">
                     <div class="row ">
-                        <div class="col"><h5>Overview</h5></div>
+                        <div class="col text-start"><h5>Overview</h5></div>
                         <div class="col d-flex justify-content-end ">
-                            <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-secondary">see all</a>
+                            {{-- <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-secondary">see all</a> --}}
                         </div>
                     </div>
                     <div class="container-fluid mb-4">
@@ -73,54 +73,46 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md p-3 bg-light shadow">
-                <div class="row">
-                    <div class="container-fluid">
-                        <div class="row ">
-                            <div class="col"><h5>Recent Activities</h5></div>
-                            <div class="col d-flex justify-content-end ">
-                                {{-- <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a> --}}
-                            </div>
+            <div class="col-md p-3 bg-light shadow border border-5 border-warning border-top-0 border-bottom-0 border-end-0">
+                <div class="container-fluid">
+                    <div class="row ">
+                        <div class="col text-start"><h5>Recent Activities</h5></div>
+                        <div class="col d-flex justify-content-end ">
+                            {{-- <a href="{{ route('hrstaff_leave_management') }}" class="btn-sm btn-primary">see all</a> --}}
                         </div>
-                        <div class="container-fluid mt-3 mb-3">
-                            @forelse ($notifications as $notification)
-                                <ul class="list-group">
-                                    <li class="list-group-item list-group-item-action mt-1">
-                                        <div class="row">
-                                            <div class="col">
-                                                {{ $notification->title }}
-                                            </div>
-                                            <div class="col text-end">
-                                                {{ timestamp_leadtime($notification->created_at) }}
-                                            </div>
+                    </div>
+                    <div class="container-fluid mt-3 mb-4">
+                        @forelse ($notifications as $notification)
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action mt-1">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ $notification->title }}
                                         </div>
-                                        {{-- <div class="row">
-                                            <div class="col">
-                                                {{ $notification->author_id }}
-                                                {{ $notification->employee_id }}
-                                            </div>
-                                        </div> --}}
-                                    </li>
-                                </ul>
-                            @empty
-                                <ul class="list-group">
-                                    <li class="list-group-item list-group-item-action mt-1">
-                                        <div class="row">
-                                            <div class="col text-center">
-                                                No Recent Activities
-                                            </div>
+                                        <div class="col text-end">
+                                            {{ timestamp_leadtime($notification->created_at) }}
                                         </div>
-                                    </li>
-                                </ul>
-                            @endforelse
-                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        @empty
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-action mt-1">
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            No Recent Activities
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        @endforelse
                     </div>
                 </div>
             </div>
         </div>
     </div>
     {{-- Employee Management Table --}}
-    <div class="row bg-light p-3 m-1 shadow">
+    <div class="container-fluid bg-light p-4 shadow border border-5 border-warning border-top-0 border-bottom-0 border-end-0">
         <div class="row">
             <div class="col">
                 <h5>Employee Leave Credits Overview</h5>
@@ -170,10 +162,7 @@
     </div>
     {{-- END Employee Management Table --}}
     {{-- Leave application Table --}}
-    <div class="spinner-border text-primary" id="loading_spinner" role="status" style="z-index: 1060; display: none;">
-        <span class="visually-hidden" >Loading...</span>
-    </div>
-    <div class="row bg-light p-3 m-1 shadow" id='form_submit'>
+    <div class="container-fluid bg-light p-4 shadow border border-5 border-warning border-top-0 border-bottom-0 border-end-0">
         <div class="row">
             <div class="col">
                 <h5>Leave Management Overview</h5>

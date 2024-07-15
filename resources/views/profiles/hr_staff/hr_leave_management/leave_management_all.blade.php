@@ -9,10 +9,10 @@
 {{-- Leave application Table --}}
 <div class="row bg-light p-3 shadow">
     <div class="d-lg-flex d-md-flex d-sm-block ">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col">
-                    <h5>Leave Management / All</h5>
+                <div class="col text-start">
+                    <h5>Leave Management</h5>
                 </div>
                 <div class="col">
                     <div class="btn-group">
