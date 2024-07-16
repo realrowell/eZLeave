@@ -6,15 +6,7 @@
 @section('menu_leave_types','text-dark')
 @section('sub-content')
 
-{{-- <div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
-    <span class="visually-hidden" >Loading...</span>
-</div> --}}
-<div class="row">
-    <div class="col mt-2">
-      {{-- <h3>Leave Management HR Staff / Leave Credits</h3> --}}
-    </div>
-</div>
-<div class="row gap-3" id="table_container">
+<div class="row mt-3 bg-light shadow" >
     {{-- <div class="row">
         <div class="col text-end align-items-end">
             <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
@@ -148,7 +140,7 @@
     {{-- End Add Leave Credits Modal --}}
 
     {{-- Employee Management Table --}}
-    <div class="row bg-light p-3 m-1 shadow">
+    <div class="row p-3 m-1">
         <div class="d-flex gap-3">
             <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                 <div class="d-lg-inline-flex d-md-inline-flex d-sm-grid d-grid gap-3 ">

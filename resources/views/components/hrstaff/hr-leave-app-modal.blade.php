@@ -1,16 +1,9 @@
 <div class="modal fade" id="ApplyLeaveModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border border-end-0 border-top-0 border-bottom-0 border-warning border-5 rounded-0">
-            <div class="spinner-border text-primary" id="loading_spinner" role="status" style="display: none;">
-                <span class="visually-hidden" >Loading...</span>
-            </div>
             <form action="{{ route('create_leaveapplication') }}" method="POST" onsubmit="return submitButtonDisabled()" enctype="multipart/form-data" id="form_submit">
                 @csrf
                 @method('POST')
-                {{-- <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> --}}
                 <div class="modal-body" id="form_submit">
                     <div class="container-fluid text-start">
                         <div class="row">
@@ -103,7 +96,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="attachment">
-                                            <h6 class="">Attachment</h6>
+                                            <h6 class="">Attachment (optional)</h6>
                                         </label>
                                         <input type="file" accept="image/*,.docx,.doc,.pdf" capture="user" class="form-control" id="attachment" name="attachment">
                                     </div>
@@ -111,7 +104,7 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="reason">
-                                            <h6 class="">Reason / Note</h6>
+                                            <h6 class="">Reason / Note (optional)</h6>
                                         </label>
                                         <textarea class="form-control" id="reason" name="reason" rows="5" cols="50"></textarea>
                                     </div>
@@ -121,11 +114,17 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
-                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" >Discard</button>
-                    <div class="spinner-border text-primary" id="loading_spinner1" role="status" style="display: none;">
-                        <span class="visually-hidden" >Loading...</span>
+                    <div class="container-fluid text-end">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" >Discard</button>
+                                <div class="spinner-border text-primary" id="loading_spinner1" role="status" style="display: none;">
+                                    <span class="visually-hidden" >Loading...</span>
+                                </div>
+                                <button id="submit_button1" type="submit" class="btn btn-success rounded-0" >Apply Leave</button>
+                            </div>
+                        </div>
                     </div>
-                    <button id="submit_button1" type="submit" class="btn btn-success" onclick="onClickLeaveApplySpinnerShow()">Apply Leave</button>
                 </div>
             </form>
         </div>

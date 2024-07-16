@@ -1,19 +1,20 @@
 <?php
 
-namespace App\View\Components\htstaff;
+namespace App\View\Components\hrstaff;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class LeaveAppModal extends Component
+class HrLeaveAppRejectModal extends Component
 {
+    public $reference_number;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($leaveReferenceNumber)
     {
-        //
+        $this->reference_number = $leaveReferenceNumber;
     }
 
     /**
@@ -21,6 +22,6 @@ class LeaveAppModal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.htstaff.leave-app-modal');
+        return view('components.hrstaff.hr-leave-app-reject-modal');
     }
 }

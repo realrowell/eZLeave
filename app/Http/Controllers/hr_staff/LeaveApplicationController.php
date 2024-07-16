@@ -24,6 +24,7 @@ use DateTime;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class LeaveApplicationController extends Controller
 {
@@ -120,7 +121,7 @@ class LeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            // $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.time().'.'.$fileExt;
             $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
@@ -234,10 +235,10 @@ class LeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
             ->update([

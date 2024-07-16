@@ -48,7 +48,7 @@ class LoginController extends Controller
 
     protected function configureRateLimiting(){
         RateLimiter::for('web', function (Request $request) {
-            return Limit::perMinute(1);
+            return Limit::perHour(1);
         });
     }
 
