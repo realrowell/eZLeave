@@ -268,7 +268,7 @@ class EmployeeLeaveApplicationController extends Controller
             ]);
         }
         Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveAppForApproverMail($leaveapplication));
-        Log::notice('Leave Application '.$leaveapplication->reference_number.' is successfully created by '.auth()->user()->email);
+        Log::notice('LEAVE APPLICATION NOTICE || Successful Leave Creation || reference #: '.$leaveapplication->reference_number.' | created by: '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
 
@@ -429,7 +429,7 @@ class EmployeeLeaveApplicationController extends Controller
                 ]);
             }
         }
-        Log::info('Leave Application '.$leave_application_rn.' is successfully updated by '.auth()->user()->email);
+        Log::info('LEAVE APPLICATION NOTICE || Successful Leave Update || reference #: '.$leave_application_rn.' | updated by: '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been updated!');
     }
 
@@ -567,11 +567,11 @@ class EmployeeLeaveApplicationController extends Controller
                     'author_id' => auth()->user()->id,
                     'employee_id' => $leave_applications->employees->users->id,
                 ]);
-                Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully approved by '.auth()->user()->email);
+                Log::notice('LEAVE APPLICATION NOTICE || Leave Application Approval || reference #: '.$leave_applications->reference_number.' | approved by: '.auth()->user()->email);
                 return redirect()->back()->with('success','Leave Application has been approved!');
             }
             else{
-                Log::warning('Leave Application '.$leave_applications->reference_number.' is attempted to approve by '.auth()->user()->email);
+                Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Approval || reference #: '.$leave_applications->reference_number.' | attempted to approve by: '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -646,8 +646,8 @@ class EmployeeLeaveApplicationController extends Controller
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
         }
-        Log::notice(auth()->user()->email.'successfully added a note on Leave Application '.$leave_applications->reference_number);
-        return redirect()->back()->with('success','You successfully add a note!');
+        Log::notice('LEAVE APPLICATION NOTICE || Leave Application Add Note || reference #: '.$leave_applications->reference_number.' | created by: '.auth()->user()->email);
+        return redirect()->back()->with('success','You successfully added a note!');
     }
 
     /**
@@ -683,11 +683,11 @@ class EmployeeLeaveApplicationController extends Controller
                     'employee_id' => $leave_applications->employees->users->id,
                 ]);
                 Mail::to($leave_applications->employees->users->email)->send(new LeaveRejectForEmployeeMail($leave_applications, $leave_approvals ));
-                Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
+                Log::notice('LEAVE APPLICATION NOTICE || Leave Application Rejection || reference #: '.$leave_applications->reference_number.' | rejected by: '.auth()->user()->email);
                 return redirect()->back()->with('warning','Leave Application has been rejected!');
             }
             else{
-                Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to reject by '.auth()->user()->email);
+                Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Rejection || reference #: '.$leave_applications->reference_number.' | attempted to reject by: '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -711,11 +711,11 @@ class EmployeeLeaveApplicationController extends Controller
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
             Mail::to($leave_applications->employees->users->email)->send(new LeaveRejectForEmployeeMail($leave_applications, $leave_approvals ));
-            Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
+            Log::notice('LEAVE APPLICATION NOTICE || Leave Application Rejection || reference #: '.$leave_applications->reference_number.' | rejected by: '.auth()->user()->email);
             return redirect()->back()->with('warning','Leave Application has been rejected!');
         }
         else{
-            Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to reject by '.auth()->user()->email);
+            Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Rejection || reference #: '.$leave_applications->reference_number.' | attempted to reject by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }
@@ -745,11 +745,11 @@ class EmployeeLeaveApplicationController extends Controller
                     ->update([
                         'status_id' => 'sta-1005'
                     ]);
-                    Log::notice('Leave Application '.$leave_application_rn.' is successfully cancelled by '.auth()->user()->email);
+                    Log::notice('LEAVE APPLICATION NOTICE || Leave Application Cancellation || reference #: '.$leave_application_rn.' | cancelled by: '.auth()->user()->email);
                     return redirect()->back()->with('warning','Leave Application has been cancelled!');
             }
             else{
-                Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to cancel by '.auth()->user()->email);
+                Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Cancellation || '.$leave_applications->reference_number.' | attempted to cancel by: '.auth()->user()->email);
                 return redirect()->back()->with('error','You are not authorize!');
             }
         }
@@ -764,11 +764,11 @@ class EmployeeLeaveApplicationController extends Controller
                 ->update([
                     'status_id' => 'sta-1005'
                 ]);
-                Log::notice('Leave Application '.$leave_application_rn.' is successfully cancelled by '.auth()->user()->email);
+                Log::notice('LEAVE APPLICATION NOTICE || Leave Application Cancellation || reference #: '.$leave_application_rn.' | cancelled by: '.auth()->user()->email);
                 return redirect()->back()->with('warning','Leave Application has been cancelled!');
         }
         else{
-            Log::warning('Leave Application '.$leave_applications->reference_number.' was attempted to cancel by '.auth()->user()->email);
+            Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Cancellation || '.$leave_applications->reference_number.' | attempted to cancel by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }

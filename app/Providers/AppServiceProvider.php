@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Opcodes\LogViewer\Facades\LogViewer;
 
@@ -24,24 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Log::info('User with ID '.auth()->user()->id.' | Username: '.auth()->user()->user_name.' with '.auth()->user()->email.' has login successfully');
         LogViewer::auth(function ($request) {
-            if(auth()->check()){
-                if(auth()->user()->role_id == 'rol-0001'){
-                    return true;
-                }
-                elseif (auth()->user()->role_id == 'rol-0002') {
-                    return false;
-                }
-                elseif (auth()->user()->role_id == 'rol-0003') {
-                    return false;
-                }
-                else {
-                    return false;
-                }
-            }
-            else{
-                return redirect(route('index'))->with('info','please login first');
-            }
+            return $request->user()
+            && in_array($request->user()->role_id, [
+                "rol-0001"
+            ]);
         });
     }
 }

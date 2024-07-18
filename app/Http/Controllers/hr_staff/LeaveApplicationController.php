@@ -24,6 +24,7 @@ use DateTime;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class LeaveApplicationController extends Controller
 {
@@ -120,7 +121,7 @@ class LeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            // $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.time().'.'.$fileExt;
             $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
@@ -213,7 +214,7 @@ class LeaveApplicationController extends Controller
 
         Mail::to($employee->employee_positions->reports_tos->users->email)->send(new LeaveAppForApproverMail($leaveapplication));
         Mail::to($employee->users->email)->send(new LeaveAppForEmployeeMail($leaveapplication));
-        Log::notice('Leave Application '.$leaveapplication->reference_number.' is successfully created by '.auth()->user()->email);
+        Log::notice('LEAVE APPLICATION NOTICE || Successful Leave Creation || reference #: '.$leaveapplication->reference_number.' | created by: '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been filed for approval!');
     }
 
@@ -234,10 +235,10 @@ class LeaveApplicationController extends Controller
 
         if($request->hasFile('attachment')){
             $fileNameExt = $request->file('attachment')->getClientOriginalName();
-            $fileName = pathinfo($fileNameExt, PATHINFO_FILENAME);
+            $fileName = Str::random(20);
             $fileExt = $request->file('attachment')->getClientOriginalExtension();
             $fileNameToStore = 'leave.attachment.'.$fileName.'_'.time().'.'.$fileExt;
-            $pathToStore = $request->file('attachment')->storeAs('public/images',$fileNameToStore);
+            $pathToStore = $request->file('attachment')->storeAs('public/images/leave_attachment',$fileNameToStore);
 
             $leave_application = LeaveApplication::where('reference_number', $leave_application_rn)
             ->update([
@@ -260,7 +261,7 @@ class LeaveApplicationController extends Controller
                 ]);
             }
         }
-        Log::notice('Leave Application '.$leave_application_rn.' is successfully updated by '.auth()->user()->email);
+        Log::notice('LEAVE APPLICATION NOTICE || Successful Leave Update || reference #: '.$leave_application_rn.' | updated by: '.auth()->user()->email);
         return redirect()->back()->with('success','Leave Application has been updated!');
     }
 
@@ -370,11 +371,11 @@ class LeaveApplicationController extends Controller
                 }
             }
             // abort(419);
-            Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully approved by '.auth()->user()->email);
+            Log::notice('LEAVE APPLICATION NOTICE || Leave Application Approval || reference #: '.$leave_applications->reference_number.' | approved by: '.auth()->user()->email);
             return redirect()->back()->with('success','Leave Application has been approved!');
         }
         else{
-            Log::warning('Leave Application '.$leave_applications->reference_number.' is attempted to approve by '.auth()->user()->email);
+            Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Approval || reference #: '.$leave_applications->reference_number.' | attempted to approve by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }
@@ -432,11 +433,11 @@ class LeaveApplicationController extends Controller
                     ]);
                 }
             }
-            Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully rejected by '.auth()->user()->email);
+            Log::notice('LEAVE APPLICATION NOTICE || Leave Application Rejection || reference #: '.$leave_applications->reference_number.' | rejected by: '.auth()->user()->email);
             return redirect()->back()->with('warning','Leave Application has been rejected!');
         }
         else{
-            Log::warning('Leave Application '.$leave_applications->reference_number.' is attempted to reject by '.auth()->user()->email);
+            Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Rejection || reference #: '.$leave_applications->reference_number.' | attempted to reject by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }
@@ -509,11 +510,11 @@ class LeaveApplicationController extends Controller
                 'author_id' => auth()->user()->id,
                 'employee_id' => $leave_applications->employees->users->id,
             ]);
-            Log::notice('Leave Application '.$leave_applications->reference_number.' is successfully cancelled by '.auth()->user()->email);
+            Log::notice('LEAVE APPLICATION NOTICE || Leave Application Cancellation || reference #: '.$leave_applications->reference_number.' | cancelled by: '.auth()->user()->email);
             return redirect()->back()->with('warning','Leave Application has been cancelled!');
         }
         else{
-            Log::warning('Leave Application '.$leave_applications->reference_number.' is attempted to cancel by '.auth()->user()->email);
+            Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Cancellation || '.$leave_applications->reference_number.' | attempted to cancel by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
     }

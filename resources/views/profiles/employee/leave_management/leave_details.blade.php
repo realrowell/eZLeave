@@ -253,21 +253,33 @@
                                             @if ($leave_application_note->leave_application_reference == $leave_application->reference_number)
                                                 @if ($leave_application_note->author_id != null)
                                                     @if ($leave_application_note->author_id == $leave_application->employees->users->id)
-                                                        <div class="row">
+                                                        {{-- <div class="row">
                                                             <div class="col">
                                                                 <span class="bg-msg-custom text-light rounded-pill pe-4 ps-4 pt-2 pb-2">
                                                                     {{ $leave_application_note->reason_note }}
                                                                 </span>
                                                                 <p class="mt-2">{{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} - {{ timestamp_leadtime($leave_application_note->created_at) }}</p>
                                                             </div>
+                                                        </div> --}}
+                                                        <div class="speech-wrapper mt-3 mb-2">
+                                                            <div class="bubble ">
+                                                                <div class="txt">
+                                                                    <p class="name">{{ $leave_application_note->users?->first_name }} {{ $leave_application_note->users?->last_name }}</p>
+                                                                    <p class="message">{{ $leave_application_note->reason_note }}</p>
+                                                                    <span class="timestamp ">{{ timestamp_leadtime( $leave_application_note->created_at ) }}</span>
+                                                                </div>
+                                                                <div class="bubble-arrow"></div>
+                                                            </div>
                                                         </div>
                                                     @elseif ($leave_application_note->author_id != $leave_application->employees->users->id)
-                                                        <div class="row">
-                                                            <div class="col text-end">
-                                                                <span class="bg-msg-custom text-light rounded-pill pe-4 ps-4 pt-2 pb-2">
-                                                                    {{ $leave_application_note->reason_note }}
-                                                                </span>
-                                                                <p class="mt-2">{{ optional($leave_application_note->users)->first_name }} {{ optional($leave_application_note->users)->last_name }} - {{ timestamp_leadtime($leave_application_note->created_at) }}</p>
+                                                        <div class="speech-wrapper mt-3 mb-2">
+                                                            <div class="bubble alt">
+                                                                <div class="txt">
+                                                                    <p class="name alt">{{ $leave_application_note->users?->first_name }} {{ $leave_application_note->users?->last_name }}</p>
+                                                                    <p class="message">{{ $leave_application_note->reason_note }}</p>
+                                                                    <span class="timestamp fw-b">{{ timestamp_leadtime( $leave_application_note->created_at ) }}</span>
+                                                                </div>
+                                                                <div class="bubble-arrow alt"></div>
                                                             </div>
                                                         </div>
                                                     @endif

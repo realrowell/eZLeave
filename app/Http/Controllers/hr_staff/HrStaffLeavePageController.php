@@ -196,7 +196,11 @@ class HrStaffLeavePageController extends Controller
     public function hrstaff_leave_pending_availment(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $users = User::where('status_id','sta-2001')->paginate(10);
+        $users = User::where('role_id','rol-0003')
+                        ->where('status_id','sta-2001')
+                        ->orderBy('last_name', 'asc')
+                        ->with(['employees'])
+                        ->get();
         // $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1001')->orWhere('status_id','sta-1003')->orderBy('created_at', 'desc')->paginate(20);
 
         $leave_applications = LeaveApplication::where('status_id','sta-1002')->where('end_date','>=',$current_year->toDateString())->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'asc')->paginate(20);
@@ -211,6 +215,7 @@ class HrStaffLeavePageController extends Controller
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
             'leave_approvals'=>LeaveApproval::orderBy('created_at', 'desc')->get(),
+            'users' => $users,
         ];
         return view('profiles.hr_staff.hr_leave_management.leave_management_pending_availment',compact('leave_applications'))->with($data);
     }
@@ -224,7 +229,11 @@ class HrStaffLeavePageController extends Controller
     public function hrstaff_leave_approved(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $users = User::where('status_id','sta-2001')->paginate(10);
+        $users = User::where('role_id','rol-0003')
+                        ->where('status_id','sta-2001')
+                        ->orderBy('last_name', 'asc')
+                        ->with(['employees'])
+                        ->get();
         $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1002')->orderBy('created_at', 'desc')->paginate(20);
 
         $data=[
@@ -237,6 +246,7 @@ class HrStaffLeavePageController extends Controller
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
             'leave_approvals'=>LeaveApproval::orderBy('created_at', 'desc')->get(),
+            'users' => $users,
         ];
         return view('profiles.hr_staff.hr_leave_management.leave_management_approved',compact('leave_applications'))->with($data);
     }
@@ -250,7 +260,11 @@ class HrStaffLeavePageController extends Controller
     public function hrstaff_leave_cancelled(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $users = User::where('status_id','sta-2001')->paginate(10);
+        $users = User::where('role_id','rol-0003')
+                        ->where('status_id','sta-2001')
+                        ->orderBy('last_name', 'asc')
+                        ->with(['employees'])
+                        ->get();
         $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1005')->orderBy('created_at', 'desc')->paginate(20);
 
         $data=[
@@ -263,6 +277,7 @@ class HrStaffLeavePageController extends Controller
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
             'leave_approvals'=>LeaveApproval::orderBy('created_at', 'desc')->get(),
+            'users' => $users,
         ];
         return view('profiles.hr_staff.hr_leave_management.leave_management_cancelled',compact('leave_applications'))->with($data);
     }
@@ -276,7 +291,11 @@ class HrStaffLeavePageController extends Controller
     public function hrstaff_leave_rejected(){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
-        $users = User::where('status_id','sta-2001')->paginate(10);
+        $users = User::where('role_id','rol-0003')
+                        ->where('status_id','sta-2001')
+                        ->orderBy('last_name', 'asc')
+                        ->with(['employees'])
+                        ->get();
         $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1004')->orderBy('created_at', 'desc')->paginate(20);
 
         $data=[
@@ -289,6 +308,7 @@ class HrStaffLeavePageController extends Controller
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
             'leave_approvals'=>LeaveApproval::orderBy('created_at', 'desc')->get(),
+            'users' => $users,
         ];
         return view('profiles.hr_staff.hr_leave_management.leave_management_reject',compact('leave_applications'))->with($data);
     }
@@ -394,7 +414,7 @@ class HrStaffLeavePageController extends Controller
                 'employee_leavecredits' => $employee_leavecredits,
             ];
 
-            dd($employee_leavecredits);
+            // dd($employee_leavecredits);
             return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits')->with($data);
         }
     }
@@ -411,8 +431,11 @@ class HrStaffLeavePageController extends Controller
             abort(419);
         }
 
-        $employee_name =    $leave_application->employees->users->last_name.", ".
-                            $leave_application->employees->users->first_name." ".
+        $employee_mi = null;
+        if($leave_application->employees->users->middle_name == !null){
+            $employee_mi = mb_substr($leave_application->employees->users->middle_name, 0, 1).". ";
+        }
+        $employee_name = $leave_application->employees->users->first_name." ".$employee_mi." ".$leave_application->employees->users->last_name." ".
                             optional($leave_application->employees->users->suffixes)->suffix_title;
         $employee_designation = $leave_application->employees->employee_positions->positions->position_description;
         $employee_subdepartment = $leave_application->employees->employee_positions->positions->subdepartments->sub_department_title;
