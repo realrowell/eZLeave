@@ -19,7 +19,7 @@
                 <tbody>
                     @foreach ($login_logs as $login_log)
                     <tr>
-                        <td>{{ $login_log->users->last_name }}, {{ $login_log->users->first_name }} {{ optional($login_log->users->suffixes)->suffix_title }}</td>
+                        <td>{{ $login_log->users?->last_name }}, {{ $login_log->users?->first_name }} {{ optional($login_log->users?->suffixes)->suffix_title }}</td>
                         <td>{{ $login_log->ip_address }}</td>
                         {{-- <td><a href="http://ip-api.com/php/{{ $login_log->ip_address }}" data-toggle="tooltip" title="{{ $login_log->ip_address }}">Show IP Details</a></td> --}}
                         <td>{{ $login_log->device }}</td>
