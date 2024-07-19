@@ -1,5 +1,8 @@
 @extends('profiles.hr_staff.employee_management.employees')
 @section('list_active','bg-selected-warning')
+@section('submenu_all','bg-selected-warning text-light')
+@section('submenu_regular','text-dark')
+@section('submenu_proba','text-dark')
 @section('sub-content')
 
 {{-- <div class="row mt-2">

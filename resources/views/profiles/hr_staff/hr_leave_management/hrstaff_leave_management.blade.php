@@ -9,11 +9,11 @@
 @section('menu_leave_types','text-dark')
 @section('sub-content')
 
-<div class="row d-print-none">
+{{-- <div class="row d-print-none">
     <div class="col ">
       <h5>Leave Menu</h5>
     </div>
-</div>
+</div> --}}
 <div class="row gap-1 justify-content-center justify-content-sm-center justify-content-lg-start d-print-none">
     <div class="col-lg-1 col-md-2 col-sm-4 col-8 card-menu-primary shadow-sm align-self-stretch @yield('sub_menu_all')" style="min-height: 1rem" >
         <a href="{{ route('hrstaff_leave_management') }}" class="@yield('sub_menu_all')">

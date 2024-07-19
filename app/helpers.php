@@ -57,3 +57,17 @@ if(!function_exists('currentFiscalYear')){
         return $current_fiscal_year;
     }
 }
+
+if(!function_exists('lengthOfService')){
+    function lengthOfService($date_hired){
+        $current_date = Carbon::now();
+        $current_date = new DateTime(Carbon::now());
+        $date_hired_datetime = new DateTime($date_hired);
+        $length_of_service = $current_date->diff($date_hired_datetime);
+        $length_of_service = $length_of_service->format('%a');
+        $length_of_service = $length_of_service/365;
+        $length_of_service = number_format((float)$length_of_service, 2, '.', '');
+
+        return $length_of_service;
+    }
+}

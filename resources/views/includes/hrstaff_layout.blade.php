@@ -364,7 +364,7 @@
             </form>
         </nav>
     </div>
-    <div class="">
+    <div class=" mb-5">
         <div class="position-relative z-1000">
             <div class="position-fixed bottom-0 end-0 me-5">
                 @if (session('success'))
