@@ -82,10 +82,10 @@
         font-size: var(--normal-font-size);
         color: rgb(44, 44, 44);
         transition: 0.5s;
-        background-color: #f4f4f4;
-        background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
+        background-color: #f1f1f1;
+        /* background-image: radial-gradient(#01143136 1px, #f4f4f4 1px);
         background-size: 20px 20px;
-        background-attachment: fixed;
+        background-attachment: fixed; */
       }
 
       a {
@@ -463,58 +463,6 @@
     </div>
 
     <div class="mb-5">
-        <div class="container-fluid d-print-none" id="profile_body" style="display: @yield('profile_bar_display')">
-            <div class="row mb-4 p-4 card shadow-sm align-self-stretch">
-                <div class="col ">
-                    <div class="row">
-                        <div class="col-lg-2 col-md-2 col-sm-12 p-2">
-                            {{-- <img class="profile-photo-sm" src="/img/dummy_profile.jpg" alt=""> --}}
-                            @if (auth()->user()->profile_photos == null)
-                                <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
-                            @else
-                                <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
-                            @endif
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 p-2">
-                            <div class="row">
-                                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} {{ optional(Auth::user()->suffixes)->suffix_title }}
-                            </div>
-                            <div class="row">
-                                {{ Auth::user()->user_name }}
-                            </div>
-                            <div class="row">
-                                {{ Auth::user()->email }}
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 p-2">
-                            <div class="row">
-                                {{ Auth::user()->email }}
-                            </div>
-                            <div class="row">
-                                {{ Auth::user()->roles->role_title }}
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-12 p-2">
-                            <div class="row">
-                                <div class="row">
-                                    <a href="{{ route('admin_profile') }}" class="nav_link">
-                                      <i class="nav_icon" >@svg('css-profile')</i>
-                                      <span class="nav_name">Profile</span>
-                                    </a>
-                                </div>
-                                <a id="logout_submit" class="nav_link" href="#{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="bx bx-log-out nav_icon"></i>
-                                    <span class="nav_name">SignOut</span>
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <script type="text/javascript">
             $(".alert").delay(4000).slideUp(200, function() {
@@ -523,25 +471,20 @@
         </script>
 
         @yield('content')
+
     </div>
 
     <footer class="position-static mt-5 pt-5" >
-      <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
-        <div class="footer-custom">
-          <div class="text-light text-center pt-2 pb-2" style="">
-            <div class="">
-              <a >
-                <p>© {{ now()->year }}
-                  <a href="https://www.bioseed.com.ph/" target="#blank" class="text-light">
-                    Bioseed Research Philippines, Inc.
-                  </a> | Powered by Bioseed Information Systems. | {{ env('APP_VERSION') }}
+        <div class="position-absolute bottom-0 start-50 translate-middle-x  w-100">
+            <div class="text-secondary text-center pt-2 pb-2" style="">
+                <p class="mb-0">© {{ now()->year }}
+                    <a href="https://www.bioseed.com.ph/" target="#blank" class="text-secondary">
+                        Bioseed Research Philippines, Inc.
+                    </a> | All Rights Reserved | {{ env('APP_VERSION') }}
                 </p>
-              </a>
+                <p>Powered by Bioseed Information Management Systems</p>
             </div>
-          </div>
         </div>
-
-      </div>
         <script
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

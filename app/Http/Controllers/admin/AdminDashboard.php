@@ -18,7 +18,7 @@ class AdminDashboard extends Controller
     public function admin_dashboard(){
 
         $data=[
-            'login_logs' => LoginLog::orderBy('date_time','desc')->get()->take(5),
+            'login_logs' => LoginLog::orderBy('created_at','desc')->get()->take(5),
             'users_count' => User::all()->count(),
             'users_count_active' => User::where('status_id','sta-2001')->count(),
             'user_count_admin' => User::where('role_id','!=','rol-0003')->count(),

@@ -134,7 +134,7 @@
                                 <input type="date" class="form-control" id="birthdate" name="birthdate" value="{{ optional($user->employees)->birthdate }}">
                             </div>
                             <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-                                <h6 class="profile-title">Contact Number</h6>
+                                <h6 class="profile-title">Contact Number <span class="text-danger">(required)</span></h6>
                                 <input type="text" class="form-control" id="contact_number" name="contact_number" value="{{ optional($user->employees)->contact_number }}">
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                                 <input type="text" class="form-control" id="address_province" name="address_province" value="{{ optional($user->employees->employee_addresses)->province }}">
                             </div>
                             <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-                                <h6 class="profile-title">Region</h6>
+                                <h6 class="profile-title">Region <span class="text-secondary">(optional)</span></h6>
                                 <input type="text" class="form-control" id="address_region" name="address_region" value="{{ optional($user->employees->employee_addresses)->region }}">
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                                 <input type="date" class="form-control" id="date_hired" name="date_hired" value="{{ optional($user->employees)->date_hired }}">
                             </div>
                             <div class="mb-2 col-lg-3 col-md-6 col-sm-12">
-                                <h6 class="profile-title">ID Number</h6>
+                                <h6 class="profile-title">ID Number <span class="text-danger">(required)</span></h6>
                                 <input type="text" class="form-control" id="sap_id_number" name="sap_id_number" value="{{ optional($user->employees)->sap_id_number }}">
                             </div>
                             <div class="mb-2 col-lg-3 col-md-6 col-sm-12">

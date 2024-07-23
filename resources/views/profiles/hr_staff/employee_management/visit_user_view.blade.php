@@ -42,7 +42,7 @@
                 <a href="{{ route('user_profile',['username'=>$user->user_name]) }}" class="ms-1 me-1 p-2 ps-3 pe-3 custom-primary-button bg-selected-warning">
                     Profile
                 </a>
-                <a href="{{ route('user_profile_leave',['username'=>$user->user_name]) }}" class="ms-1 me-1 p-2 ps-3 pe-3 custom-primary-button @yield('grid_active') ">
+                <a href="{{ route('user_profile_leave',['username'=>$user->user_name]) }}" class="ms-1 me-1 p-2 ps-3 pe-3 custom-primary-button">
                     Leave MS
                 </a>
             </div>

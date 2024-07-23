@@ -29,16 +29,17 @@
     <div>
         <div class="table-responsive">
             <div class="table-wrapper">
-                <table id="data_table" class="table table-bordered table-hover bg-light ">
+                <table id="data_table" class="table table_sm table-bordered table-hover bg-light ">
                     <thead class="bg-success text-light border-light">
                         <tr>
                             <th>Full Name</th>
-                            <th>Position</th>
-                            <th>Username</th>
-                            <th>Email</th>
                             <th>Gender</th>
+                            <th>LOS</th>
+                            <th>Position</th>
                             <th>Sub-department</th>
                             <th>Department</th>
+                            <th>Status</th>
+                            <th>Birthdate</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -48,16 +49,31 @@
                             <td>
                                 <div class="row">
                                     <div class="col">
-                                        {{ $user->last_name }}, {{ $user->first_name }} {{ $user->middle_name }} {{ optional($user->suffixes)->suffix_title }}
+                                        {{ $user->last_name }}, {{ $user->first_name }}
+                                        @if ($user->middle_name != null)
+                                           {{ mb_substr($user->middle_name, 0, 1).'.' }}
+                                        @endif
+                                        {{ optional($user->suffixes)->suffix_title }}
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ optional(optional($user->employees->employee_positions)->positions)->position_description }}</td>
-                            <td>{{ $user->user_name }}</td>
-                            <td>{{ $user->email }}</td>
                             <td>{{ $user->employees->genders->gender_title }}</td>
+                            <td>
+                                @if (lengthOfService($user->employees->date_hired) <= 0.6)
+                                    <h6 class="mb-0 mt-3 text-primary">LOS: {{ lengthOfService($user->employees->date_hired) }} y</h6>
+                                @else
+                                    @if ($user->employees->employment_status == 'ems-0002')
+                                        <h6 class="mb-0 mt-3 text-danger">LOS: {{ lengthOfService($user->employees->date_hired) }} y/s</h6>
+                                    @else
+                                        <h6 class="mb-0 mt-3 text-">LOS: {{ lengthOfService($user->employees->date_hired) }} y/s</h6>
+                                    @endif
+                                @endif
+                            </td>
+                            <td>{{ optional(optional($user->employees->employee_positions)->positions)->position_description }}</td>
                             <td>{{ optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->sub_department_title }}</td>
                             <td>{{ optional(optional(optional(optional($user->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}</td>
+                            <td>{{ $user->employees?->employment_statuses?->employment_status_title }}</td>
+                            <td>{{ $user->employees->birthdate }}</td>
                             <td class="d-flex gap-2">
                                 {{-- <a href="/hr/user/profile/{{ $user->user_name }}" class="btn-sm btn-primary">Profile</a>
                                 <a href="#" class="btn-sm btn-primary">Leave-MS</a> --}}

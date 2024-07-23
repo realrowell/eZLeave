@@ -234,8 +234,10 @@ class HrStaffPageController extends Controller
      * SHOW REGULAR EMPLOYEES IN LIST
      */
     public function hrstaff_employee_management_regular_list(){
-
-        $users = Employee::where('status_id','sta-2001')->where('employment_status_id','ems-0001')->paginate(15);
+        $users = User::where('status_id','sta-2001')->where('role_id','rol-0003')->orderBy('last_name','asc')
+                        ->whereHas('employees', function ($query) {
+                            return $query->where('employment_status_id', '=', 'ems-0001');
+                        })->get();
         $data=[
             // 'users' => User::where('status_id','sta-2001')->paginate(5),
             'suffixes' => Suffix::all()->where('status_id','sta-1007'),
@@ -245,9 +247,10 @@ class HrStaffPageController extends Controller
             'positions' => Position::all()->where('status_id','sta-1007'),
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
-            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
+            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007'),
+            'users' => $users,
         ];
-        return view('profiles.hr_staff.employee_management.employees_regular_list_view',compact('users'))->with($data);
+        return view('profiles.hr_staff.employee_management.employees_regular_list_view')->with($data);
     }
 
     /**
@@ -285,8 +288,11 @@ class HrStaffPageController extends Controller
      * SHOW REGULAR EMPLOYEES IN LIST
      */
     public function hrstaff_employee_management_probationary_list(){
+        $users = User::where('status_id','sta-2001')->where('role_id','rol-0003')->orderBy('last_name','asc')
+        ->whereHas('employees', function ($query) {
+            return $query->where('employment_status_id', '=', 'ems-0002');
+        })->get();
 
-        $users = Employee::where('status_id','sta-2001')->where('employment_status_id','ems-0002')->paginate(15);
         $data=[
             // 'users' => User::where('status_id','sta-2001')->paginate(5),
             'suffixes' => Suffix::all()->where('status_id','sta-1007'),
@@ -296,9 +302,10 @@ class HrStaffPageController extends Controller
             'positions' => Position::all()->where('status_id','sta-1007'),
             'employment_statuses' => EmploymentStatus::all(),
             'subdepartments' => SubDepartment::all()->where('status_id','sta-1007'),
-            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007')
+            'area_of_assignments' => AreaOfAssignment::all()->where('status_id','sta-1007'),
+            'users' => $users,
         ];
-        return view('profiles.hr_staff.employee_management.employees_probi_list_view',compact('users'))->with($data);
+        return view('profiles.hr_staff.employee_management.employees_probi_list_view')->with($data);
     }
 
     public function visit_profile_view($username){
@@ -412,20 +419,20 @@ class HrStaffPageController extends Controller
             'user_reports_to_name' => optional(optional($user->employees->employee_positions)->reports_tos)->last_name.', '.
                                         optional(optional($user->employees->employee_positions)->reports_tos)->first_name,
             'hrstaffs' => $hrstaffs,
-        ];
-
-        return view('profiles.hr_staff.employee_management.visit_user_update',[
             'user'=>$user,
             'employees'=>$employees,
             'user_reports_tos' => $user_reports_tos,
             'reports_to' => $reports_to,
             'second_reports_to' => $second_reports_to,
             'profile_photo' => $profile_photo,
-        ])->with($data);
+        ];
+
+        return view('profiles.hr_staff.employee_management.visit_user_update')->with($data);
     }
 
     public function visit_profile_leave_view($username){
-        $user=User::where('user_name',$username)->get()->first();
+        $user=User::where('user_name',$username)->first();
+        $profile_photo = ProfilePhoto::where('user_id',$user->id)->where('status_id','sta-1007')->first();
 
         if(optional($user->employees->employee_positions)->reports_tos == null){
             $reports_to = "NONE";
@@ -474,6 +481,7 @@ class HrStaffPageController extends Controller
             'employee_leave_applications' => LeaveApplication::where('employee_id',$user->employees->id)->where('fiscal_year_id',$current_fiscal_year->id)->orderBy('created_at', 'asc')->get(),
             'reports_to' => $reports_to,
             'second_reports_to' => $second_reports_to,
+            'profile_photo' => $profile_photo,
         ];
         return view('profiles.hr_staff.employee_management.employee_leavems_view')->with($data);
     }

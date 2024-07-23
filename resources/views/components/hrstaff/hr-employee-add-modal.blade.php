@@ -1,4 +1,4 @@
-<div class="modal fade" id="AddAccountModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="AddEmployeeModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="spinner-border text-primary" id="loading_spinner_1" role="status" style="display: none;">
             <span class="visually-hidden" >Loading...</span>

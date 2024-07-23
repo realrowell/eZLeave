@@ -56,15 +56,15 @@
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-8 col-lg-6 justify-content-end align-items-end text-end mt-2">
-                    <a href="{{ route('hrstaff_employees_grid') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 @yield('grid_active')">
+                    <a href="{{ route('hrstaff_employees_grid') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3 @yield('grid_active')">
                         <i class='fs-6 bx bxs-grid-alt' ></i>
                         Grid View
                     </a>
-                    <a href="{{ route('hrstaff_employees_list') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 @yield('list_active')">
+                    <a href="{{ route('hrstaff_employees_list') }}" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3 @yield('list_active')">
                         <i class='fs-6 bx bx-list-ul' ></i>
                         List View
                     </a>
-                    <a href="#AddAccount" class="ms-1 me-1 custom-primary-button rounded-0 p-2"  data-bs-toggle="modal" data-bs-target="#AddAccountModal">
+                    <a href="#AddAccount" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3"  data-bs-toggle="modal" data-bs-target="#AddEmployeeModal">
                         <i class='bx bxs-user-plus' ></i>
                         Apply Employee
                     </a>

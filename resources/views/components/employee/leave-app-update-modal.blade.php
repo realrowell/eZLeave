@@ -10,19 +10,19 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <label for="employee">
-                                            <h2 class="">Update Leave Details</h2>
+                                            <h3 class="">Update Leave Details</h3>
                                         </label>
                                     </div>
                                     <div class="col-3 text-end">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" id="btn_modal_x_onUpdate{{ $leave_reference_number }}" aria-label="Close"></button>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row pt-3">
                                     <div class="col">
                                         <label for="employee">
                                             <h6 class="">Reference Number</h6>
                                         </label>
-                                        <input type="text" class="form-control" disabled value="{{ $leave_reference_number }}">
+                                        <h5>{{ $leave_reference_number }}</h5>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
