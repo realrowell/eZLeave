@@ -70,7 +70,7 @@ function onClickLeaveApplySpinnerShow(){
 function onFormSubmit(){
     document.getElementById('loading_spinner_1').style.display="block";
     document.getElementById('submit_button1').classList.add('disabled');
-    document.getElementById('submit_button2').classList.add('disabled');
+    // document.getElementById('submit_button2').classList.add('disabled');
     document.getElementById('form_to_submit').style.opacity = "0.3";
 }
 

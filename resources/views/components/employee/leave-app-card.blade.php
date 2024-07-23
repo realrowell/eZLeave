@@ -32,20 +32,29 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col">
-                <p class="card-text" id="approval_p">Approver:</p>
-                <h6>
-                    {{ $leave_approver_name }}
-                </h6>
-            </div>
-            <div class="col">
-                @if ($second_approver_id != null)
-                    <p class="card-text" id="approval_p">Second Approver:</p>
-                    <h6 class="">
-                        {{ $second_approver_name }}
+            @if ($leave_app_employee != auth()->user()->employees->id)
+                <div class="col">
+                    <p class="card-text" id="approval_p">Application by:</p>
+                    <h6>
+                        {{ $leave_employee_name }}
                     </h6>
-                @endif
-            </div>
+                </div>
+            @elseif ($leave_app_employee == auth()->user()->employees->id)
+                <div class="col">
+                    <p class="card-text" id="approval_p">Approver:</p>
+                    <h6>
+                        {{ $leave_approver_name }}
+                    </h6>
+                </div>
+                <div class="col">
+                    @if ($second_approver_id != null)
+                        <p class="card-text" id="approval_p">Second Approver:</p>
+                        <h6 class="">
+                            {{ $second_approver_name }}
+                        </h6>
+                    @endif
+                </div>
+            @endif
         </div>
         <div class="row">
             <div class="col">

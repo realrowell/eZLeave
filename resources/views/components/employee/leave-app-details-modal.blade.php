@@ -5,7 +5,7 @@
                 <div class="container-fluid text-start">
                     <div class="row pt-3">
                         <div class="col-9">
-                            <h5 class="modal-title">Leave Details</h5>
+                            <h3 class="modal-title">Leave Details</h3>
                         </div>
                         <div class="col-3 text-end">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -18,7 +18,7 @@
                                     <label for="employee">
                                         <h6 class="">Reference Number</h6>
                                     </label>
-                                    <input type="text" class="form-control" disabled value="{{ $leave_reference_number }}">
+                                    <h5>{{ $leave_reference_number }}</h5>
                                 </div>
                             </div>
                             <div class="row pt-2">

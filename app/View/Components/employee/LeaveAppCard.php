@@ -2,6 +2,7 @@
 
 namespace App\View\Components\employee;
 
+use App\Models\LeaveApplication;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -20,6 +21,7 @@ class LeaveAppCard extends Component
     public $leave_app_employee;
     public $status;
     public $status_title;
+    public $leave_employee_name;
     /**
      * Create a new component instance.
      */
@@ -27,6 +29,7 @@ class LeaveAppCard extends Component
                                 $leaveEnd, $leaveCreated, $approverName, $secondApproverId, $secondApproverName,
                                 $status, $statusTitle)
     {
+        $leaveApplication = LeaveApplication::where('reference_number',$leaveReferenceNumber)->first();
         $this->leave_reference_number = $leaveReferenceNumber;
         $this->leave_type_title = $leaveTypeTitle;
         $this->leave_duration = $leaveDuration;
@@ -39,6 +42,12 @@ class LeaveAppCard extends Component
         $this->leave_app_employee = $leaveAppEmployee;
         $this->status = $status;
         $this->status_title = $statusTitle;
+
+        $user_middlename = mb_substr($leaveApplication->employees?->users?->middle_name, 0, 1);
+        if($user_middlename != null){
+            $user_middlename = $user_middlename.'.';
+        }
+        $this->leave_employee_name = $leaveApplication->employees?->users?->first_name.' '.$user_middlename.' '.$leaveApplication->employees?->users?->last_name.' '.$leaveApplication->employees?->users?->suffixes?->suffix_title;
     }
 
     /**
