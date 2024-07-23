@@ -28,7 +28,7 @@ class GoogleLoginController extends Controller
         }
 
         Auth::login($user);
-        Log::info('LOGIN NOTICE || Successful Login || Login with Google || Username: '.auth()->user()->user_name.' | Email: '.auth()->user()->email.);
+        Log::info('LOGIN NOTICE || Successful Login || Login with Google || Username: '.auth()->user()->user_name.' | Email: '.auth()->user()->email);
 
         return redirect(RouteServiceProvider::HOME);
     }
