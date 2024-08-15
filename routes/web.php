@@ -185,7 +185,7 @@ Route::get('/admin/accounts/admin/{username}', [AdminPageController::class, 'adm
 Route::get('/admin/accounts/update_view/{username}', [AdminPageController::class, 'admin_visit_account_update_view'])->name('admin_visit_account_update_view');
 Route::get('/admin/accounts/update/{username}', [AdminPageController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
 Route::post('/admin/accounts/update/{user_id}/{employee_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
-Route::patch('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
+Route::post('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
 Route::get('/admin/accounts/visit/reset_password/{username}', [AccountManagementController::class, 'account_reset_password'])->name('account_reset_password');
 Route::get('/admin/accounts/admin/reset_password/{username}', [AccountManagementController::class, 'admin_account_reset_password'])->name('admin_account_reset_password');
 Route::get('/admin/accounts/account_deactivate/{username}', [AccountManagementController::class, 'account_deactivate'])->name('account_deactivate');

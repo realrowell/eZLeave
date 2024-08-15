@@ -35,7 +35,7 @@ class AdminPageController extends Controller
      * SHOW EMPLOYEES IN GRID
      */
     public function admin_accounts_grid(){
-        $users = User::orderBy('last_name','asc')->paginate(12);
+        $users = User::orderBy('last_name','asc')->paginate(24);
         $data=[
             // 'users' => User::all()->where('status_id','sta-2001'),
             'suffixes' => Suffix::all()->where('status_id','sta-1007'),
