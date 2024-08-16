@@ -241,6 +241,9 @@ Route::controller(AdminLeaveMaintenanceController::class)->group(function (){
 });
 
 Route::get('/admin/system_settings', [SystemSettingsController::class, 'system_settings_view'])->name('admin_system_settings');
+Route::get('/admin/system_settings/email_info', [SystemSettingsController::class, 'email_settings_info_view'])->name('email.settings.info');
+Route::get('/admin/system_settings/app_info', [SystemSettingsController::class, 'app_info_view'])->name('app.info');
+Route::get('/admin/system_settings/system_info', [SystemSettingsController::class, 'system_info_view'])->name('system.info');
 
 
 //Auth
