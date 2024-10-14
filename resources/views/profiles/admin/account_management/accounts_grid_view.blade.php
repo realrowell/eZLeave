@@ -10,7 +10,7 @@
 
 {{-- GRID PROFILE --}}
 <div class="container-fluid">
-    <div class="row justify-content-sm-center justify-content-md-center justify-content-lg-center ">
+    <div class="row">
         @foreach ($users as $user)
             <div class="col-lg-4 col-md-6 col-sm-10 align-self-stretch p-1  ">
                 <x-admin.admin-account-card

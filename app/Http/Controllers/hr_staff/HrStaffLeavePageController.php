@@ -340,6 +340,12 @@ class HrStaffLeavePageController extends Controller
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
         // dd($current_fiscal_year->fiscal_year_title);
 
+        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)
+                                ->where('status_id','sta-1007')
+                                ->orderBy('created_at','desc')
+                                ->with(['leavetypes','employees.employee_positions.positions.subdepartments.departments','employees.users','fiscal_years'])
+                                ->get();
+
         $data=[
             'users' => User::where('status_id','sta-2001')
                             ->where('role_id','rol-0003')
@@ -348,14 +354,10 @@ class HrStaffLeavePageController extends Controller
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
+            'employee_leavecredits' => $employee_leavecredits,
         ];
-        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$current_fiscal_year->id)
-                                ->where('status_id','sta-1007')
-                                ->orderBy('created_at','desc')
-                                ->with(['leavetypes','employees.employee_positions.positions.subdepartments.departments','employees.users','fiscal_years'])
-                                ->get();
 
-        return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
+        return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits' )->with($data);
     }
 
     /**
@@ -367,6 +369,8 @@ class HrStaffLeavePageController extends Controller
     public function hrstaff_fy_leave_credits($fiscal_year){
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
+
+        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$fiscal_year)->where('status_id','sta-1007')->orderBy('created_at','desc')->get();
 
         $data=[
             // 'employees' => Employee::all()->where('status_id','sta-2001')
@@ -380,10 +384,10 @@ class HrStaffLeavePageController extends Controller
             'leavetypes' => LeaveType::all()->where('status_id','sta-1007'),
             'fiscal_years' => FiscalYear::all()->where('status_id','sta-1007'),
             'current_fiscal_year' => $current_fiscal_year,
+            'employee_leavecredits' => $employee_leavecredits,
         ];
-        $employee_leavecredits = EmployeeLeaveCredit::where('fiscal_year_id',$fiscal_year)->where('status_id','sta-1007')->orderBy('created_at','desc')->paginate(20);
 
-        return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits',compact('employee_leavecredits'))->with($data);
+        return view('profiles.hr_staff.hr_leave_management.hrstaff_leave_credits' )->with($data);
     }
 
     /**

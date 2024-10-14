@@ -7,10 +7,13 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo_icon.png') }}">
 
     {{-- Bootstrap 5 --}}
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> --}}
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous"> --}}
     {{-- End Bootstrap 5 --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home_style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/profile_style.css?version=1.1.0') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/select2_style.css?version=1.0.2') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatable_style.css?version=1.0.1') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/datatables.css?version=1.0.1') }}" />
     {{-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css">
 
@@ -39,19 +42,22 @@
       rel="stylesheet"
     />
 
-    <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    {{-- <script defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script defer src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script> --}}
 
     {{-- TinyMCE Editor --}}
-    <script defer src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script defer type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script>
+    {{-- <script src="https://cdn.tiny.cloud/1/wwnohmwf93vz1jxygxktfrjqohktqf35ys0gg87dp5rhhy4l/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript" src="{{ asset('js/tinymce_editor.js') }}"></script> --}}
 
     {{-- Javescript Navbar --}}
     <script defer type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.js') }}"></script>
-    <script defer type="text/javascript" src="{{ asset('js/spinners.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/submit_buttons_v=1.1.js?version=1.0.2') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/spinners.js?version=1.0.1') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/datatables.min.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+    <link   href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
@@ -363,12 +369,12 @@
                     <i class="bx nav_icon bx-message-square-detail"></i>
                     <span class="nav_name">Leave Management</span>
                 </a>
-                <a href="{{ route('admin_org_menu') }}" class="nav_link @yield('sidebar_organization_active')">
+                <a href="{{ route('admin_departments_grid') }}" class="nav_link @yield('sidebar_organization_active')">
                     <i class='bx nav_icon bx-buildings' ></i>
                     <span class="nav_name">Organization</span>
                 </a>
                 <a href="{{ env('LOG_VIEWER_ROUTE') }}" class="nav_link @yield('sidebar_policy_active')">
-                    <i class='bx nav_icon bx-file-find' ></i>
+                    <i class="bx  nav_icon"><i class='bx bx-chevron-right-square' ></i></i>
                     <span class="nav_name">Log Viewer</span>
                 </a>
                 <a href="{{ route('admin_policy_menu') }}" class="nav_link @yield('sidebar_policy_active')">
@@ -381,7 +387,7 @@
                     <i class="bx x-tabler-report nav_icon">{{ svg('tabler-report-analytics') }}</i>
                     <span class="nav_name">Report</span>
                 </a>
-                <a href="{{ route('admin_system_settings') }}" class="nav_link @yield('sidebar_settings_active')">
+                <a href="{{ route('app.info') }}" class="nav_link @yield('sidebar_settings_active')">
                   <i class="bx x-tabler-report nav_icon" style="width: 25px">
                     {{ svg('carbon-settings') }}
                   </i>
@@ -464,12 +470,6 @@
 
     <div class="mb-5">
 
-        <script type="text/javascript">
-            $(".alert").delay(4000).slideUp(200, function() {
-                  $(this).alert('close');
-              });
-        </script>
-
         @yield('content')
 
     </div>
@@ -485,6 +485,52 @@
                 <p>Powered by Bioseed Information Management Systems</p>
             </div>
         </div>
+        <script type="text/javascript">
+            $(".alert").delay(4000).slideUp(200, function() {
+                  $(this).alert('close');
+              });
+
+            $(document).ready(function () {
+                $('.js-basic-single').select2({
+                    placeholder: "select here",
+                    selectOnClose: false,
+                    width: 'resolve',
+                });
+
+                $('#data_table').dataTable({
+                    order: [],
+                    pagingType: 'simple',
+                    renderer: {
+                        pagingButton: 'bootstrap',
+                        pagingContainer: 'bootstrap5'
+                    },
+                    autoFill: {
+                        columns: ':not(:first-child)'
+                    },
+                    language: {
+                        lengthMenu: 'Change the number of records to show _MENU_ ',
+                        paginate: {
+                            // next: 'Next >',
+                            // previous: '< Previous',
+                        }
+                    },
+                    // layout: {
+                    //     topStart: 'buttons'
+                    // },
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Type here to filter the table',
+                                text: 'Search'
+                            }
+                        }
+                    }
+                }).css({ 'margin-top': '0em' });
+            });
+            // new DataTable('#data_table',{
+            //     pagingType: 'first_last_numbers'
+            // });
+        </script>
         <script
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

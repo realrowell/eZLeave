@@ -5,12 +5,14 @@
                 @csrf
                 @method('POST')
                 <div class="modal-body" id="form_container_onApply">
-                    <div class="row pt-3">
-                        <div class="col-9">
-                            <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
-                        </div>
-                        <div class="col-3 text-end">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
+                    <div class="container-fluid">
+                        <div class="row pt-3">
+                            <div class="col-9">
+                                <h5 class="modal-title" id="staticBackdropLabel">File a Leave Application</h5>
+                            </div>
+                            <div class="col-3 text-end">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn_modal_x_onApply"></button>
+                            </div>
                         </div>
                     </div>
                     <div class="container-fluid text-start">
@@ -86,12 +88,16 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col">
+                                    <div class="col placeholder-glow">
+                                        <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_duration" role="status" >
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                         <label for="duration">Duration (days)</label>
                                         <a class="m-2 fs-6" data-bs-toggle="tooltip" data-bs-placement="right" title="*If the date range includes a weekend, it will not be count after creating the application.">
                                             <i class='bx bx-info-circle text-primary'></i>
                                         </a>
-                                        <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/>
+                                        {{-- <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/> --}}
+                                        <input type="text" name="duration" placeholder="" id="leave_duration" class="form-control" disabled/>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
@@ -105,9 +111,9 @@
                                 <div class="row mt-2">
                                     <div class="col">
                                         <label class="" for="reason">
-                                            <h6 class="">Reason / Note (optional)</h6>
+                                            <h6 class="">Reason / Note</h6>
                                         </label>
-                                        <textarea class="form-control" id="reason" name="reason" rows="5" cols="50"></textarea>
+                                        <textarea class="form-control" id="reason" name="reason" rows="5" cols="50" minlength="20" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -115,15 +121,68 @@
                     </div>
                 </div>
                 <div class="modal-footer" id="form_submit" style="opacity: 1">
-                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
-                    <button id="btn_apply" type="submit" class="btn btn-success rounded-0" >
-                        <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
-                            <span class="visually-hidden">Loading...</span>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <button type="button" class="btn btn-transparent" data-bs-dismiss="modal" id="btn_close_onApply">Cancel</button>
+                            </div>
+                            <div class="col text-end">
+                                <button id="btn_apply" type="submit" class="btn btn-success rounded-0" >
+                                    <div class="spinner-border spinner-border-sm d-none" role="status" id="loading_spinner_apply">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    Create Application
+                                </button>
+                            </div>
                         </div>
-                        Create Application
-                    </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#datetime_startdate, #datetime_enddate, #start_am_check, #start_pm_check, #end_am_check, #end_pm_check').on('change',function(){
+            var start_date = $('#datetime_startdate').val();
+            var end_date = $('#datetime_enddate').val();
+            var start_am = $('#start_am_check').is(':checked');
+            var start_pm = $('#start_pm_check').is(':checked');
+            var end_am = $('#end_am_check').is(':checked');
+            var end_pm = $('#end_pm_check').is(':checked');
+
+            if(end_date == null || end_date == ""){
+                end_date = start_date;
+            }
+            if(start_date == end_date){
+                start_pm = false;
+                end_am = false;
+                $('#start_pm_check').prop( "checked", false );
+                $('#end_am_check').prop( "checked", false );
+            }
+            else if(start_date != end_date){
+                start_am = false;
+                end_pm = false;
+                $('#start_am_check').prop( "checked", false );
+                $('#end_pm_check').prop( "checked", false );
+            }
+            console.log(start_am+" / "+start_pm+" / "+end_am+" / "+end_pm);
+
+            $('#leave_duration').addClass('placeholder');
+            $('#spinner_duration').removeClass('d-none');
+            console.log(start_date+" / "+end_date);
+            $.ajax({
+                type: 'GET',
+                url: '/employee/leave-app/get-duration/'+start_date+'/'+end_date+'/'+start_am+'/'+start_pm+'/'+end_am+'/'+end_pm,
+                success: function (response){
+                    var response = JSON.parse(response);
+                    console.log(response);
+                    $('#leave_duration').empty();
+                    $('#leave_duration').removeClass('placeholder');
+                    $('#spinner_duration').addClass('d-none');
+                    $('#leave_duration').val(response);
+                }
+            });
+        });
+    });
+</script>

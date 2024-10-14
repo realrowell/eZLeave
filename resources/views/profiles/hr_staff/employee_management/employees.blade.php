@@ -66,7 +66,7 @@
                     </a>
                     <a href="#AddAccount" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3"  data-bs-toggle="modal" data-bs-target="#AddEmployeeModal">
                         <i class='bx bxs-user-plus' ></i>
-                        Apply Employee
+                        Add Employee
                     </a>
                 </div>
             </div>

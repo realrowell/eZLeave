@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\LoginLog;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,10 @@ class authCheckEmployeeRole
             elseif (auth()->user()->role_id == 'rol-0003') {
                 if(auth()->user()->status_id == 'sta-2001'){
                     // Log::info('User with ID '. auth()->user()->id.' | User name: '.auth()->user()->first_name.auth()->user()->middle_name.auth()->user()->last_name. ' has access the employee page.');
+                    // $login_logs = LoginLog::where('user_id',auth()->user()->id)->get();
+                    // if($login_logs->count() <= 2){
+                    //     return redirect(route('password.reset.view'));
+                    // }
                     return $next($request);
                 }
                 else{

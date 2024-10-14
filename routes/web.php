@@ -13,6 +13,7 @@ use App\Http\Controllers\indexPageController;
 use App\Http\Controllers\User_Profile_Controller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\admin\DepartmentController;
+use App\Http\Controllers\admin\EmailTestController;
 use App\Http\Controllers\admin\PositionController;
 use App\Http\Controllers\admin\SubDepartmentController;
 use App\Http\Controllers\admin\SystemSettingsController;
@@ -63,6 +64,8 @@ Route::get('/profile/user_profile/edit', [User_Profile_Controller::class, 'profi
 |
 */
 Route::get('/dashboard', [EmployeeDashboard::class, 'employee_dashboard'])->name('employee_dashboard');
+Route::get('/account/password-reset-page', [EmployeeDashboard::class, 'password_reset_view'])->name('password.reset.view');
+Route::post('/account/password/reset', [EmployeeProfileController::class, 'password_reset'])->name('employee.password.reset');
 Route::get('/profile', [EmployeeProfileController::class, 'employee_profile'])->name('employee_profile');
 Route::get('/profile/update/view', [EmployeeProfileController::class, 'employee_profile_update_view'])->name('employee_profile_update_view');
 Route::get('/notifications', [EmployeePageController::class, 'user_notifications_page'])->name('user.notification.page');
@@ -89,6 +92,7 @@ Route::post('/employee/create_note_leaveapplication/{leave_application_rn}', [Em
 Route::post('/employee/approve_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_approval'])->name('employee_leave_approval');
 Route::post('/employee/reject_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_rejection'])->name('employee_leave_rejection');
 Route::post('/employee/cancel_leaveapplication/{leave_application_rn}', [EmployeeLeaveApplicationController::class, 'employee_leave_application_cancellation'])->name('employee_leave_cancellation');
+Route::get('/employee/leave-app/get-duration/{startdate}/{enddate}/{startam}/{startpm}/{endam}/{endpm}', [EmployeeLeaveApplicationController::class, 'GetLeaveDuration']);
 
 
 /*
@@ -185,7 +189,7 @@ Route::get('/admin/accounts/admin/{username}', [AdminPageController::class, 'adm
 Route::get('/admin/accounts/update_view/{username}', [AdminPageController::class, 'admin_visit_account_update_view'])->name('admin_visit_account_update_view');
 Route::get('/admin/accounts/update/{username}', [AdminPageController::class, 'admin_update_employee_view'])->name('admin_update_employee_view');
 Route::post('/admin/accounts/update/{user_id}/{employee_id}', [AccountManagementController::class, 'admin_update_employee'])->name('admin_update_employee');
-Route::patch('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
+Route::post('/admin/accounts/admin/update/{username}', [AccountManagementController::class, 'update_admin_account'])->name('update_admin_account');
 Route::get('/admin/accounts/visit/reset_password/{username}', [AccountManagementController::class, 'account_reset_password'])->name('account_reset_password');
 Route::get('/admin/accounts/admin/reset_password/{username}', [AccountManagementController::class, 'admin_account_reset_password'])->name('admin_account_reset_password');
 Route::get('/admin/accounts/account_deactivate/{username}', [AccountManagementController::class, 'account_deactivate'])->name('account_deactivate');
@@ -224,9 +228,7 @@ Route::get('/admin/organization/area_of_assignments/grid', [AreaOfAssignmentCont
 Route::get('/admin/organization/area_of_assignments/list', [AreaOfAssignmentController::class, 'admin_organization_areaofassignemnts_list'])->name('admin_areaofassignemnts_list');
 Route::get('/admin/organization/area_of_assignments/profile/{id}', [AreaOfAssignmentController::class, 'admin_organization_areaofassignemnts_profile'])->name('admin_areaofassignemnts_profile');
 Route::post('/organization/create_area_of_assignments', [AreaOfAssignmentController::class, 'create_area_of_assignments'])->name('admin_create_areaofassignemnt');
-// Route::put('/organization/update_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'update_area_of_assignments']);
 Route::get('/organization/update_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'update_area_of_assignments'])->name('admin_update_areaofassignemnt');
-// Route::put('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'delete_area_of_assignments']);
 Route::get('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'delete_area_of_assignments'])->name('admin_delete_areaofassignemnt');
 
 Route::controller(AdminLeavePageController::class)->group(function (){
@@ -239,8 +241,19 @@ Route::controller(AdminLeaveMaintenanceController::class)->group(function (){
     Route::get( '/admin/update_leavetype/{leavetype_id}', 'update_leavetypes')->name('admin.update.leavetype');
     Route::get( '/admin/delete_leavetype/{leavetype_id}', 'delete_leavetypes')->name('admin.delete.leavetype');
 });
+Route::controller(SystemSettingsController::class)->group(function (){
+    Route::get( '/admin/system_settings', 'system_settings_view' )->name('admin_system_settings');
+    Route::get( '/admin/system_settings/email_info', 'email_settings_info_view')->name('email.settings.info');
+    Route::get( '/admin/system_settings/test_email', 'email_test_view')->name('email.test.view');
+    Route::get( '/admin/system_settings/app_info', 'app_info_view' )->name('app.info');
+    Route::get( '/admin/system_settings/system_info', 'system_info_view')->name('system.info');
+    Route::get( '/admin/system_settings/db_info', 'db_info_view')->name('db.info');
+    Route::get( '/admin/system_settings/other_info', 'other_info_view' )->name('other.info');
+    Route::get( '/admin/system_settings/system_info', 'system_info_view')->name('system.info');
+    Route::get( '/admin/system_settings/queue_info', 'queue_info_view')->name('queue.info');
+});
 
-Route::get('/admin/system_settings', [SystemSettingsController::class, 'system_settings_view'])->name('admin_system_settings');
+Route::post('/admin/email/email_test', [EmailTestController::class, 'email_test'])->name('email.test');
 
 
 //Auth

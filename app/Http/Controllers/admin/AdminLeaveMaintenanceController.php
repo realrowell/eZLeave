@@ -73,7 +73,7 @@ class AdminLeaveMaintenanceController extends Controller
      */
     public function update_leavetypes(Request $request, $leavetype_id){
         $data = $request->validate([
-            'leavetype_title' => 'sometimes|max:50',
+            // 'leavetype_title' => 'sometimes|max:50',
             'leavetype_description' => 'sometimes|max:300',
             'days_per_year' => 'nullable',
             'max_days' => 'nullable',
@@ -114,7 +114,7 @@ class AdminLeaveMaintenanceController extends Controller
 
         $leavecredits = LeaveType::where('id',$leavetype_id)
         ->update([
-            'leave_type_title' => $data['leavetype_title'],
+            // 'leave_type_title' => $data['leavetype_title'],
             'leave_type_description' => $data['leavetype_description'],
             'leave_days_per_year' => $data['days_per_year'],
             'max_leave_days' => $data['max_days'],

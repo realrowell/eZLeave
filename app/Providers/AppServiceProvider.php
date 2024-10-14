@@ -33,13 +33,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Blade::component('leave-app-modal', LeaveAppModal::class);
-        Blade::component('leave-app-details-modal', LeaveAppDetailsModal::class);
-        Blade::component('leave-app-card', LeaveAppCard::class);
-        Blade::component('leave-app-update-modal', LeaveAppUpdateModal::class);
-        Blade::component('leave-app-cancel-modal', LeaveAppCancelModal::class);
-        Blade::component('leave-app-reject-modal', LeaveAppRejectModal::class);
-        Blade::component('leave-app-approve-modal', LeaveAppApproveModal::class);
         // Log::info('User with ID '.auth()->user()->id.' | Username: '.auth()->user()->user_name.' with '.auth()->user()->email.' has login successfully');
         LogViewer::auth(function ($request) {
             return $request->user()

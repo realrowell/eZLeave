@@ -5,25 +5,6 @@
 @section('submenu_proba','text-dark')
 @section('sub-content')
 
-{{-- <div class="row mt-2">
-    <div class="col-lg-6 col-md-6 col-sm-12">
-
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="row">
-            <form action="{{ route('hrstaff_employees_list_search') }}" onkeyup="searchBtnEnable()">
-            @csrf
-                <div class="input-group">
-                    <input type="search" class="form-control rounded" name="search_input" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                    <button type="submit" class="btn btn-primary disabled" id="search_btn">search</button>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <p>*Search employee by first name or by last name here</p>
-        </div>
-    </div>
-</div> --}}
 {{-- LIST PROFILE --}}
 <div class="row">
     <div>

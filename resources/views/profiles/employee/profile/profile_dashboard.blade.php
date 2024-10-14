@@ -53,7 +53,13 @@
                         <h5>Leave Management</h5>
                     </div>
                     <div class="col text-end">
-                        <a href="{{ route('profile_leave_management_history_grid') }}" class="btn-sm btn btn-outline-primary">see all</a>
+                        <a href="#AddAccount" class="ms-1 me-1 btn-sm btn btn-primary"  data-bs-toggle="modal" data-bs-target="#ApplyLeaveModal">
+                            <i class='bx bx-calendar-plus' ></i>
+                            Create Leave App
+                        </a>
+                        <x-employee.leave-app-modal>
+                        </x-employee.leave-app-modal>
+                        <a href="{{ route('profile_leave_management_history_grid') }}" class="btn-sm btn btn-secondary">see all</a>
                     </div>
                 </div>
                 <div class="row text-center p-4">

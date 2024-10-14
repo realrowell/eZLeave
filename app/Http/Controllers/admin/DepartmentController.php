@@ -20,6 +20,8 @@ class DepartmentController extends Controller
     public function admin_organization_departments_grid(){
         $subdepartments = SubDepartment::all()->where('status_id','sta-1007'); //only active sub departments
         $departments = Department::where('status_id','sta-1007')->orderBy('department_title','asc')->get();
+        $department_active_count = $departments->count();
+        $department_count = Department::all()->count();
         $employees = Employee::all()->where('status_id','sta-2001');
         // dd($subdepartment_counts);
         return view('profiles.admin.organization.departments_grid',
@@ -27,6 +29,8 @@ class DepartmentController extends Controller
                 'departments' => $departments,
                 'subdepartments' => $subdepartments,
                 'employees' => $employees,
+                'department_active_count' => $department_active_count,
+                'department_count' => $department_count,
             ]
         );
     }

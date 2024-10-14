@@ -27,4 +27,8 @@ class FiscalYear extends Model
             $model->id = IdGenerator::generate(['table' => 'fiscal_years', 'length' => 8, 'prefix' =>$prefix.date('ym')]);
         });
     }
+
+    public function statuses(){
+        return $this -> hasOne(Status::class,'id','status_id');
+    }
 }
