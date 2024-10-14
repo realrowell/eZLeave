@@ -38,7 +38,7 @@ class EmployeeLeaveApplicationController extends Controller
             'leavetype' => 'required',
             'startdate' => 'required',
             'enddate' => 'required',
-            'reason' => 'nullable',
+            'reason' => 'required|min:20',
             'attachment' => 'nullable',
             'start_am_check' => 'nullable',
             'start_pm_check' => 'nullable',
@@ -71,6 +71,10 @@ class EmployeeLeaveApplicationController extends Controller
         $current_year = Carbon::now();
         $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
         $employee_leave_credits = EmployeeLeaveCredit::where('employee_id',$employee->id)->where('leave_type_id', $leave_application_leave_type->id)->where('fiscal_year_id',$current_fiscal_year->id)->where('status_id','sta-1007')->first();
+
+        if( strtolower($data['reason'])== strtolower($leave_application_leave_type->leave_type_title)){
+            return redirect()->back()->with('warning','Please put a descriptive reason and try again!');
+        }
 
         if(optional(auth()->user()->employees->employee_positions)->reports_to_id == null){
             return redirect()->back()->with('warning','Unsuccessful leave application! Please contact you HR officer (sys_error_code: 1001)');
@@ -771,5 +775,69 @@ class EmployeeLeaveApplicationController extends Controller
             Log::warning('LEAVE APPLICATION NOTICE || Failed Leave Cancellation || '.$leave_applications->reference_number.' | attempted to cancel by: '.auth()->user()->email);
             return redirect()->back()->with('error','You are not authorize!');
         }
+    }
+
+
+    public function GetLeaveDuration($startdate, $enddate, $startam, $startpm, $endam, $endpm){
+        $startDate = new DateTime($startdate);
+        $endDate = new DateTime($enddate);
+        $durationDays = 0;
+        $current_date = Carbon::now();
+        // $start_part_of_day = 'dprt-1001';
+        // $end_part_of_day = 'dprt-1001';
+
+        // Get number of days between two dates
+        $durationInterval = $startDate->diff($endDate);
+        $durationDays = $durationInterval->format('%a');
+
+        // Add one day to get correct number of days (because diff() method counts the start day too)
+        $durationDays++;
+
+        // check if the request date is a half day
+        if ($startDate > $endDate) {
+            return response(['message'=>"Invalid Date Range"],400);
+        }
+        elseif($startDate == $endDate){
+            if($startam == "true" || $endpm == "true"){
+                $durationDays--;
+                if($startam == "true"){
+                    $durationDays = $durationDays+0.5;
+                }
+                if($endpm == "true"){
+                    $durationDays = $durationDays+0.5;
+                }
+            }
+        }
+        else{
+
+            if($startpm == "true" || $endam == "true"){
+                if($startpm == "true"){
+                    $durationDays = $durationDays-0.5;
+                }
+                if($endam == "true"){
+                    $durationDays = $durationDays-0.5;
+                }
+            }
+            // if($startam == "true" || $endpm == "true"){
+            //     if($startam == "true"){
+            //         $durationDays = $durationDays-0.5;
+            //     }
+            //     if($endpm == "true"){
+            //         $durationDays = $durationDays-0.5;
+            //     }
+            // }
+        }
+        // create an iterateable period of date (P1D equates to 1 day)
+        $period = new DatePeriod($startDate, new DateInterval('P1D'), $endDate);
+        foreach($period as $dt){
+            $curr = $dt->format('D');
+
+            // substract if Saturday or Sunday
+            if ($curr == 'Sat' || $curr == 'Sun') {
+                $durationDays--;
+            }
+        }
+        // dd($durationDays);
+        echo json_encode($durationDays);
     }
 }

@@ -17,8 +17,15 @@ class SubDepartmentController extends Controller
     public function admin_organization_subdepartments_grid(){
         $subdepartments = Subdepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(12);
         $departments = Department::all()->where('status_id','sta-1007');
+        $subdepartment_active_count = Subdepartment::where('status_id','sta-1007')->count();
+        $subdepartment_count = Subdepartment::all()->count();
+
         return view('profiles.admin.organization.subdepartments_grid',compact('subdepartments'),
-            ['departments' => $departments]
+            [
+                'departments' => $departments,
+                'subdepartment_active_count' => $subdepartment_active_count,
+                'subdepartment_count' => $subdepartment_count,
+            ]
         );
     }
     public function admin_organization_subdepartments_list(){

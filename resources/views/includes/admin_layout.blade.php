@@ -369,12 +369,12 @@
                     <i class="bx nav_icon bx-message-square-detail"></i>
                     <span class="nav_name">Leave Management</span>
                 </a>
-                <a href="{{ route('admin_org_menu') }}" class="nav_link @yield('sidebar_organization_active')">
+                <a href="{{ route('admin_departments_grid') }}" class="nav_link @yield('sidebar_organization_active')">
                     <i class='bx nav_icon bx-buildings' ></i>
                     <span class="nav_name">Organization</span>
                 </a>
                 <a href="{{ env('LOG_VIEWER_ROUTE') }}" class="nav_link @yield('sidebar_policy_active')">
-                    <i class='bx nav_icon bx-file-find' ></i>
+                    <i class="bx  nav_icon"><i class='bx bx-chevron-right-square' ></i></i>
                     <span class="nav_name">Log Viewer</span>
                 </a>
                 <a href="{{ route('admin_policy_menu') }}" class="nav_link @yield('sidebar_policy_active')">
@@ -387,7 +387,7 @@
                     <i class="bx x-tabler-report nav_icon">{{ svg('tabler-report-analytics') }}</i>
                     <span class="nav_name">Report</span>
                 </a>
-                <a href="{{ route('admin_system_settings') }}" class="nav_link @yield('sidebar_settings_active')">
+                <a href="{{ route('app.info') }}" class="nav_link @yield('sidebar_settings_active')">
                   <i class="bx x-tabler-report nav_icon" style="width: 25px">
                     {{ svg('carbon-settings') }}
                   </i>

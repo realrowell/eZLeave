@@ -1,7 +1,7 @@
 @extends('profiles.admin.settings.system_settings')
 @section('menu_email','bg-selected-warning text-light')
-@section('menu_holidays',' text-dark')
 @section('menu_system_info',' text-dark')
+@section('menu_queue_info',' text-dark')
 @section('sub-content')
 
 <div class="row gap-1">
@@ -15,7 +15,7 @@
         </a>
     </div>
     <div class="col-lg-1 col-md-4 col-sm-5 col-5 card-menu-primary shadow-sm align-self-stretch @yield('submenu_test_email')" style="min-height: 1rem" >
-        <a href="{{ route('admin_accounts_grid') }}" class="@yield('submenu_test_email')">
+        <a href="{{ route('email.test.view') }}" class="@yield('submenu_test_email')">
             <div class="col text-light-hover">
                 <div class="card-body">
                     <h6>Test Email</h6>

@@ -73,6 +73,30 @@
                 </div>
             </li>
         </ul>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-action mt-1">
+                <div class="row">
+                    <div class="col">
+                        DEBUGBAR_ENABLED
+                    </div>
+                    <div class="col">
+                        {{ env("DEBUGBAR_ENABLED", "No Data Available") }}
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-action mt-1">
+                <div class="row">
+                    <div class="col">
+                        LOG_VIEWER_ENABLED
+                    </div>
+                    <div class="col">
+                        {{ env("LOG_VIEWER_ENABLED", "No Data Available") }}
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 @endsection

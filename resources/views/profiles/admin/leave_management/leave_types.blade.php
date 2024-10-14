@@ -6,14 +6,11 @@
 @section('custom_active_leave_icon','var(--accent-color)')
 @section('content')
 
-<div class="container-fluid p-5" id="profile_body">
+<div class="container-fluid " id="profile_body">
     <div class="spinner-border text-primary" id="loading_spinner_approve" role="status" style="display: none;">
         <span class="visually-hidden" >Loading...</span>
     </div>
-    <div class="row">
-        <h5>Menu</h5>
-    </div>
-    <div class="row mb-4 d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
+    <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning text-light" style="min-height: 1rem" >
             <a href="{{ route('admin.leave.types') }}" class="bg-selected-warning text-light">
                 <div class="col text-light-hover">
@@ -33,92 +30,29 @@
             </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col mt-2">
-          <h3>Leave Management / Leave Types</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="row">
-            <div class="col text-end align-items-end">
-                <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddTypeModal">
-                    <i data-toggle="tooltip" title="list view" class="add-icon" >
-                        <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
-                    </i>
-                    Add
-                </a>
-            </div>
-        </div>
 
-        <!-- Add Type Modal -->
-        <div class="modal fade" id="AddTypeModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <form action="{{ route('admin.create.leavetype') }}" method="POST" onsubmit="onClickApprove()">
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Add Leave Type</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid text-start">
-                                <div class="row mt-2 mb-3" >
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <label for="leavetype_title">
-                                            <h6 class="">Leave Type Title</h6>
-                                        </label>
-                                        <input type="text" class="form-control" id="leavetype_title" name="leavetype_title" placeholder="" required>
-                                        <label class="mt-3" for="leavetype_description">
-                                            <h6 class="">Leave Type Description</h6>
-                                        </label>
-                                        <textarea class="form-control" id="leavetype_description" name="leavetype_description" rows="5" cols="50" required></textarea>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <label for="days_per_year">
-                                            <h6>Leave per year (Days)</h6>
-                                        </label>
-                                        <input type="number" step="0.5" class="form-control" id="days_per_year" name="days_per_year" placeholder="" required>
-                                        <label class="mt-3" for="max_days">
-                                            <h6>Max Accumulation (Days)</h6>
-                                        </label>
-                                        <input type="number" class="form-control" id="max_days" name="max_days" placeholder="" required>
-                                        <label class="mt-3" for="cut_off_date">
-                                            <h6>Cut off Date</h6>
-                                        </label>
-                                        <input type="date" class="form-control" id="cut_off_date" name="cut_off_date" placeholder="">
-                                        {{-- <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="show_on_employee" name="show_on_employee" value="1">
-                                            <label class="form-check-label" for="show_on_employee">Show this to Employee</label>
-                                        </div> --}}
-                                        <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="is_accumulable" name="is_accumulable" value="1">
-                                            <label class="form-check-label" for="is_accumulable">is Accumulable?</label>
-                                        </div>
-                                        <div class="form-check form-switch mt-3">
-                                            <input class="form-check-input" type="checkbox" id="apply_predate" name="apply_predate" value="1">
-                                            <label class="form-check-label" for="apply_predate">Apply Predate</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
-                            <button id="submit_button1" type="submit" class="btn btn-success">Add</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        {{-- End Add Type Modal --}}
-    </div>
-    <div class="row " id="table_container">
-        <div class="row bg-light p-3 m-1">
+</div>
+
+<div class="container-fluid" id="profile_body">
+    <div class="row bg-light shadow p-3">
+        <div class="col">
             <div class="row">
-                <div class="col">
-                    <h5>Employee Leave Type Management</h5>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <h4>Leave Management / Leave Types</h4>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-end">
+                    <a href="#AddDept" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3"  data-bs-toggle="modal" data-bs-target="#AddTypeModal">
+                        <i class='bx bxs-user-plus' ></i>
+                        Create Leave Type
+                    </a>
                 </div>
             </div>
+
+            <!-- Add Type Modal -->
+                <x-admin.admin-leave-type-add-modal>
+                </x-admin.admin-leave-type-add-modal>
+            {{-- End Add Type Modal --}}
+
             <div class="row">
                 <div class="table-wrapper text-wrap">
                     <table class="table table-bordered table-hover bg-light">
@@ -160,105 +94,9 @@
                                 </td>
                             </tr>
                             <!-- Update Leave Type Modal -->
-                                <div class="modal fade" id="UpdatetypeModal{{ $leavetype->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                                        <div class="modal-content">
-                                            <form action="{{ route('admin.update.leavetype',['leavetype_id'=>$leavetype->id]) }}" method="PATCH" onsubmit="onClickApprove()">
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel">Update Leave Type</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="container-fluid text-start">
-                                                        <div class="row mt-2 mb-3" >
-                                                            <div class="col">
-                                                                <label for="leavetype_title">
-                                                                    <h6 class="">Leave Type Title</h6>
-                                                                </label>
-                                                                <input type="text" class="form-control" id="leavetype_title" name="leavetype_title" value="{{ $leavetype->leave_type_title }}" required>
-                                                                <label class="mt-3" for="leavetype_description">
-                                                                    <h6 class="">Leave Type Description</h6>
-                                                                </label>
-                                                                <textarea class="form-control" id="leavetype_description" name="leavetype_description" rows="8" cols="50" required>{{ $leavetype->leave_type_description }}</textarea>
-                                                            </div>
-                                                            <div class="col">
-                                                                <label for="days_per_year">
-                                                                    <h6>Leave per year (Days)</h6>
-                                                                </label>
-                                                                <input type="number" step="0.25" class="form-control" id="days_per_year" name="days_per_year" value="{{ $leavetype->leave_days_per_year }}" required>
-                                                                <label class="mt-3" for="max_days">
-                                                                    <h6>Max Accumulation (Days)</h6>
-                                                                </label>
-                                                                <input type="number" step="0.25" class="form-control" id="max_days" name="max_days" value="{{ $leavetype->max_leave_days }}" required>
-                                                                <label class="mt-3" for="cut_off_date">
-                                                                    <h6>Cut off Date</h6>
-                                                                </label>
-                                                                @if ($leavetype->cut_off_date == null)
-                                                                    <input type="date" class="form-control" id="cut_off_date" name="cut_off_date" placeholder="">
-                                                                @else
-                                                                    <input type="date" class="form-control" id="cut_off_date" name="cut_off_date" value="{{ \Carbon\Carbon::parse($leavetype->cut_off_date)->format('Y-m-d') }}">
-                                                                @endif
-                                                                {{-- <label class="mt-3" for="reset_date">
-                                                                    <h6>Reset Date</h6>
-                                                                </label> --}}
-                                                                {{-- <input type="date" class="form-control" id="reset_date" name="reset_date" hidden value="{{ \Carbon\Carbon::parse($leavetype->reset_date)->format('Y-m-d') }}" required> --}}
-                                                                {{-- @if ($leavetype->show_on_employee == false)
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="show_on_employee2{{ $leavetype->leave_type_title }}" name="show_on_employee" value="1">
-                                                                        <label class="form-check-label" for="show_on_employee2{{ $leavetype->leave_type_title }}">Show this to Employee</label>
-                                                                    </div>
-                                                                @else
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="show_on_employee1{{ $leavetype->leave_type_title }}" name="show_on_employee" value="1" checked>
-                                                                        <label class="form-check-label" for="show_on_employee1{{ $leavetype->leave_type_title }}">Show this to Employee</label>
-                                                                    </div>
-                                                                @endif --}}
-                                                                @if ($leavetype->accumulable == false)
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="is_accumulable2{{ $leavetype->leave_type_title }}" name="is_accumulable" value="1">
-                                                                        <label class="form-check-label" for="is_accumulable2{{ $leavetype->leave_type_title }}">is Accumulable?</label>
-                                                                    </div>
-                                                                @else
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="is_accumulable1{{ $leavetype->leave_type_title }}" name="is_accumulable" value="1" checked>
-                                                                        <label class="form-check-label" for="is_accumulable1{{ $leavetype->leave_type_title }}">is Accumulable?</label>
-                                                                    </div>
-                                                                @endif
-                                                                @if ($leavetype->status_id == 'sta-1007')
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="is_active1{{ $leavetype->leave_type_title }}" name="is_active" value="1" checked>
-                                                                        <label class="form-check-label" id="is_active_checkbox" for="is_active1{{ $leavetype->leave_type_title }}">is Active</label>
-                                                                    </div>
-                                                                @elseif($leavetype->status_id == 'sta-1008')
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="is_active2{{ $leavetype->leave_type_title }}" name="is_active" value="1">
-                                                                        <label class="form-check-label" id="is_active_checkbox" for="is_active2{{ $leavetype->leave_type_title }}">is Active</label>
-                                                                    </div>
-                                                                @endif
-                                                                @if ($leavetype->predate == false)
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="apply_predate2{{ $leavetype->leave_type_title }}" name="apply_predate" value="1">
-                                                                        <label class="form-check-label" for="apply_predate2{{ $leavetype->leave_type_title }}">Apply Predate?</label>
-                                                                    </div>
-                                                                @else
-                                                                    <div class="form-check form-switch mt-3">
-                                                                        <input class="form-check-input" type="checkbox" id="apply_predate1{{ $leavetype->leave_type_title }}" name="apply_predate" value="1" checked>
-                                                                        <label class="form-check-label" for="apply_predate1{{ $leavetype->leave_type_title }}">Apply Predate?</label>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-transparent" data-bs-dismiss="modal">Close</button>
-                                                    <button id="submit_button1" type="submit" class="btn btn-success" >Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                                <x-admin.admin-leave-type-update-modal
+                                :leavetypeId="$leavetype->id">
+                                </x-admin.admin-leave-type-update-modal>
                             {{-- End update leave Type Modal --}}
                             <!-- delete leave type Modal -->
                                 <div class="modal fade" id="delete_modal{{ $leavetype->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

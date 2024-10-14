@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Admin\NewUserRegistered;
+use App\Mail\Admin\PasswordResetMailNotification;
 use App\Models\Admin;
 use App\Models\AreaOfAssignment;
 use App\Models\Employee;
@@ -24,6 +26,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use PharIo\Manifest\Email;
 
@@ -110,6 +113,7 @@ class AccountManagementController extends Controller
             'date_hired' => $data['date_hired'],
             'status_id' => 'sta-2001',
         ]);
+        Mail::to($users['email'])->send(new NewUserRegistered($users));
         return redirect()->back()->with('success','Employee account has been created!');
     }
 
@@ -174,6 +178,7 @@ class AccountManagementController extends Controller
                 'status_id' => 'sta-1007',
             ]);
         }
+        Mail::to($users['email'])->send(new NewUserRegistered($users));
         return redirect()->back()->with('success','Account has been created!');
     }
 
@@ -519,7 +524,7 @@ class AccountManagementController extends Controller
             'author_id' => auth()->user()->id,
             'employee_id' => $user->id,
         ]);
-
+        Mail::to($user->email)->send(new PasswordResetMailNotification($user));
         return redirect()->back()->with('success','Password has been reset succefully!');
     }
 

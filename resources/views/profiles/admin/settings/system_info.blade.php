@@ -41,22 +41,10 @@
             <li class="list-group-item list-group-item-action mt-1">
                 <div class="row">
                     <div class="col">
-                        APP_DEBUG
+                        SESSION_DRIVER
                     </div>
                     <div class="col">
-                        {{ env("APP_DEBUG", "No Data Available") }}
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-action mt-1">
-                <div class="row">
-                    <div class="col">
-                        APP_URL
-                    </div>
-                    <div class="col">
-                        {{ env("APP_URL", "No Data Available") }}
+                        {{ env("SESSION_DRIVER", "No Data Available") }}
                     </div>
                 </div>
             </li>
@@ -65,10 +53,10 @@
             <li class="list-group-item list-group-item-action mt-1">
                 <div class="row">
                     <div class="col">
-                        APP_VERSION
+                        SESSION_LIFETIME
                     </div>
                     <div class="col">
-                        {{ env("APP_VERSION", "No Data Available") }}
+                        {{ env("SESSION_LIFETIME", "No Data Available") }}m
                     </div>
                 </div>
             </li>

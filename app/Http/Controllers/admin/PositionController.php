@@ -24,21 +24,23 @@ class PositionController extends Controller
      * POSITIONS GRID VIEW
      */
     public function admin_organization_positions_grid(){
-        $positions = Position::all()->where('status_id','sta-1007');
+        $positions = Position::where('status_id','sta-1007')->paginate(24);
         $subdepartments = SubDepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->get();
         $view_subdepartments = SubDepartment::where('status_id','sta-1007')->orderBy('sub_department_title','asc')->paginate(5);
         $departments = Department::all()->where('status_id','sta-1007');
         $position_levels = PositionLevel::all();
         $position_titles = PositionTitles::where('status_id','sta-1007')->orderBy('position_title','asc')->get();
-
-
+        $position_active_count = Position::where('status_id','sta-1007')->count();
+        $position_count = Position::all()->count();
         return view('profiles.admin.organization.positions_grid',compact('view_subdepartments'),
             [
                 'positions' => $positions,
                 'subdepartments' => $subdepartments,
                 'position_levels' => $position_levels,
                 'departments' => $departments,
-                'position_titles' => $position_titles
+                'position_titles' => $position_titles,
+                'position_active_count' => $position_active_count,
+                'position_count' => $position_count,
             ]
         );
     }

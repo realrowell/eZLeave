@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\employee;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Admin\PasswordResetMailNotification;
 use App\Models\Employee;
 use App\Models\EmployeeAddress;
 use App\Models\EmployeePosition;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeProfileController extends Controller
@@ -289,5 +291,18 @@ class EmployeeProfileController extends Controller
             $message_type = 'info';
         }
         return redirect()->route('employee_profile')->with($message_type,$message);
+    }
+
+    public function password_reset(Request $request){
+        $data = $request->validate([
+            'password' => 'required|confirmed|min:8|max:255',
+        ]);
+        $users = User::where('id', auth()->user()->id)
+            ->update([
+                'password' => Hash::make($request['password']),
+            ]);
+        Mail::to(auth()->user()->email)->send(new PasswordResetMailNotification(auth()->user()));
+        auth()->logout();
+        return redirect()->route('index')->with('success','Password has reset successfully!');
     }
 }

@@ -57,4 +57,8 @@ class EmployeeDashboard extends Controller
         ];
         return view('profiles.employee.profile.profile_dashboard')->with($data);
     }
+
+    public function password_reset_view(){
+        return view('profiles.employee.profile.password_reset');
+    }
 }

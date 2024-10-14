@@ -29,7 +29,7 @@
                             <td>{{ $login_log->ip_address }}</td>
                             {{-- <td><a href="http://ip-api.com/php/{{ $login_log->ip_address }}" data-toggle="tooltip" title="{{ $login_log->ip_address }}">Show IP Details</a></td> --}}
                             <td>{{ $login_log->device }}</td>
-                            <td>{{ $login_log->date_time }}</td>
+                            <td>{{ $login_log->created_at }}</td>
                         </tr>
                         @endforeach
                     </tbody>
