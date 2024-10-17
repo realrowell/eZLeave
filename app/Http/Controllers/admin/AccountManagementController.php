@@ -7,6 +7,7 @@ use App\Mail\Admin\NewUserRegistered;
 use App\Mail\Admin\PasswordResetMailNotification;
 use App\Models\Admin;
 use App\Models\AreaOfAssignment;
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeAddress;
 use App\Models\EmployeePosition;
@@ -767,6 +768,12 @@ class AccountManagementController extends Controller
 
     }
 
+
+
+    // public function GetDepartmentFromSubdepartment($id){
+    //     $departments = Department::where('department_id',$id)->where('status_id','sta-1007')->get();
+    //     echo json_encode($subdepartments);
+    // }
     public function GetSubdepartmentFromDepartment($id){
         $subdepartments = SubDepartment::where('department_id',$id)->where('status_id','sta-1007')->get();
         echo json_encode($subdepartments);
