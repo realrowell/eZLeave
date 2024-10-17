@@ -119,6 +119,7 @@ Route::get('/hr/employee_management/employees/probationary/list', [HrStaffPageCo
 Route::get('/hr/profile', [HrStaffPageController::class, 'hrstaff_visit_profile'])->name('hrstaff_profile');
 Route::get('/hr/profile/update', [HrStaffPageController::class, 'hrstaff_visit_profile_update'])->name('hrstaff_profile_update');
 
+Route::get('/addAccount/getDepartment/{id}', [AccountManagementController::class, 'GetDepartmentFromSubdepartment']);
 Route::get('/addAccount/getSubdepartment/{id}', [AccountManagementController::class, 'GetSubdepartmentFromDepartment'])->name('addAccount_getSubdepart');
 Route::get('/addAccount/getPosition/{id}', [AccountManagementController::class, 'GetPositionFromSubdepartment'])->name('addAccount_getPosition');
 
@@ -155,7 +156,9 @@ Route::get('/create_leave/getLeaveType/{id}', [LeaveApplicationController::class
 Route::get('/hr/user/profile/{username}', [HrStaffPageController::class, 'visit_profile_view'])->name('user_profile');
 Route::get('/hr/user/update/{username}', [HrStaffPageController::class, 'visit_profile_update'])->name('visit_user_update');
 Route::get('/hr/user/profile/leave/{username}', [HrStaffPageController::class, 'visit_profile_leave_view'])->name('user_profile_leave');
-Route::get('leave/credits/export', [LeaveCreditController::class, 'export'])->name('export');
+Route::get('/leave-credits/export/{fiscal_year}', [LeaveCreditController::class, 'leave_credit_export'])->name('leave.credit.export');
+Route::get('/leave-credits/export-wizard', [LeaveCreditController::class, 'leave_credit_export_wizard'])->name('leave.credit.export.wizard');
+// Route::get('/leave-credits/export/range', [LeaveCreditController::class, 'leave_credit_export_range'])->name('leave.credit.export.range');
 
 
 /*

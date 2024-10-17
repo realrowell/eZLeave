@@ -11,7 +11,7 @@
     <div class="col-lg-2 col-md-2 col-sm-12 col-12 text-start">
         <h5>Leave Management</h5>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-12 col-12">
+    <div class="col-lg-3 col-md-3 col-sm-12 col-12">
         <div class="btn-group">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Fiscal Year:
@@ -31,8 +31,17 @@
                 @endforeach
             </ul>
         </div>
+        {{-- <div class="btn-group">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Export CSV
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item " href="#">Export Current FY</a></li>
+                <li><a class="dropdown-item " href="#" data-bs-toggle="modal" data-bs-target="#ExportFilterModal">Export Filter</a></li>
+            </ul>
+        </div> --}}
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+    <div class="col-lg-5 col-md-5 col-sm-12 col-12">
         <form action="{{ route('hrstaff_leave_management_search') }}" >
             {{-- @csrf --}}
             <div class="container-fluid" style="width: clamp(40vw, 75%, 50vw)">

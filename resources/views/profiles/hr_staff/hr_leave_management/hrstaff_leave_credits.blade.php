@@ -7,16 +7,12 @@
 @section('sub-content')
 
 <div class="row mt-3 bg-light shadow" >
-    {{-- <div class="row">
-        <div class="col text-end align-items-end">
-            <a href="#Add" class="col p-2 ms-2 custom-primary-button custom-rounded-top"  data-bs-toggle="modal" data-bs-target="#AddLeaveCreditModal">
-                <i data-toggle="tooltip" title="list view" class="add-icon" >
-                    <svg class="mb-1" width="30px" height="30px" viewBox="-2.4 -2.4 28.80 28.80">{{ svg('css-add') }}</svg>
-                </i>
-                Give Leave Credits
-            </a>
-        </div>
-    </div> --}}
+    @php
+        $url_fy = $current_fiscal_year;;
+        if (Request()->fiscal_year) {
+            $url_fy = Request()->fiscal_year;
+        }
+    @endphp
 
     <!-- Add Leave Credits Modal -->
         <div class="modal fade" id="AddLeaveCreditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -117,7 +113,7 @@
                                                 <label for="reason_note">
                                                     <h6>Note</h6>
                                                 </label>
-                                                <textarea class="form-control form-control-sm" name="reason_note" id="reason_note" cols="30" rows="2"></textarea>
+                                                <textarea class="form-control form-control-sm" name="reason_note" id="reason_note" cols="30" rows="2" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -138,6 +134,10 @@
             </div>
         </div>
     {{-- End Add Leave Credits Modal --}}
+    <!-- Export Leave Credit Date Range Modal -->
+        <x-hrstaff.export-filter-modal :urlFY="$url_fy">
+        </x-hrstaff.export-filter-modal>
+    {{-- Export Leave Credit Date Range Modal --}}
 
     {{-- Employee Management Table --}}
     <div class="row p-3 m-1">
@@ -158,15 +158,24 @@
                                 @endforeach
                             @endif
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu dropdown-menu-dark">
                             @foreach ($fiscal_years as $fiscal_year)
                                 <li><a class="dropdown-item" href="{{ route('hrstaff_fy_leave_credits',['fiscal_year'=>$fiscal_year->id]) }}">{{ $fiscal_year->fiscal_year_title }}</a></li>
                             @endforeach
                         </ul>
                     </div>
                     <div class="btn-group">
-                        <a class="btn btn-secondary btn-sm" href="{{ route('export') }}">Export CSV</a>
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Export CSV
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item " href="{{ route('leave.credit.export',['fiscal_year' => $url_fy]) }}">Export Current FY</a></li>
+                            <li><a class="dropdown-item " href="#" data-bs-toggle="modal" data-bs-target="#ExportFilterModal">Export Filter</a></li>
+                        </ul>
                     </div>
+                    {{-- <div class="btn-group">
+                        <a class="btn btn-secondary btn-sm" href="{{ route('leave.credit.export') }}">Export CSV</a>
+                    </div> --}}
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-end pe-5">

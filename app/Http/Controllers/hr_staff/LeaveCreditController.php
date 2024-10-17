@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\hr_staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\EmployeeLeaveCredit;
+use App\Models\EmploymentStatus;
 use App\Models\FiscalYear;
 use App\Models\LeaveCreditLog;
 use App\Models\LeaveType;
+use App\Models\SubDepartment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -196,11 +199,10 @@ class LeaveCreditController extends Controller
     }
 
 
-    public function export()
-    {
-        $fileprefix = Carbon::now();
+    public function leave_credit_export($fiscal_year){
+        $current_fiscal_year = FiscalYear::where('id',$fiscal_year)->first();
 
-        $filename = 'employee-leave-credits'.$fileprefix->format('Ymd').'.csv';
+        $filename = $current_fiscal_year->fiscal_year_title.'-employee-leave-credits-'.Carbon::now()->format('Ymd').'.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
@@ -210,30 +212,47 @@ class LeaveCreditController extends Controller
             'Expires' => '0',
         ];
 
-        return response()->stream(function () {
+        $employee_leave_credit = EmployeeLeaveCredit::where('status_id','sta-1007')->where('fiscal_year_id',$current_fiscal_year->id);
+
+        return response()->stream(function () use ($employee_leave_credit) {
+
             $handle = fopen('php://output', 'w');
 
             // Add CSV headers
             fputcsv($handle, [
-                'LeaveType',
+                'ID',
                 'Name',
+                'Position',
+                'Department',
+                'Sub-department',
+                'Employment Status',
+                'LeaveType',
                 'Leave Credit',
                 'Fiscal Year',
             ]);
             $current_year = Carbon::now();
-            $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_year->toDateString())->where('fiscal_year_end','>=',$current_year->toDateString())->first();
+            // $current_fiscal_year = FiscalYear::where('id',$fiscal_year)->first();
              // Fetch and process data in chunks
-             EmployeeLeaveCredit::where('status_id','sta-1007')->where('fiscal_year_id',$current_fiscal_year->id)->chunk(25, function ($leavecredits) use ($handle) {
+            $employee_leave_credit->chunk(25, function ($leavecredits) use ($handle) {
                 foreach ($leavecredits as $leavecredit) {
-             // Extract data from each employee.
+                    // Extract data from each employee.
+                    $employee_mi = '';
+                    if($leavecredit->employees?->users?->middle_name != null){
+                        $employee_mi = mb_substr($leavecredit->employees->users->middle_name, 0, 1).'.';
+                    }
                     $data = [
+                        isset($leavecredit->employees->sap_id_number)? $leavecredit->employees->sap_id_number : '',
+                        isset($leavecredit->employees->user_id)? $leavecredit->employees->users->last_name.', '.$leavecredit->employees->users->first_name.' '.$employee_mi.' '.$leavecredit->employees->users?->suffixes?->suffix_title : '',
+                        isset($leavecredit->employees->employee_positions->position_id)? $leavecredit->employees->employee_positions->positions->position_description : '',
+                        isset($leavecredit->employees->employee_positions->positions->subdepartment_id)? $leavecredit->employees->employee_positions->positions->subdepartments->sub_department_title : '',
+                        isset($leavecredit->employees->employee_positions->positions->subdepartments->department_id)? $leavecredit->employees->employee_positions->positions->subdepartments->departments->department_title : '',
+                        isset($leavecredit->employees->employment_status_id)? $leavecredit->employees->employment_statuses->employment_status_title : '',
                         isset($leavecredit->leavetypes->leave_type_title)? $leavecredit->leavetypes->leave_type_title : '',
-                        isset($leavecredit->employees->users->first_name)? $leavecredit->employees->users->first_name.' '.$leavecredit->employees->users->last_name : '',
                         isset($leavecredit->leave_days_credit)? $leavecredit->leave_days_credit : '',
                         isset($leavecredit->fiscal_years->fiscal_year_title)? $leavecredit->fiscal_years->fiscal_year_title : '',
                     ];
 
-             // Write data to a CSV file.
+                    // Write data to a CSV file.
                     fputcsv($handle, $data);
                 }
             });
@@ -242,4 +261,97 @@ class LeaveCreditController extends Controller
             fclose($handle);
         }, 200, $headers);
     }
+
+
+    public function leave_credit_export_wizard(Request $request){
+
+        $fiscal_year = $request->fiscalyear;
+        $leavetype = LeaveType::where('id', $request->leavetype)->first();
+        $department = Department::where('id',$request->department)->first();
+        $subdepartment = SubDepartment::where('id',$request->subdepartment)->first();
+        $employment_status = EmploymentStatus::where('id',$request->employment_status)->first();
+
+        $current_fiscal_year = FiscalYear::where('id',$fiscal_year)->first();
+
+        $filename = $current_fiscal_year->fiscal_year_title.'-employee-leave-credits-'.Carbon::now()->format('Ymd').'.csv';
+
+        $employee_leave_credits = EmployeeLeaveCredit::where('status_id','sta-1007')
+                                ->where('fiscal_year_id',$current_fiscal_year->id);
+
+        if($leavetype != null){
+            $employee_leave_credits = $employee_leave_credits->where('leave_type_id',$leavetype->id);
+        }
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        if($employment_status != null){
+            $employee_leave_credits = $employee_leave_credits->whereHas('employees', function ($query) use ($employment_status) {
+                                                                return $query->where('employment_status_id', '=', $employment_status->id);
+                                                                });
+        }
+        if($department != null){
+            $employee_leave_credits = $employee_leave_credits->whereHas('employees.employee_positions.positions.subdepartments', function ($query) use ($department) {
+                                                                return $query->where('department_id', '=', $department->id);
+                                                                });
+        }
+        if($subdepartment != null){
+            $employee_leave_credits = $employee_leave_credits->whereHas('employees.employee_positions.positions', function ($query) use ($subdepartment) {
+                                                                return $query->where('subdepartment_id', '=', $subdepartment->id);
+                                                                });
+        }
+
+        return response()->stream(function () use ($employee_leave_credits,$department) {
+
+            $handle = fopen('php://output', 'w');
+
+            // Add CSV headers
+            fputcsv($handle, [
+                'ID',
+                'Name',
+                'Position',
+                'Department',
+                'Sub-department',
+                'Employment Status',
+                'LeaveType',
+                'Leave Credit',
+                'Fiscal Year',
+            ]);
+            $current_year = Carbon::now();
+
+            // Fetch and process data in chunks
+            $employee_leave_credits->chunk(25, function ($leavecredits) use ($handle) {
+                foreach ($leavecredits as $leavecredit => $value) {
+                    // Extract data from each employee.
+                    $employee_mi = '';
+                    if($value->employees?->users?->middle_name != null){
+                        $employee_mi = mb_substr($value->employees->users->middle_name, 0, 1).'.';
+                    }
+                    $data = [
+                        isset($value->employees->sap_id_number)? $value->employees->sap_id_number : '',
+                        isset($value->employees->user_id)? mb_convert_encoding($value->employees->users->last_name, "UCS-4").', '.$value->employees->users->first_name.' '.$employee_mi.' '.$value->employees->users?->suffixes?->suffix_title : '',
+                        isset($value->employees->employee_positions->position_id)? $value->employees->employee_positions->positions->position_description : '',
+                        isset($value->employees->employee_positions->positions->subdepartments->department_id)? $value->employees->employee_positions->positions->subdepartments->departments->department_title : '',
+                        isset($value->employees->employee_positions->positions->subdepartment_id)? $value->employees->employee_positions->positions->subdepartments->sub_department_title : '',
+                        isset($value->employees->employment_status_id)? $value->employees->employment_statuses->employment_status_title : '',
+                        isset($value->leavetypes->leave_type_title)? $value->leavetypes->leave_type_title : '',
+                        isset($value->leave_days_credit)? $value->leave_days_credit : '',
+                        isset($value->fiscal_years->fiscal_year_title)? $value->fiscal_years->fiscal_year_title : '',
+                    ];
+
+                    // Write data to a CSV file.
+                    fputcsv($handle, $data);
+                }
+            });
+
+            // Close CSV file handle
+            fclose($handle);
+        }, 200, $headers);
+    }
+
 }
