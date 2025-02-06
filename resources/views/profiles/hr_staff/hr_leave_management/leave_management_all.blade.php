@@ -31,7 +31,7 @@
                 @endforeach
             </ul>
         </div>
-        {{-- <div class="btn-group">
+        <div class="btn-group">
             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Export CSV
             </button>
@@ -39,8 +39,10 @@
                 <li><a class="dropdown-item " href="#">Export Current FY</a></li>
                 <li><a class="dropdown-item " href="#" data-bs-toggle="modal" data-bs-target="#ExportFilterModal">Export Filter</a></li>
             </ul>
-        </div> --}}
+        </div>
     </div>
+    <x-hrstaff.leave-app-export-filter-modal>
+    </x-hrstaff.leave-app-export-filter-modal>
     <div class="col-lg-5 col-md-5 col-sm-12 col-12">
         <form action="{{ route('hrstaff_leave_management_search') }}" >
             {{-- @csrf --}}
@@ -109,15 +111,15 @@
                         <td>{{ \Carbon\Carbon::parse($leave_application->created_at)->format('m/d/Y \\a\\t h:ia') }}</td>
                         <td>
                             @if ($leave_application->status_id == 'sta-1001')
-                                <span class="fw-normal badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-secondary bg-gradient rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1002')
-                                <span class="fw-normal badge bg-success rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-success bg-gradient rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1003')
-                                <span class="fw-normal badge bg-secondary rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-secondary bg-gradient rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1004')
-                                <span class="fw-normal badge bg-danger rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-danger bg-gradient rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @elseif ($leave_application->status_id == 'sta-1005')
-                                <span class="fw-normal badge text-dark bg-warning rounded-pill">{{ $leave_application->statuses->status_title }}</span>
+                                <span class="fw-normal badge bg-warning bg-gradient text-dark rounded-pill">{{ $leave_application->statuses->status_title }}</span>
                             @endif
                         </td>
                         <td class="d-flex gap-2 pb-3 text-center justify-content-center align-items-center">

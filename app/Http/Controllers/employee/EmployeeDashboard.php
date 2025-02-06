@@ -55,7 +55,7 @@ class EmployeeDashboard extends Controller
             'leavetypes' => LeaveType::where('status_id','sta-1007')->where('show_on_employee',true)->get(),
             'notifications' => Notification::where('employee_id',auth()->user()->id)->orWhere('author_id',auth()->user()->id)->where('status_id','sta-1007')->get(),
         ];
-        return view('profiles.employee.profile.profile_dashboard')->with($data);
+        return view('profiles.employee.profile.profile_dashboard_v2')->with($data);
     }
 
     public function password_reset_view(){

@@ -22,6 +22,10 @@
     --header-bg-color: #00653D;
 }
 
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }
 
 .bg-msg-custom{
     background-color: var(--msg-background-color);
@@ -89,6 +93,15 @@
 } */
 .text-light-hover:hover{
     color: white;
+}
+.text-warning-hover{
+    color: var(--warning-color);
+}
+.text-warning-hover:hover{
+    color: var(--warning-color-hover);
+}
+.text-warning-hover:visited{
+    color: var(--primary-color-hover);
 }
 
 .custom-h-50{

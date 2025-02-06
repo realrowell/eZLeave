@@ -1,12 +1,10 @@
 @extends('includes.employee_profile_layout')
 @section('title','Dashboard')
 @section('sidebar_dashboard_active','active')
+@section('profile_bar_display', 'none')
 @section('content')
 
 <div class="container-fluid" id="profile_body">
-    <div class="row">
-        <h5>Menu</h5>
-    </div>
     <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning" style="min-height: 1rem" >
             <a href="{{ route('employee_dashboard') }}" class="text-light">
@@ -40,12 +38,7 @@
 </div>
 
 <div class="container-fluid mb-4 pb-5" id="profile_body">
-    {{-- <div class="row">
-        <div class="col ">
-            <h3>Dashboard</h3>
-        </div>
-    </div> --}}
-    <div class="row gap-3">
+    <div class="row gap-3 ">
         <div class="col-md p-3 bg-light shadow-sm border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
             <div class="container-fluid">
                 <div class="row">
@@ -101,7 +94,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
-                        <h5>Remaining Leave Credits</h5>
+                        <h5>Leave Credits Balance</h5>
                     </div>
                 </div>
                 <div class="row text-center p-4">
@@ -137,37 +130,6 @@
                             @endif
                         @endif
                     @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mt-3 bg-light shadow-sm p-3 border border-warning border-5 border-bottom-0 border-end-0 border-top-0" >
-        <div class="col">
-            <div class="row text-center align-items-center justify-content-center">
-                <div class="col-lg-8 col-md-8 col-sm-12 text-start">
-                    <h5>
-                        Search Leave Request
-                        <div class="spinner-border spinner-border-sm text-primary position-relative float-start" id="loading_spinner_1" role="status" style="display: none;">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </h5>
-                </div>
-            </div>
-            <div class="row text-center align-items-center justify-content-center">
-                <div class="col-lg-8 col-md-8 col-sm-12">
-                    <form action="{{ route('leave_details.search') }}" method="GET" onsubmit="onFormSubmit()" id="form_to_submit">
-                    @csrf
-                        <div class="input-group">
-                            <span class="input-group-text bg-light ps-3 pe-3" id="basic-addon1"><i class='bx bx-search-alt' style="font-size: 1.4rem; margin-bottom: -1px"></i></span>
-                            <input type="text" class="form-control form-control-sm" name="reference_number" id="reference_number" size="100" oninput="searchBtnEnable()">
-                            <button type="submit" class="btn btn-primary ps-5 pe-5 disabled" id="search_btn" >Search</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row text-center align-items-center justify-content-center">
-                <div class="col-lg-8 col-md-8 col-sm-12 text-start">
-                    <h6>*input leave REFERENCE NUMBER here</h6>
                 </div>
             </div>
         </div>
@@ -241,75 +203,182 @@
             </div>
         </div>
     @endif
-    <div class="row mt-3 bg-light shadow-sm p-3 border border-warning border-5 border-bottom-0 border-end-0 border-top-0" >
-        <div class="col p-3">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col">
-                        <h5>Frequently Asked Questions</h5>
+    <div class="row mt-3">
+        <div class="col-lg-3 col-md-4 col-sm-12 col-12 nopadding">
+            <div class="p-3 bg-light shadow-sm border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+                <div class="container-fluid text-center">
+                    <div class="row">
+                        <div class="col">
+                            @if (auth()->user()->profile_photos == null)
+                                <img class="profile-photo-sm" src="{{ asset('img/dummy_profile.jpg') }}" alt="profile photo">
+                            @else
+                                <img class="profile-photo-sm" src="{{ asset('storage/images/profile_photos/'.auth()->user()->profile_photos->profile_photo) }}" alt="profile photo">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <p class="fs-5 mb-0">
+                                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} {{ optional(Auth::user()->suffixes)->suffix_title }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ Auth::user()->email }}
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="accordion accordion-flush" id="accordionFlushExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                        How to Apply or Create a New Leave Application
-                                    </button>
-                                </h2>
-                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                                    <div class="accordion-body">
-                                        <ol>
-                                            <li>
-                                                Go to the Leave Management tab, then the Pending Approval sub-menu.
-                                            </li>
-                                            <li>
-                                                Click “Apply New” or the leave card.
-                                            </li>
-                                            <li>
-                                                Fill out the form, including the leave type, dates, reason, and any attachments.
-                                            </li>
-                                            <li>
-                                                Check the box for Morning or Afternoon for half-day leave, or leave it unchecked for a full day.
-                                            </li>
-                                            <li>
-                                                Click “Create Application” to submit your leave request.
-                                            </li>
-                                        </ol>
-                                        <div class="container-fluid">
-                                            <div class="row text-center">
-                                                <div class="col">
-                                                    <a href="#">View more details</a>
+                <div class="container-fluid mt-3">
+                    <div class="row">
+                        <div class="col">
+                            <p>
+                                <b>Organization</b>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Position</b>
+                        </div>
+                        <div class="col">
+                            {{ optional(optional(Auth::user()->employees->employee_positions)->positions)->position_description }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Department</b>
+                        </div>
+                        <div class="col">
+                            {{ optional(optional(optional(optional(Auth::user()->employees->employee_positions)->positions)->subdepartments)->departments)->department_title }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <b>Area Assignment</b>
+                        </div>
+                        <div class="col">
+                            {{ Auth::user()->employees->employee_positions?->area_of_assignments?->location_address ?? 'No data available' }}
+                        </div>
+                    </div>
+
+                    <div class="container-fluid mt-4 mb-5 text-center">
+                        <div class="row">
+                            <div class="col">
+                                <a href="{{ route('employee_profile') }}" class="text-success"><u>My Profile</u></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-12 col-12 ps-lg-3 nopadding">
+            <div class="row">
+                <div class="col">
+                    <div class="bg-light shadow-sm p-3 border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+                        <div class="row text-center align-items-center justify-content-center">
+                            <div class="col-lg-8 col-md-8 col-sm-12 text-start">
+                                <h5>
+                                    Search Leave Request
+                                    <div class="spinner-border spinner-border-sm text-primary position-relative float-start" id="loading_spinner_1" role="status" style="display: none;">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row text-center align-items-center justify-content-center">
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <form action="{{ route('leave_details.search') }}" method="GET" onsubmit="onFormSubmit()" id="form_to_submit">
+                                @csrf
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light ps-3 pe-3" id="basic-addon1"><i class='bx bx-search-alt' style="font-size: 1.4rem; margin-bottom: -1px"></i></span>
+                                        <input type="text" class="form-control form-control-sm" name="reference_number" id="reference_number" size="100" oninput="searchBtnEnable()">
+                                        <button type="submit" class="btn btn-primary ps-5 pe-5 disabled" id="search_btn" >Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row text-center align-items-center justify-content-center">
+                            <div class="col-lg-8 col-md-8 col-sm-12 text-start">
+                                <h6>*input leave REFERENCE NUMBER here</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="bg-light shadow-sm p-3 border border-warning border-5 border-bottom-0 border-end-0 border-top-0">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Frequently Asked Questions</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="flush-headingOne">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                    How to Apply or Create a New Leave Application
+                                                </button>
+                                            </h2>
+                                            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body">
+                                                    <ol>
+                                                        <li>
+                                                            Go to the Leave Management tab, then the Pending Approval sub-menu.
+                                                        </li>
+                                                        <li>
+                                                            Click “Apply New” or the leave card.
+                                                        </li>
+                                                        <li>
+                                                            Fill out the form, including the leave type, dates, reason, and any attachments.
+                                                        </li>
+                                                        <li>
+                                                            Check the box for Morning or Afternoon for half-day leave, or leave it unchecked for a full day.
+                                                        </li>
+                                                        <li>
+                                                            Click “Create Application” to submit your leave request.
+                                                        </li>
+                                                    </ol>
+                                                    <div class="container-fluid">
+                                                        <div class="row text-center">
+                                                            <div class="col">
+                                                                <a href="{{ route('article.faq.1') }}">View more details</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                        How to Approve a Leave Application
-                                    </button>
-                                </h2>
-                                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                                    <div class="accordion-body">
-                                        <ol>
-                                            <li>
-                                                On the Dashboard page, click “For your Approval” or go to the Leave Management tab and select the "For Approval" sub-menu.
-                                            </li>
-                                            <li>
-                                                Click “Approve” on the selected leave application.
-                                            </li>
-                                            <li>
-                                                Confirm the approval.
-                                            </li>
-                                        </ol>
-                                        <div class="container-fluid">
-                                            <div class="row text-center">
-                                                <div class="col">
-                                                    <a href="#">View more details</a>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="flush-headingTwo">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                    How to Approve a Leave Application
+                                                </button>
+                                            </h2>
+                                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body">
+                                                    <ol>
+                                                        <li>
+                                                            On the Dashboard page, click “For your Approval” or go to the Leave Management tab and select the "For Approval" sub-menu.
+                                                        </li>
+                                                        <li>
+                                                            Click “Approve” on the selected leave application.
+                                                        </li>
+                                                        <li>
+                                                            Confirm the approval.
+                                                        </li>
+                                                    </ol>
+                                                    <div class="container-fluid">
+                                                        <div class="row text-center">
+                                                            <div class="col">
+                                                                <a href="{{ route('article.faq.2') }}">View more details</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

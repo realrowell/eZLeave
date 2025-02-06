@@ -88,9 +88,12 @@
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col">
+                                    <div class="col placeholder-glow">
+                                        <div class="spinner-border text-primary spinner-border-sm d-none" id="spinner_duration" role="status" >
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                         <label for="">Duration (days)</label>
-                                        <input type="text" name="duration" placeholder="" id="duration_input" class="form-control" disabled/>
+                                        <input type="text" name="duration" placeholder="" id="leave_duration" class="form-control" disabled/>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
@@ -155,6 +158,49 @@
                     response.forEach(element => {
                         $('#leavetype').append(`<option value="${element.leave_type_id}">${element.leavetypes.leave_type_title}: ${element['leave_days_credit']}</option>`);
                     });
+                }
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('#datetime_startdate, #datetime_enddate, #start_am_check, #start_pm_check, #end_am_check, #end_pm_check').on('change',function(){
+            var start_date = $('#datetime_startdate').val();
+            var end_date = $('#datetime_enddate').val();
+            var start_am = $('#start_am_check').is(':checked');
+            var start_pm = $('#start_pm_check').is(':checked');
+            var end_am = $('#end_am_check').is(':checked');
+            var end_pm = $('#end_pm_check').is(':checked');
+
+            if(end_date == null || end_date == ""){
+                end_date = start_date;
+            }
+            if(start_date == end_date){
+                start_pm = false;
+                end_am = false;
+                $('#start_pm_check').prop( "checked", false );
+                $('#end_am_check').prop( "checked", false );
+            }
+            else if(start_date != end_date){
+                start_am = false;
+                end_pm = false;
+                $('#start_am_check').prop( "checked", false );
+                $('#end_pm_check').prop( "checked", false );
+            }
+            console.log(start_am+" / "+start_pm+" / "+end_am+" / "+end_pm);
+
+            $('#leave_duration').addClass('placeholder');
+            $('#spinner_duration').removeClass('d-none');
+            console.log(start_date+" / "+end_date);
+            $.ajax({
+                type: 'GET',
+                url: '/employee/leave-app/get-duration/'+start_date+'/'+end_date+'/'+start_am+'/'+start_pm+'/'+end_am+'/'+end_pm,
+                success: function (response){
+                    var response = JSON.parse(response);
+                    console.log(response);
+                    $('#leave_duration').empty();
+                    $('#leave_duration').removeClass('placeholder');
+                    $('#spinner_duration').addClass('d-none');
+                    $('#leave_duration').val(response);
                 }
             });
         });

@@ -78,9 +78,9 @@
                             </div>
                             <div class="row">
                                 {{-- @production --}}
-                                    <a href="{{ route('google.redirect') }}" class="btn mt-2 rounded-0 text-light" style="background-color: #4C8BF5">
-                                        <img class="bg-light rounded-pill me-2" src="{{ asset('img/google_g_logo.svg') }}" alt="">
-                                        Continue with Google Workspace
+                                    <a href="{{ route('google.redirect') }}" class="btn mt-2 p-2 rounded-0 text-light disabled" style="background-color: #DC3E15">
+                                        <img class="me-2" src="{{ asset('img/microsoft_login_logo.svg') }}" alt="" style="height: 30px">
+                                        Login with Microsoft Office 365 (coming soon)
                                     </a>
                                 {{-- @endproduction --}}
                             </div>
