@@ -242,10 +242,10 @@ class LeaveCreditController extends Controller
                     }
                     $data = [
                         isset($leavecredit->employees->sap_id_number)? $leavecredit->employees->sap_id_number : '',
-                        isset($leavecredit->employees->user_id)? $leavecredit->employees->users->last_name.', '.$leavecredit->employees->users->first_name.' '.$employee_mi.' '.$leavecredit->employees->users?->suffixes?->suffix_title : '',
+                        isset($leavecredit->employees->user_id)? mb_convert_encoding($leavecredit->employees->users->last_name, "UCS-4").', '.$leavecredit->employees->users->first_name.' '.$employee_mi.' '.$leavecredit->employees->users?->suffixes?->suffix_title : '',
                         isset($leavecredit->employees->employee_positions->position_id)? $leavecredit->employees->employee_positions->positions->position_description : '',
-                        isset($leavecredit->employees->employee_positions->positions->subdepartment_id)? $leavecredit->employees->employee_positions->positions->subdepartments->sub_department_title : '',
                         isset($leavecredit->employees->employee_positions->positions->subdepartments->department_id)? $leavecredit->employees->employee_positions->positions->subdepartments->departments->department_title : '',
+                        isset($leavecredit->employees->employee_positions->positions->subdepartment_id)? $leavecredit->employees->employee_positions->positions->subdepartments->sub_department_title : '',
                         isset($leavecredit->employees->employment_status_id)? $leavecredit->employees->employment_statuses->employment_status_title : '',
                         isset($leavecredit->leavetypes->leave_type_title)? $leavecredit->leavetypes->leave_type_title : '',
                         isset($leavecredit->leave_days_credit)? $leavecredit->leave_days_credit : '',

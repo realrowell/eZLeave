@@ -530,4 +530,113 @@ class LeaveApplicationController extends Controller
 
         echo json_encode($employeeLeaveCredits);
     }
+
+
+    public function leave_application_export_wizard(Request $request){
+
+        $coverage_startdate = $request->startdate_coverage;
+        $coverage_enddate = $request->enddate_coverage;
+        $leavetype = $request->leavetype;
+        $employmentstatus = $request->employment_status;
+        $department = $request->department;
+        $subdepartment = $request->subdepartment;
+        $fiscalyear = $request->fiscalyear;
+
+        $current_date = Carbon::now();
+        $current_fiscal_year = FiscalYear::where('fiscal_year_start','<=', $current_date->toDateString())->where('fiscal_year_end','>=',$current_date->toDateString())->first();
+
+        $leave_applications = LeaveApplication::where('fiscal_year_id',$current_fiscal_year->id)->orderBy('start_date', 'desc');
+
+        if($coverage_startdate != null){
+            $leave_applications = $leave_applications->where('start_date','>=',$coverage_startdate);
+        }
+        if($coverage_enddate != null){
+            $leave_applications = $leave_applications->where('end_date','<=',$coverage_enddate);
+        }
+        if($leavetype != null){
+            $leave_applications = $leave_applications->where('leave_type_id',$leavetype);
+        }
+        if($employmentstatus != null){
+            $leave_applications = $leave_applications->whereHas('employees', function ($query) use ($employmentstatus) {
+                                                        return $query->where('employment_status_id', '=', $employmentstatus);
+                                                        });
+        }
+        if($department != null){
+            $leave_applications = $leave_applications->whereHas('employees.employee_positions.positions.subdepartments', function ($query) use ($department) {
+                                                        return $query->where('department_id', '=', $department);
+                                                        });
+        }
+        if($department != null){
+            $leave_applications = $leave_applications->whereHas('employees.employee_positions.positions.subdepartments', function ($query) use ($subdepartment) {
+                                                        return $query->where('id', '=', $subdepartment);
+                                                        });
+        }
+
+        $filename = $current_fiscal_year->fiscal_year_title.'-employee-leave-applications-'.Carbon::now()->format('Ymd').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-16LE',
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+        return response()->stream(function () use ($leave_applications) {
+
+            $handle = fopen('php://output', 'w');
+
+            // Add CSV headers
+            fputcsv($handle, [
+                'Emp. ID',
+                'Leave Ref. #',
+                // 'Department',
+                'Sub-department',
+                'Position',
+                'Employment Status',
+                'Name',
+                'LeaveType',
+                'Start date',
+                'End date',
+                'Duration',
+                'Approver 1',
+                'Approver 2',
+                'Date filed',
+                'Status',
+            ]);
+            $current_year = Carbon::now();
+
+            // Fetch and process data in chunks
+            $leave_applications->chunk(25, function ($leave_apps) use ($handle) {
+                foreach ($leave_apps as $leave_app => $value) {
+                    // Extract data from each employee.
+                    $employee_mi = '';
+                    if($value->employees?->users?->middle_name != null){
+                        $employee_mi = mb_substr($value->employees->users->middle_name, 0, 1).'.';
+                    }
+                    $data = [
+                        isset($value->employees->sap_id_number)? $value->employees->sap_id_number : '',
+                        isset($value->reference_number)? $value->reference_number : '',
+                        isset($value->employees->employee_positions->positions->subdepartment_id)? $value->employees->employee_positions->positions->subdepartments->sub_department_title : '',
+                        isset($value->employees->employee_positions->position_id)? $value->employees->employee_positions->positions->position_description : '',
+                        isset($value->employees->employment_status_id)? $value->employees->employment_statuses->employment_status_title : '',
+                        isset($value->employees->user_id)? mb_convert_encoding($value->employees->users->last_name, "UTF-16LE").', '.$value->employees->users->first_name.' '.$employee_mi.' '.$value->employees->users?->suffixes?->suffix_title : '',
+                        isset($value->leavetypes->leave_type_title)? $value->leavetypes->leave_type_title : '',
+                        isset($value->start_date)? Carbon::parse($value->start_date)->format('m/d/Y').' - '.$value->start_of_date_parts->day_part_title : '',
+                        isset($value->end_date)? Carbon::parse($value->end_date)->format('m/d/Y').' - '.$value->end_of_date_parts->day_part_title : '',
+                        isset($value->duration)? $value->duration.' day/s' : '',
+                        isset($value->approver_id)? $value->approvers->users?->first_name.' '.$value->approvers->users?->last_name : '',
+                        isset($value->second_approver_id)? $value->second_approvers->users?->first_name.' '.$value->second_approvers->users?->last_name : '',
+                        isset($value->created_at)? $value->created_at : '',
+                        isset($value->status_id)? $value->statuses->status_title : '',
+                    ];
+
+                    // Write data to a CSV file.
+                    fputcsv($handle, $data);
+                }
+            });
+
+            // Close CSV file handle
+            fclose($handle);
+        }, 200, $headers);
+    }
 }

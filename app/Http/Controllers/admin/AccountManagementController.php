@@ -775,7 +775,11 @@ class AccountManagementController extends Controller
     //     echo json_encode($subdepartments);
     // }
     public function GetSubdepartmentFromDepartment($id){
-        $subdepartments = SubDepartment::where('department_id',$id)->where('status_id','sta-1007')->get();
+        $subdepartments = SubDepartment::where('status_id','sta-1007');
+        if($id != null){
+            $subdepartments = $subdepartments->where('department_id',$id);
+        }
+        $subdepartments = $subdepartments->get();
         echo json_encode($subdepartments);
     }
 

@@ -4,12 +4,13 @@
 @section('sidebar_leave_management_active_custom','active_custom')
 @section('custom_active_leave_icon','var(--accent-color)')
 @section('custom_active_for_approval','var(--accent-color)')
+@section('profile_bar_display', 'none')
 @section('content')
 
 <div class="container-fluid d-print-none" id="profile_body" >
-    <div class="row">
+    {{-- <div class="row">
         <h5>Menu</h5>
-    </div>
+    </div> --}}
     <div class="row d-flex gap-1 justify-content-center justify-content-sm-center justify-content-lg-start">
         <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " >
             <a href="{{ route('employee_dashboard') }}" class="text-dark">

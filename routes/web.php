@@ -28,6 +28,7 @@ use App\Http\Controllers\employee\EmployeeProfileController;
 use App\Http\Controllers\employee\NotificationController;
 use App\Http\Controllers\hr_staff\HrStaffLeavePageController;
 use App\Http\Controllers\hr_staff\HrStaffPageController;
+use App\Http\Controllers\ArticlePageController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -54,6 +55,8 @@ Route::get('/', [indexPageController::class, 'index'])->name('index');
 Route::get('/profile/user_profile', [User_Profile_Controller::class, 'profile_user_profile'])->name('employee_user_profile');
 Route::get('/profile/user_profile/edit', [User_Profile_Controller::class, 'profile_user_profile_edit']);
 
+Route::get('/article/faq/create-leave-application', [ArticlePageController::class, 'ArticleFaq1'])->name('article.faq.1');
+Route::get('/article/faq/approval-leave-application', [ArticlePageController::class, 'ArticleFaq2'])->name('article.faq.2');
 
 /*
 |
@@ -159,6 +162,7 @@ Route::get('/hr/user/profile/leave/{username}', [HrStaffPageController::class, '
 Route::get('/leave-credits/export/{fiscal_year}', [LeaveCreditController::class, 'leave_credit_export'])->name('leave.credit.export');
 Route::get('/leave-credits/export-wizard', [LeaveCreditController::class, 'leave_credit_export_wizard'])->name('leave.credit.export.wizard');
 // Route::get('/leave-credits/export/range', [LeaveCreditController::class, 'leave_credit_export_range'])->name('leave.credit.export.range');
+Route::get('/leave-applications/export-wizard', [LeaveApplicationController::class, 'leave_application_export_wizard'])->name('leave.application.export.wizard');
 
 
 /*

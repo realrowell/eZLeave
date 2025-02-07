@@ -137,7 +137,10 @@ class HrStaffLeavePageController extends Controller
             //                     ->orWhere('last_name','LIKE','%'.$input_search.'%')
             //                     ->first();
             // dd($input_search);
-            $leave_applications = LeaveApplication::where('employee_id',$input_search)->orderBy('created_at', 'desc')->paginate(20);
+            $leave_applications = LeaveApplication::where('employee_id',$input_search)
+                                                    ->orderBy('start_date', 'desc')
+                                                    ->with(['employees.users','statuses','approvers.users','second_approvers.users','leavetypes'])
+                                                    ->paginate(20);
 
             if($leave_applications==null){
                 return redirect()->back()->with('error','No Data Found!');
