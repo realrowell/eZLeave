@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AdminFiscalYearUpdateModal extends Component
+class AdminDeleteFiscalYearModal extends Component
 {
     public $fiscalyear;
     /**
@@ -23,6 +23,6 @@ class AdminFiscalYearUpdateModal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.admin-fiscal-year-update-modal');
+        return view('components.admin.admin-delete-fiscal-year-modal');
     }
 }

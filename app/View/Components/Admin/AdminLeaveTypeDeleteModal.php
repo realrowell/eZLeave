@@ -2,20 +2,20 @@
 
 namespace App\View\Components\Admin;
 
-use App\Models\FiscalYear;
+use App\Models\LeaveType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AdminFiscalYearUpdateModal extends Component
+class AdminLeaveTypeDeleteModal extends Component
 {
-    public $fiscalyear;
+    public $leavetype;
     /**
      * Create a new component instance.
      */
-    public function __construct($fiscalyearId)
+    public function __construct($leavetypeID)
     {
-        $this->fiscalyear = FiscalYear::where('id',$fiscalyearId)->first();
+        $this->leavetype = LeaveType::where('id', $leavetypeID)->first();
     }
 
     /**
@@ -23,6 +23,6 @@ class AdminFiscalYearUpdateModal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.admin-fiscal-year-update-modal');
+        return view('components.admin.admin-leave-type-delete-modal');
     }
 }
