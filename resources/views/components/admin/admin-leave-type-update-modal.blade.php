@@ -1,7 +1,7 @@
 <div class="modal fade" id="UpdatetypeModal{{ $leavetype->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border border-5 border-warning border-top-0 border-bottom-0 border-end-0 rounded-0">
-            <form action="{{ route('admin.update.leavetype',['leavetype_id'=>$leavetype->id]) }}" method="PATCH" onsubmit="onClickApprove()">
+            <form action="{{ route('admin.update.leavetype',['leavetype_id'=>$leavetype->id]) }}" method="POST" onsubmit="onClickApprove()">
                 @csrf
                 <div class="modal-body">
                     <div class="container-fluid text-start">

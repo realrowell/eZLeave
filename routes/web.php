@@ -29,6 +29,7 @@ use App\Http\Controllers\employee\NotificationController;
 use App\Http\Controllers\hr_staff\HrStaffLeavePageController;
 use App\Http\Controllers\hr_staff\HrStaffPageController;
 use App\Http\Controllers\ArticlePageController;
+use App\Http\Controllers\admin\FiscalYearManagementController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -47,8 +48,11 @@ use Illuminate\Support\Facades\Auth;
 // });
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
-Route::get('/google/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+// Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
+// Route::get('/google/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
+
+Route::get('/ms365/redirect', [App\Http\Controllers\MS365LoginController::class, 'redirectToMicrosoft'])->name('ms365.redirect');
+Route::get('/ms365/callback', [App\Http\Controllers\MS365LoginController::class, 'handleMicrosoftCallback'])->name('ms365.callback');
 
 Route::get('/', [indexPageController::class, 'index'])->name('index');
 
@@ -238,15 +242,25 @@ Route::post('/organization/create_area_of_assignments', [AreaOfAssignmentControl
 Route::get('/organization/update_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'update_area_of_assignments'])->name('admin_update_areaofassignemnt');
 Route::get('/organization/delete_area_of_assignments/{id}', [AreaOfAssignmentController::class, 'delete_area_of_assignments'])->name('admin_delete_areaofassignemnt');
 
+Route::controller(FiscalYearManagementController::class)->group(function (){
+    Route::post( '/admin/create_fiscalyear', 'CreateFiscalYear' )->name('admin.create.fiscalyear');
+    Route::post( '/admin/update_fiscalyear/{fiscalyear_id}', 'UpdateFiscalYear')->name('admin.update.fiscalyear');
+    Route::post( '/admin/archive_fiscalyear/{fiscalyear_id}', 'ArchiveFiscalYear')->name('admin.archive.fiscalyear');
+    Route::post( '/admin/unarchive_fiscalyear/{fiscalyear_id}', 'UnarchiveFiscalYear')->name('admin.unarchive.fiscalyear');
+    Route::post( '/admin/delete_fiscalyear/{fiscalyear_id}', 'DeleteFiscalYear')->name('admin.delete.fiscalyear');
+});
 Route::controller(AdminLeavePageController::class)->group(function (){
     Route::get( '/admin/leave-menu', 'admin_leave_menu' )->name('admin.leave.menu');
-    Route::get( '/admin/leave-types', 'admin_leave_types' )->name('admin.leave.types');
-    Route::get( '/admin/fiscal-years', 'admin_fiscal_years' )->name('admin.fiscal.years');
+    Route::get( '/admin/leave/leave-types', 'admin_leave_types' )->name('admin.leave.types');
+    Route::get( '/admin/leave/fiscal-years', 'admin_fiscal_years' )->name('admin.fiscal.years');
+    Route::get( '/admin/leave/holidays', 'admin_holidays' )->name('admin.holidays');
 });
 Route::controller(AdminLeaveMaintenanceController::class)->group(function (){
     Route::post( '/admin/create_leavetype', 'create_leavetypes' )->name('admin.create.leavetype');
-    Route::get( '/admin/update_leavetype/{leavetype_id}', 'update_leavetypes')->name('admin.update.leavetype');
-    Route::get( '/admin/delete_leavetype/{leavetype_id}', 'delete_leavetypes')->name('admin.delete.leavetype');
+    Route::post( '/admin/update_leavetype/{leavetype_id}', 'update_leavetypes')->name('admin.update.leavetype');
+    Route::post( '/admin/archive_leavetype/{leavetype_id}', 'archive_leavetypes')->name('admin.archive.leavetype');
+    Route::post( '/admin/unarchive_leavetype/{leavetype_id}', 'unarchive_leavetypes')->name('admin.unarchive.leavetype');
+    Route::post( '/admin/delete_leavetype/{leavetype_id}', 'delete_leavetypes')->name('admin.delete.leavetype');
 });
 Route::controller(SystemSettingsController::class)->group(function (){
     Route::get( '/admin/system_settings', 'system_settings_view' )->name('admin_system_settings');

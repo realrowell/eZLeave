@@ -49,6 +49,12 @@ class AdminLeaveMaintenanceController extends Controller
             $data['apply_predate'] = false;
         }
 
+        $existing_leavetypes = LeaveType::where('status_id','sta-1007')->get();
+        foreach($existing_leavetypes as $existing_leavetype){
+            if(strtolower($existing_leavetype->leave_type_title) == strtolower($data['leavetype_title'])){
+                return redirect()->back()->with('error','Leave type already exists!');
+            }
+        }
 
 
         $leave_types = LeaveType::create([
@@ -61,7 +67,7 @@ class AdminLeaveMaintenanceController extends Controller
             'accumulable' => $data['is_accumulable'],
             'predate' => $data['apply_predate'],
         ]);
-        Log::notice( "New leave type CREATED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leave_types->id );
+        Log::info( "SYSTEM UPDATE NOTICE || Leave Type Creation || ".$leave_types->leave_type_title." has been created by: ".auth()->user()->email );
         return redirect()->back()->with('success','Leave type has been created!');
     }
 
@@ -124,8 +130,40 @@ class AdminLeaveMaintenanceController extends Controller
             'predate' => $data['apply_predate'],
             'status_id' => $data['is_active'],
         ]);
-        Log::notice( "Leave type UPDATED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leavetype_id );
+        Log::info( "SYSTEM UPDATE NOTICE || Leave Type Update || ".$leavetype_id." has been updated by: ".auth()->user()->email );
         return redirect()->back()->with('success','Leave type has been updated!');
+    }
+
+    /**
+     * Delete leave types here.
+     *
+     *
+     * DELETE LEAVE TYPE
+     */
+    public function archive_leavetypes($leavetype_id){
+        $leavecredits = LeaveType::where('id',$leavetype_id)
+        ->update([
+            'status_id' => 'sta-1006',
+        ]);
+        Log::info( "SYSTEM UPDATE NOTICE || Leave Type Archived || ".$leavetype_id." has been archived by: ".auth()->user()->email );
+        return redirect()->back()->with('warning','Leave type has been archived!');
+    }
+
+    public function unarchive_leavetypes($leavetype_id){
+        $existing_leavetypes = LeaveType::where('status_id','sta-1007')->get();
+        $current_leavetype = LeaveType::where('id',$leavetype_id)->first();
+        foreach($existing_leavetypes as $existing_leavetype){
+            if(strtolower($existing_leavetype->leave_type_title) == strtolower($current_leavetype->leave_type_title)){
+                return redirect()->back()->with('error','Leave type already exists!');
+            }
+        }
+
+        $leavecredits = LeaveType::where('id',$leavetype_id)
+        ->update([
+            'status_id' => 'sta-1007',
+        ]);
+        Log::info( "SYSTEM UPDATE NOTICE || Leave Type Unarchived || ".$leavetype_id." has been unarchived by: ".auth()->user()->email );
+        return redirect()->back()->with('success','Leave type has been unarchived!');
     }
 
     /**
@@ -139,7 +177,7 @@ class AdminLeaveMaintenanceController extends Controller
         ->update([
             'status_id' => 'sta-1009',
         ]);
-        Log::warning( "Leave type DELETED by ".auth()->user()->first_name." ".auth()->user()->last_name." with id:".$leavetype_id );
+        Log::info( "SYSTEM UPDATE NOTICE || Leave Type Deleted || ".$leavetype_id." has been deleted by: ".auth()->user()->email );
         return redirect()->back()->with('warning','Leave type has been deleted!');
     }
 }

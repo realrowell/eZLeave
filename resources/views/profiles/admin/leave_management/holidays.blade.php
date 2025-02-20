@@ -20,8 +20,8 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning text-light" style="min-height: 1rem" >
-            <a href="{{ route('admin.fiscal.years') }}" class=" bg-selected-warning text-light">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch " style="min-height: 1rem" >
+            <a href="{{ route('admin.fiscal.years') }}" class=" text-dark">
                 <div class="col text-light-hover">
                     <div class="card-body">
                         <h6>Fiscal Years</h6>
@@ -29,8 +29,8 @@
                 </div>
             </a>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch" style="min-height: 1rem" >
-            <a href="{{ route('admin.holidays') }}" class=" text-dark">
+        <div class="col-lg-2 col-md-4 col-sm-5 col-5 card-menu shadow-sm align-self-stretch bg-selected-warning text-light" style="min-height: 1rem" >
+            <a href="{{ route('admin.holidays') }}" class="bg-selected-warning text-light">
                 <div class="col text-light-hover">
                     <div class="card-body">
                         <h6>Holidays</h6>
@@ -46,12 +46,12 @@
         <div class="col">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                    <h4>Leave Management / Fiscal years</h4>
+                    <h4>Leave Management / Holidays</h4>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-end">
                     <a href="#AddDept" class="ms-1 me-1 custom-primary-button rounded-0 p-2 ps-3 pe-3"  data-bs-toggle="modal" data-bs-target="#AddTypeModal">
                         <i class='bx bx-plus-medical'></i>
-                        Create Fiscal year
+                        Add Holiday Date
                     </a>
                 </div>
             </div>

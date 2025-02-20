@@ -3,24 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
-class GoogleLoginController extends Controller
+class MS365LoginController extends Controller
 {
-    public function redirectToGoogle()
+    public function redirectToMicrosoft()
     {
         return Socialite::driver('microsoft')->redirect();
     }
 
-
-    public function handleGoogleCallback()
+    public function handleMicrosoftCallback()
     {
-        $googleUser = Socialite::driver('microsoft')->stateless()->user();
-        $user = User::where('email', $googleUser->email)->first();
+        $microsoftUser = Socialite::driver('microsoft')->stateless()->user();
+        $user = User::where('email', $microsoftUser->email)->first();
         if(!$user)
         {
             // $user = User::create(['name' => $googleUser->name, 'email' => $googleUser->email, 'password' => \Hash::make(rand(100000,999999))]);
@@ -28,8 +27,9 @@ class GoogleLoginController extends Controller
         }
 
         Auth::login($user);
-        Log::info('LOGIN NOTICE || Successful Login || Login with Google || Username: '.auth()->user()->user_name.' | Email: '.auth()->user()->email);
+        Log::info('LOGIN NOTICE || Successful Login || Login with Microsoft365 || Username: '.auth()->user()->user_name.' | Email: '.auth()->user()->email);
 
         return redirect(RouteServiceProvider::HOME);
     }
+
 }

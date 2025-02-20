@@ -67,10 +67,17 @@ return [
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/sms/sms-'.date('Y').'-'.date('m').'.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
             'replace_placeholders' => true,
+        ],
+
+        'monthly' => [
+            'driver' => 'custom',
+            'via' => \App\Logging\MonthlyLogger::class,
+            'path' => storage_path('logs/ezleave.log'),
+            'months' => 12,
         ],
 
         'slack' => [

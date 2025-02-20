@@ -25,7 +25,7 @@ class AdminLeavePageController extends Controller
      * RETURN Admin Leave types View
      */
     public function admin_leave_types(){
-        $leavetypes = LeaveType::where('status_id','sta-1007')->orwhere('status_id','sta-1008')->get();
+        $leavetypes = LeaveType::where('status_id','sta-1007')->orwhere('status_id','sta-1006')->get();
 
         return view('profiles.admin.leave_management.leave_types',
         [
@@ -40,9 +40,24 @@ class AdminLeavePageController extends Controller
      * RETURN Admin Fiscal Years View
      */
     public function admin_fiscal_years(){
-        $fiscalyears = FiscalYear::where('status_id','sta-1007')->get();
+        $fiscalyears = FiscalYear::where('status_id','sta-1007')->orWhere('status_id','sta-1006')->get();
 
         return view('profiles.admin.leave_management.fiscal_years',
+        [
+            'fiscalyears'=>$fiscalyears
+        ]);
+    }
+
+    /**
+     *
+     *
+     *
+     * RETURN Admin Holiday View
+     */
+    public function admin_holidays(){
+        $fiscalyears = FiscalYear::where('status_id','sta-1007')->orWhere('status_id','sta-1006')->get();
+
+        return view('profiles.admin.leave_management.holidays',
         [
             'fiscalyears'=>$fiscalyears
         ]);

@@ -78,9 +78,9 @@
                             </div>
                             <div class="row">
                                 {{-- @production --}}
-                                    <a href="{{ route('google.redirect') }}" class="btn mt-2 p-2 rounded-0 text-light disabled" style="background-color: #DC3E15">
+                                    <a href="{{ route('ms365.redirect') }}" class="btn mt-2 p-2 rounded-0 text-light " style="background-color: #e64825">
                                         <img class="me-2" src="{{ asset('img/microsoft_login_logo.svg') }}" alt="" style="height: 30px">
-                                        Login with Microsoft Office 365 (coming soon)
+                                        Login with Microsoft Office 365
                                     </a>
                                 {{-- @endproduction --}}
                             </div>

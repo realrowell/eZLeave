@@ -63,6 +63,19 @@ function onClickRejectId(id){
     document.getElementById('btn_modal_x_onReject'+id).classList.add('disabled');
 }
 
+function onClickDeleteId(id){
+    document.getElementById('loading_spinner_delete'+id).classList.remove('d-none');
+    document.getElementById('form_container_onDelete'+id).style.opacity = "0.2";
+    document.getElementById('btn_delete'+id).classList.add('disabled');
+    document.getElementById('btn_close_onDelete'+id).classList.add('disabled');
+    document.getElementById('btn_modal_x_onDelete'+id).classList.add('disabled');
+}
+
+function onClickUnarchiveId(id){
+    document.getElementById('loading_spinner_unarchive'+id).classList.remove('d-none');
+    document.getElementById('btn_unarchive'+id).classList.add('disabled');
+}
+
 function onClickLeaveApplySpinnerShow(){
     document.getElementById('loading_spinner').style.display="block";
 }
